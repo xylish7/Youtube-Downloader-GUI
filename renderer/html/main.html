@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <script defer src="../../assets/fontawesome/fontawesome-all.js"></script>
+
+    <link rel="stylesheet" href="../../node_modules/bulma/css/bulma.css">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+
+    <title>Youtube-downloader</title>
+  </head>
+  <body>
+
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <div class="navbar-item">
+          <div class="field is-grouped">
+            <p id="title" class="control">
+              Youtube Downloader
+            </p>
+          </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+      
+      <div class="columns">
+        <div class="column">
+          <a class="button is-small" id="open-folder">
+            <span class="icon is-small">
+              <i class="far fa-folder-open"></i>
+            </span>
+            <span>Save Folder</span>
+          </a>     
+        </div>
+      </div>
+
+      <article id="path-article" class="message is-small" style="display: none">
+        <div class="message-body" >
+          <p id="path-message"></p> 
+        </div>
+      </article>
+
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input id="mp3-conversion" type="checkbox" value="true">
+            Convert to mp3
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input id="keep-files" type="checkbox" value="true" disabled>
+            Keep original file(s)
+          </label>
+        </div>
+      </div>
+
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <div class="control has-icons-left has-icons-right">
+            <input id="input-url" class="input is-small" type="text" placeholder="Copy url...">
+            <span class="icon is-small is-left">
+              <i class="fas fa-globe"></i>
+            </span>
+          </div>
+        </div>
+        <div class="control">
+          <a id="download-button" class="button is-danger is-small not-downloading" disabled>
+            <span class="icon">
+              <i id="button-icon" class="fa fa-download"></i>
+            </span>
+            <span id="button-message">Start-download</span> 
+          </a>
+        </div>
+      </div>
+
+      <h1>Progress:
+        <span class="video-number"></span>
+        <span class="conversion-number"></span>
+      </h1>
+
+      <div class="log customized-scrollbar">
+
+      </div>
+
+      <div class="notification is-danger">
+        <button class="delete"></button>
+        <p id="notification-message">
+          
+        </p>
+      </div>
+      
+    </div>
+  </body>
+  <script>
+    // You can also require other files to run in this process
+    require('../app/app.js')
+
+    // jQuerry
+    $ = require('jquery')
+
+  </script>
+  
+</html>

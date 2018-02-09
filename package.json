@@ -1,0 +1,51 @@
+{
+  "name": "yt-downloader",
+  "version": "1.0.0",
+  "description": "Youtube Downloader",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "win": "electron-builder -w"
+  },
+  "build": {
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": true,
+      "createDesktopShortcut": true,
+      "installerIcon": "assets/icons/icon.ico",
+      "uninstallerIcon": "assets/icons/icon.ico",
+      "uninstallDisplayName": "Youtube Downloader"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icons/icon.ico",
+      "publisherName": "F.Frincu"
+    }
+  },
+  "repository": "",
+  "keywords": [
+    "Youtube",
+    "download",
+    "convert",
+    "mp3",
+    "cut"
+  ],
+  "author": "Frincu Filip",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^1.7.12",
+    "electron-reload": "^1.2.2"
+  },
+  "dependencies": {
+    "bulma": "^0.6.1",
+    "cross-spawn-async": "^2.2.5",
+    "electron-window-state": "^4.1.1",
+    "hazardous": "^0.3.0",
+    "jquery": "^3.2.1",
+    "tree-kill": "^1.2.0",
+    "youtube-dl": "^1.12.2"
+  }
+}

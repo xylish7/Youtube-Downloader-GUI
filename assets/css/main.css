@@ -1,0 +1,122 @@
+@font-face {
+  font-family: titleFont;
+  src: url(../fonts/Keep_Singing.ttf);
+}
+
+*:focus {
+  outline: none !important;
+}
+
+body {
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: context-menu;
+  overflow:hidden;
+  font-family: "Courier New";
+  width: 600;
+  height: 600;
+}
+
+body::-webkit-scrollbar{
+  display: none;
+}
+
+article {
+  margin-top: 10px;
+}
+
+progress {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.container {
+  margin: 0 20px
+}
+
+.fa.fa-folder-open-o {
+  color: hsl(348, 100%, 61%);
+}
+.log {
+  max-height: 180px;
+  min-height: 25px;
+  overflow-y: scroll;
+  margin: 0 15px 15px;
+  padding: 5px 10px;
+  border-style: solid;
+  border-color: hsl(348, 100%, 61%);
+  border-width: 1px;
+  border-radius: 5px;
+  overflow-x: hidden;
+}
+
+.customized-scrollbar::-webkit-scrollbar {
+  width: 9px;
+  height: 8px;
+  border-radius: 5px
+}
+
+.customized-scrollbar::-webkit-scrollbar-thumb {
+    background: lightgray; 
+    border-radius: 20px;
+}
+
+.columns.is-mobile.is-gapless {
+  margin: 0
+}
+
+.video-title {
+  white-space: nowrap;
+  width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.video-number {
+  font-size: 13px;
+}
+
+.conversion-number {
+  font-size: 13px;
+}
+
+.percent-progress{
+  margin-left: 10px;
+}
+
+.notification {
+  padding: 5px 0px 5px 10px;
+  display: none;
+  text-align: center;
+  margin: auto;
+}
+
+#title {
+  color: hsl(348, 100%, 61%);
+  font-size: 22px;
+  font-family: titleFont;
+}
+
+#url-input {
+  border:1px solid lightgray;
+  background-image:none;
+  background-color:transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  outline: none;
+}
+
+#url-input:hover {
+  border: 1px solid #b5b5b5
+}
+
+#openFolder {
+  border-color: hsl(348, 100%, 61%);
+}
+
+#button-message {
+  width: 112px;
+  height: 18;
+  
+}
