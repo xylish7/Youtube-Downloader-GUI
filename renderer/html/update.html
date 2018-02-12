@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="../../node_modules/bulma/css/bulma.css">
+
+    <script defer src="../../assets/fontawesome/fontawesome-all.js"></script>
+
+    <meta charset="utf-8">
+    <title>Downloading Update</title>
+    <style>
+      body {
+        font-family: "Courier New";
+        overflow:hidden;
+      }
+
+      body::-webkit-scrollbar{
+        display: none;
+      }
+
+      .update-percent {
+        margin-left: 10px;
+        font-size: 18px;
+      }
+
+      .fa-info-circle {
+        color: hsl(348, 100%, 61%);
+      }
+
+      .section {
+        padding: 20px 24px 15px
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="section">
+        <div class="container"></div>
+          <p><i class="fas fa-info-circle"></i> <strong>Downloading an update. This may take a few minutes...</strong></p>
+          <br>
+          <div class="columns is-mobile is-gapless is-vcentered">
+            <div class="column is-2">
+                <img src="../../assets/icons/icon.ico" alt="icon" height="42" width="42">
+            </div>
+            <div  class="column is-8">
+              <progress class="progress is-danger is-medium" value="0" max="100"></progress>
+            </div>
+            <div class="column is-2 has-text-centered">
+              <p class="update-percent">23.52%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+  </body>
+
+  <script>
+
+    // jQuery
+    $ = require('jquery')
+
+    // Require IPC
+    const {ipcRenderer} = require('electron')
+
+    // Request progress every second
+    setInterval(() => {
+
+      // Request a sync response via IPC
+      let progress = ipcRenderer.sendSync('download-progress-request').toFixed(2)
+
+      // Update progress element
+      $('progress').val(progress)
+      $('.update-percent').html(`${progress}%`)
+
+    }, 1000)
+
+  </script>
+</html>

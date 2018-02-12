@@ -6,12 +6,14 @@ const path = require('path')
 const fs   = require('fs')
 
 
+
 // Internal Modules
-const mainWindow = require('./main/windows/mainWindow')
+const mainWindow = require('./main/windows/main-window')
 const mp3converter = require('./main/conversion/mp3Converter')
 const dlPlaylist = require('./main/ytdl/download-playlist')
 const menuBar = require('./main/menu/menu-bar')
 const onExit = require('./main/kill-processes/on-exit')
+const updater = require('./main/update/updater')
 
 // require('electron-reload')(__dirname);
 // This method will be called when Electron has finished
@@ -22,6 +24,9 @@ app.on('ready', () => {
   var windows = {
     mainWindow: mainWindow.createWindow()
   }
+
+  // Check for update after x seconds
+  setTimeout(updater.check, 2000);
 
   // Create context menu
   windows.mainWindow.webContents.on('context-menu', (e, params) => {
