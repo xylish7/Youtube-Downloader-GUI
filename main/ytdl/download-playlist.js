@@ -33,6 +33,11 @@ exports.playlist = (url) => {
   // Catch error
   video.on('error', (err) => { 
     this.ipcEvent.event.sender.send('ytdl-errors', err)
+
+    var error_template = `---------------------------\n${new Date().toLocaleString()}\n---------------------------\n\n${err}\n\n`
+    fs.appendFile(`${__dirname}/../../logs/ytdl-errors.txt`, error_template, (error) => {
+      if (error) throw error;
+    })
   });
 
   // Get video information

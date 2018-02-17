@@ -17,7 +17,7 @@ exports.createWindow = () => {
   })
   
   // Load main window content
-  this.win.loadURL(`file://${__dirname}/../../renderer/html/update.html`)
+  this.win.loadURL(`file://${__dirname}/../../renderer/windows/update.html`)
 
   // Handle window closed
   this.win.on('closed', () => {

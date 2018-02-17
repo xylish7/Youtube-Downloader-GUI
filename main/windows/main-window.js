@@ -24,7 +24,7 @@ exports.createWindow = () => {
   mainWindowState.manage(this.win);
   
   // Load main window content
-  this.win.loadURL(`file://${__dirname}/../../renderer/html/main.html`)
+  this.win.loadURL(`file://${__dirname}/../../renderer/windows/main.html`)
 
   // Toggle developer tools
   // this.win.toggleDevTools()

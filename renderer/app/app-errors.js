@@ -2,7 +2,7 @@ const fs = require('fs')
 
 // Messages
 exports.messages = {
-  path: 'Path does not exists!',
+  path: 'Please select the Save Folder!',
   url: 'The provided URL is not valid!',
   ytdl_error: 'Unsupported URL! / Connection timeout!',
   large_playlist: 'For large playlist, fetching data time is 1-2 min!'

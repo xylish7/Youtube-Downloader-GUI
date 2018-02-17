@@ -1,5 +1,5 @@
 // Modules
-const {ipcRenderer} = require('electron')
+const {ipcRenderer, clipboard} = require('electron')
 const fs = require('fs')
 const $ = require('jquery')
 
@@ -36,6 +36,11 @@ inputUrl.on('input paste', () =>{
   jqueryActions.disableButton()
 })
 
+// Paste URL on double click
+inputUrl.on('dblclick', () => {
+  inputUrl.val(clipboard.readText())
+})
+
 // Start download
 downloadButton.on('click', () => {
 
@@ -44,13 +49,16 @@ downloadButton.on('click', () => {
 
   if (!downloadButton.prop('disabled') && !downloadButton.hasClass('fetch-data')) {
     // Object containg the results of validations
-    var validationResults = {
-      path: appErrors.validatePath(jqueryActions.downloadInfo.savePath),
-      url: appErrors.validateURL()
+    var validationResults = {}
+
+    if (inputUrl.val() != '') {
+      validationResults.url = appErrors.validateURL()
     }
+    
+    validationResults.path = appErrors.validatePath(jqueryActions.downloadInfo.savePath)
 
     // If all validation passed start the downoload
-    if (appErrors.validateAll(validationResults, 10000)) {
+    if (appErrors.validateAll(validationResults, 10000) && validationResults.url) {
 
       // If there is no download in progress, starts one
       if (downloadButton.hasClass('not-downloading')){
@@ -164,6 +172,7 @@ ipcRenderer.on('conversion-done', (event, receivedData) => {
 ipcRenderer.on('ytdl-errors', (event, err) => {
   jqueryActions.buttonState('static')
   videoNumber.empty()
+  console.log(err)
 
   // Send error
   appErrors.validateAll({ytdl_error: false}, 10000)

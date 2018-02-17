@@ -52,6 +52,7 @@
     "electron-window-state": "^4.1.1",
     "hazardous": "^0.3.0",
     "jquery": "^3.2.1",
+    "mustache": "^2.3.0",
     "tree-kill": "^1.2.0",
     "youtube-dl": "^1.12.2"
   }

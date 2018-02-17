@@ -80,6 +80,7 @@ var spawnChild = (spawnAttributes, playlistInfo, downloadInfo) => {
     if (code == 0)
       if (playlistInfo.static.keepFiles == 'false'){
         fs.unlinkSync(`${downloadInfo.savePath}\\${sendData.title}.webm`);
+        playlistInfo.static.win.webContents.send('conversion-done', sendData)
       }
 
     // Remove pid from child array
@@ -90,8 +91,7 @@ var spawnChild = (spawnAttributes, playlistInfo, downloadInfo) => {
       var pendingProcess = pendingProcesses.shift()
       spawnChild(pendingProcess.spawnAttributes, pendingProcess.playlistInfo, pendingProcess.downloadInfo)
     }
-
-    playlistInfo.static.win.webContents.send('conversion-done', sendData)
+    
   });
 }
 
