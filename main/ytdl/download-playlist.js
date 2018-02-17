@@ -34,8 +34,15 @@ exports.playlist = (url) => {
   video.on('error', (err) => { 
     this.ipcEvent.event.sender.send('ytdl-errors', err)
 
+    // Create directory for logs if it doesn't exists
+    var dir = `${process.env.USERPROFILE}/YT-downloader-logs`
+    if (!fs.existsSync(dir)){
+      fs.mkdirSync(dir);
+    }
+
+    // Create log file
     var error_template = `---------------------------\n${new Date().toLocaleString()}\n---------------------------\n\n${err}\n\n`
-    fs.appendFile(`${__dirname}/../../logs/ytdl-errors.txt`, error_template, (error) => {
+    fs.appendFile(`${process.env.USERPROFILE}/YT-downloader-logs/ytdl-errors.txt`, error_template, (error) => {
       if (error) throw error;
     })
   });
@@ -62,7 +69,7 @@ exports.playlist = (url) => {
     }
   
     // Save path
-    var outputFile = `${this.ipcEvent.downloadInfo.savePath}\\${dynamicInfo.title}.webm`
+    var outputFile = `${this.ipcEvent.downloadInfo.savePath}\\${dynamicInfo.title}.mp4`
 
     // Start writing video in directory
     stream = fs.createWriteStream(outputFile)

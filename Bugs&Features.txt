@@ -1,9 +1,0 @@
-Bugs:
-- showing 'Url not valid' error even when url input is empty - fixed
-- 'Conversion finished' showns when Stop-download is pressed - fixed
-
-Features:
-- song cutter
-- remember save folder
-- save file under another name
-- copy link on double-click - done

@@ -105,11 +105,10 @@ exports.disableButton = () => {
   const articlePath = $('#path-article')
   const inputUrl = $('#input-url')
   const downloadButton = $('#download-button')
+  
+  if (articlePath.css('display') != 'none' && inputUrl.val() != '') downloadButton.removeAttr('disabled')
+    else downloadButton.attr('disabled', true)
 
-  inputUrl.on('input', () =>{
-    (articlePath.css('display') != 'none' && inputUrl.val() != '') ?
-      downloadButton.removeAttr('disabled') : downloadButton.attr('disabled', true)
-  })
 }
 
 // Change the state of the Download button

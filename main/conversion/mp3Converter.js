@@ -11,7 +11,7 @@ exports.convertVideo = (playlistInfo, downloadInfo) => {
     ffmpeg_path: path.resolve(__dirname, '..', '..', 'node_modules', 'youtube-dl', 'bin', 'ffmpeg.exe'),
     args: [
       '-i', 
-      `${downloadInfo.savePath}\\${playlistInfo.dynamic.title}.webm`,
+      `${downloadInfo.savePath}\\${playlistInfo.dynamic.title}.mp4`,
       '-map', '0:a:0',
       '-b:a', '96k',
       '-y',
@@ -77,11 +77,11 @@ var spawnChild = (spawnAttributes, playlistInfo, downloadInfo) => {
       sendData.conversionFinished = true;
     }
     
-    if (code == 0)
+    if (code == 0) 
       if (playlistInfo.static.keepFiles == 'false'){
-        fs.unlinkSync(`${downloadInfo.savePath}\\${sendData.title}.webm`);
+        fs.unlinkSync(`${downloadInfo.savePath}\\${sendData.title}.mp4`);
         playlistInfo.static.win.webContents.send('conversion-done', sendData)
-      }
+      } else playlistInfo.static.win.webContents.send('conversion-done', sendData)
 
     // Remove pid from child array
     removeChild(ffmpeg.pid)

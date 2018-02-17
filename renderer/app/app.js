@@ -31,14 +31,15 @@ openFolder.on('click', () => {
   jqueryActions.downloadInfo.savePath = jqueryActions.getDownloadPath()
 })
 
-// Disable download button if no URL is provided
-inputUrl.on('input paste', () =>{
-  jqueryActions.disableButton()
-})
-
 // Paste URL on double click
 inputUrl.on('dblclick', () => {
   inputUrl.val(clipboard.readText())
+  jqueryActions.disableButton()
+})
+
+// Disable download button if no URL is provided
+inputUrl.on('input paste', () =>{
+  jqueryActions.disableButton()
 })
 
 // Start download
@@ -170,9 +171,11 @@ ipcRenderer.on('conversion-done', (event, receivedData) => {
 
 // Youtube download errors
 ipcRenderer.on('ytdl-errors', (event, err) => {
+  // Remove notification
+  appErrors.largePlaylist(true)
+
   jqueryActions.buttonState('static')
   videoNumber.empty()
-  console.log(err)
 
   // Send error
   appErrors.validateAll({ytdl_error: false}, 10000)
