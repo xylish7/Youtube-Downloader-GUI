@@ -52,12 +52,12 @@ downloadButton.on('click', () => {
     // Object containg the results of validations
     var validationResults = {}
 
+    validationResults.path = appErrors.validatePath(jqueryActions.downloadInfo.savePath)
+
     if (inputUrl.val() != '') {
       validationResults.url = appErrors.validateURL()
     }
     
-    validationResults.path = appErrors.validatePath(jqueryActions.downloadInfo.savePath)
-
     // If all validation passed start the downoload
     if (appErrors.validateAll(validationResults, 10000) && validationResults.url) {
 

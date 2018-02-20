@@ -1,0 +1,132 @@
+.navbar {
+  padding-left: 85px;
+  margin-top: 10px;
+}
+
+.centerer{
+  margin-right: 20px;
+}
+
+.normal-underline-text,
+.custom-underline-text{
+  position:relative;
+  display:inline-block;
+  font-size:18px;
+  text-align:center;
+}
+
+.normal-underline-text,
+.normal-underline-text:hover{
+  color: rgb(254, 57, 96);
+  text-decoration:underline;
+}
+
+.custom-underline-text,
+.custom-underline-text:hover,
+.custom-underline-text:focus,
+.custom-underline-text:active{
+  color: rgb(254, 57, 96);
+  text-decoration:none;
+}
+
+.custom-underline-text::after{
+    content:"";
+    position:absolute;
+    background-color:rgba(254, 57, 96, 0.7);
+    transition:.2s ease-in all;
+}
+
+.c .custom-underline-text::after{
+    top:100%;
+    height:3px !important;
+    width:50%;
+    left:25%;
+}
+
+.c:hover .custom-underline-text::after{
+    width:100%;
+    left:0%;
+    background-color:rgb(254, 57, 96);
+    transition:.8s ease all;
+}
+.c:active .custom-underline-text::after{
+  width:100%;
+  left:0%;
+  background-color:rgb(254, 57, 96);
+
+}
+
+/* Setting button */
+.fa-sun {
+  color: rgba(254, 57, 96, 0.5);
+}
+
+#general-settings {
+  float: right;
+  border: none;
+  background: none;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-box-shadow: inset 0 0 0 1px rgba(254, 57, 96, 0.5);
+          box-shadow: inset 0 0 0 1px rgba(254, 57, 96, 0.5);
+  color: rgb(254, 57, 96);
+  font-size: inherit;
+  font-weight: 700;
+  position: relative;
+  vertical-align: middle;
+}
+
+#general-settings::before, #general-settings::after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.spin {
+  width: 35px;
+  height: 35px;
+  padding-top: 5px;
+}
+.spin:hover {
+  color: rgb(254, 57, 96);
+}
+.spin::before, .spin::after {
+  top: 0;
+  left: 0;
+}
+.spin::before {
+  border: 1px solid transparent;
+}
+.spin:hover::before {
+  border-top-color: rgb(254, 57, 96);
+  border-right-color: rgb(254, 57, 96);
+  border-bottom-color: rgb(254, 57, 96);
+  -webkit-transition: border-top-color 0.15s linear, border-right-color 0.15s linear 0.1s, border-bottom-color 0.15s linear 0.2s;
+  transition: border-top-color 0.15s linear, border-right-color 0.15s linear 0.1s, border-bottom-color 0.15s linear 0.2s;
+}
+.spin::after {
+  border: 0 solid transparent;
+}
+.spin:hover::after {
+  border-top: 1px solid rgb(254, 57, 96);;
+  border-left-width: 1px;
+  border-right-width: 1px;
+  -webkit-transform: rotate(270deg);
+          transform: rotate(270deg);
+  -webkit-transition: border-left-width 0s linear 0.35s, -webkit-transform 0.4s linear 0s;
+  transition: border-left-width 0s linear 0.35s, -webkit-transform 0.4s linear 0s;
+  transition: transform 0.4s linear 0s, border-left-width 0s linear 0.35s;
+  transition: transform 0.4s linear 0s, border-left-width 0s linear 0.35s, -webkit-transform 0.4s linear 0s;
+}
+
+.circle {
+  border-radius: 35%;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.circle::before, .circle::after {
+  border-radius: 35%;
+}

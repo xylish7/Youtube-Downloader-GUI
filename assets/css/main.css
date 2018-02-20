@@ -1,3 +1,5 @@
+/* General style */
+
 @font-face {
   font-family: titleFont;
   src: url(../fonts/Keep_Singing.ttf);
@@ -38,7 +40,7 @@ progress {
   color: hsl(348, 100%, 61%);
 }
 .log {
-  max-height: 180px;
+  max-height: 171px;
   min-height: 25px;
   overflow-y: scroll;
   margin: 0 15px 15px;
@@ -91,10 +93,12 @@ progress {
   margin: auto;
 }
 
-#title {
-  color: hsl(348, 100%, 61%);
-  font-size: 22px;
-  font-family: titleFont;
+.title {
+  color: hsl(348, 99%, 61%);
+}
+
+.subtitle {
+  color: hsl(348, 99%, 61%);
 }
 
 #url-input {
@@ -117,6 +121,6 @@ progress {
 
 #button-message {
   width: 112px;
-  height: 18;
-  
+  height: 18; 
 }
+
