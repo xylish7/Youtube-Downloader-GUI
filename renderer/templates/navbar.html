@@ -1,0 +1,158 @@
+<template class="page-template">
+  <section>
+    
+    <div class="container">
+      <div class="navbar">
+
+        <span class="title is-5">Youtube-DL</span> 
+
+        <span id="download-link" class="nav-link ">
+            <a href="#" class="custom-underline-text is-active"><strong>Download</strong></a>
+        </span>
+
+        <span id="convert-link" class="nav-link">
+          <a href="#" class="custom-underline-text"><strong>Convert</strong></a>
+        </span>
+  
+        <span id="cut-link" class="nav-link">
+          <a href="#" class="custom-underline-text"><strong>Cut</strong></a>
+        </span>
+
+        <button id="general-settings" class="button spin circle">
+          <span class="icon has-text-danger">
+            <i id="setting-icon" class="far fa-sun"></i>
+          </span>
+        </button>
+        <hr>
+      </div>
+      
+      <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">General settings</p>
+            <button class="delete is-danger close-modal" aria-label="close"></button>
+          </header>
+          <section class="modal-card-body customized-scrollbar">
+            <p class="subtitle is-6"><strong>Download settings:</strong></p>
+            <div class="columns is-mobile is-gapless">
+              <div class="column is-4">Video quality:</div>
+              <div class="column">
+                <div class="field">
+                  <div class="control">
+                    <div class="select is-danger is-small">
+                      <select>
+                        <option selected="selected">best-quality</option>
+                        <option>144p</option>
+                        <option>240p</option>
+                        <option>360p</option>
+                        <option>480p</option>
+                        <option>720p-HD</option>
+                        <option>1080p-HD</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column">3</div>
+            </div>
+            <br>
+            <div class="columns is-mobile is-gapless">
+              <div class="column is-4">Video format:</div>
+              <div class="column">
+                <div class="field">
+                  <div class="control">
+                    <div class="select is-danger is-small">
+                      <select>
+                        <option selected="selected">mp4</option>
+                        <option>webm</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column">3</div>
+            </div>
+            
+            <hr>
+            <p class="subtitle is-6"><strong>Convert settings:</strong></p>
+            <div class="columns is-mobile is-gapless">
+              <div class="column is-4">Audio quality:</div>
+              <div class="column">
+                <div class="field">
+                  <div class="control">
+                    <div class="select is-danger is-small">
+                      <select>
+                        <option>80 kbps</option>
+                        <option>96 kbps</option>
+                        <option selected="selected">128 kbps</option>
+                        <option>160 kbps</option>
+                        <option>192 kbps</option>
+                        <option>224 kbps</option>
+                        <option>256 kbps</option>
+                        <option>320 kbps</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column">3</div>
+            </div>
+            <br>
+            <div class="columns is-mobile is-gapless">
+              <div class="column is-4">Audio format:</div>
+              <div class="column">
+                <div class="field">
+                  <div class="control">
+                    <div class="select is-danger is-small">
+                      <select>
+                        <option selected="selected">mp3</option>
+                        <option>m4a</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column">3</div>
+            </div>
+            <br>
+            <div class="columns is-mobile is-gapless">
+              <div class="column is-4">No. processes</div>
+              <div class="column">
+                <div class="field">
+                  <div class="control">
+                    <div class="select is-danger is-small">
+                      <select>
+                        <option >1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option selected="selected">4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column">3</div>
+            </div>
+            
+            <hr>
+            <p class="subtitle is-6"><strong>Cut settings:</strong></p>
+            <div class="columns is-mobile is-gapless">
+              <div class="column has-text-centered">
+                <p class="title is-6">Coming soon!</p> 
+              </div>
+            </div>
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-small is-danger close-modal">Close</button>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</template>

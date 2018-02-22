@@ -127,10 +127,10 @@ exports.playlist = (url) => {
 ipcMain.on('stop-download', (event) => {
   stream.end()
   video.unresolve()
-  //video.removeSource()
   killAllProcesses()
   this.staticInfo.appendColumns = true
   this.staticInfo.downloadFinished = false
+  this.staticInfo.informationExtracted = false
   event.sender.send('response')
 })
 

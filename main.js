@@ -1,11 +1,9 @@
 // Modules
-require ('hazardous') // module required when creating installed
+require ('hazardous') // module required when creating installed so spawn can be used
 const {app, ipcMain} = require('electron')
 const ytdl = require('youtube-dl')
 const path = require('path')
 const fs   = require('fs')
-
-
 
 // Internal Modules
 const mainWindow = require('./main/windows/main-window')

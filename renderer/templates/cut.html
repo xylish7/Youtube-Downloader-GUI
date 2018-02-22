@@ -1,0 +1,34 @@
+<template class="page-template">
+  <section id="cut-section" class="menu-section hide-section">
+    
+    <div class="container">
+      <article class="message is-large">
+        <div class="message-body text-is-centered">
+          <h1 class="title is-3">Coming soon!</h1>
+          <hr>
+          <p class="subtitle is-4">Until then, don't forget to share this awesome app with your friends!&#9786;</p>
+          <p class="subtitle is-5">
+            Share link: <strong>Click icon
+              <span id="copy-link1" class="icon" style="cursor: pointer; color:hsla(357, 84%, 48%, 0.849);">
+                <i class="far fa-copy"></i>
+              </span>              
+              to copy link! </strong> 
+              <span id="copy-confirmation1" 
+              style=" position:relative; font-size:16px; top: -4px; color:hsla(357, 84%, 48%, 0.849); display:none">Copied!</span>
+            </p>
+          <p class="subtitle is-6"
+           style="user-select: auto; -webkit-user-select: auto; cursor: auto">
+           <strong>https://github.com/xylish7/Youtube-Downloader-GUI/releases/download/v1.2.1/yt-downloader-setup-1.2.1.exe</strong>
+          </p>
+        </div>
+      </article>
+    </div>
+
+    <script>
+      $("#copy-link1").on("click",() => {
+        clipboard.writeText('https://github.com/xylish7/Youtube-Downloader-GUI/releases/download/v1.2.1/yt-downloader-setup-1.2.1.exe')
+        $("#copy-confirmation1").fadeIn(500).delay(1000).fadeOut(800)
+      })     
+    </script>
+  </section>
+</template>

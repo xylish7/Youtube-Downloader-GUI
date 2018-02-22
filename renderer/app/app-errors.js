@@ -2,13 +2,20 @@ const fs = require('fs')
 
 // Messages
 exports.messages = {
-  path: 'Please select the Save Folder!',
+  save_folder_selected: 'Please select the Save Folder!',
+  path_not_exist: 'The selected Save Folder does not exists!',
   url: 'The provided URL is not valid!',
   ytdl_error: 'Unsupported URL! / Connection timeout!',
   large_playlist: 'For large playlist, fetching data time is 1-2 min!'
 }
 
 exports.notificationTime
+
+// Test if Save Folder was selected
+exports.validateSaveFolder = () => {
+  const articlePath = $('#path-article')
+  return (articlePath.css('display') != 'none') ? true : false
+}
 
 // Test path is valid
 exports.validatePath = (path) => fs.existsSync(path)

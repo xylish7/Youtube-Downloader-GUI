@@ -1,4 +1,16 @@
+// Modules
 const {dialog} = require('electron').remote
+
+// Internal modules
+const Store = require('../store')
+
+// create persistent variable
+const store = new Store({
+  // We'll call our data file 'user-preferences'
+  configName: 'user-preferences',
+  defaults: {}
+});
+
 
 // Informations regarding the download
 exports.downloadInfo = {
@@ -25,6 +37,9 @@ exports.getDownloadPath = () => {
     properties: ['openDirectory']
   })
 
+  // Store savePath
+  store.set('savePath', savePath[0])
+
   // Show path
   messagePath.html(`<i><strong>Save Path: </strong> ${savePath[0]}</i>`)
   articlePath.show()
@@ -34,7 +49,7 @@ exports.getDownloadPath = () => {
     downloadButton.removeAttr('disabled')
   }
 
-  return savePath[0]
+  this.downloadInfo.savePath = savePath[0]
 }
 
 // Get all values from inputs, checkboxes, selects etc.

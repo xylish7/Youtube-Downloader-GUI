@@ -4,9 +4,10 @@ const fs = require('fs')
 const $ = require('jquery')
 
 // Internal Modules
-const jqueryActions = require('./app-actions')
+const appActions = require('./app-actions')
 const appErrors = require('./app-errors')
 const appNotifications = require('../../main/kill-processes/app-notifications')
+const dataInitialization = require('../initialize-store-data')
 
 // IDs
 const downloadButton = $('#download-button')
@@ -28,18 +29,18 @@ const videoTitle = '.video-title'
 
 // Open browse window to choose save path
 openFolder.on('click', () => {
-  jqueryActions.downloadInfo.savePath = jqueryActions.getDownloadPath()
+  appActions.getDownloadPath()
 })
 
 // Paste URL on double click
 inputUrl.on('dblclick', () => {
   inputUrl.val(clipboard.readText())
-  jqueryActions.disableButton()
+  appActions.disableButton()
 })
 
 // Disable download button if no URL is provided
 inputUrl.on('input paste', () =>{
-  jqueryActions.disableButton()
+  appActions.disableButton()
 })
 
 // Start download
@@ -52,7 +53,11 @@ downloadButton.on('click', () => {
     // Object containg the results of validations
     var validationResults = {}
 
-    validationResults.path = appErrors.validatePath(jqueryActions.downloadInfo.savePath)
+    // Check if save folder was selected
+    validationResults.save_folder_selected = appErrors.validateSaveFolder()
+
+    // Check if selected save folder exists
+    validationResults.path_not_exist = appErrors.validatePath(appActions.downloadInfo.savePath)
 
     if (inputUrl.val() != '') {
       validationResults.url = appErrors.validateURL()
@@ -71,18 +76,18 @@ downloadButton.on('click', () => {
         conversionNumber.empty()
         
         // Disable button and input
-        jqueryActions.buttonState('fetch-data')
+        appActions.buttonState('fetch-data')
       
         videoNumber.html(`Download starting...`)
         // Get the value of checkboxes and inputs
-        jqueryActions.getFieldValues()
+        appActions.getFieldValues()
         // Emit event with download info as argumnets
-        ipcRenderer.send('new-playlist', jqueryActions.downloadInfo)
+        ipcRenderer.send('new-playlist', appActions.downloadInfo)
         
         // Condition when Stop download is pressed
       } else {    
           ipcRenderer.send('stop-download')
-          jqueryActions.buttonState('static')
+          appActions.buttonState('static')
           log.empty()
           ipcRenderer.on('response', () => {
             conversionNumber.empty()
@@ -111,16 +116,16 @@ $('.delete').on('click', () => {
 ipcRenderer.on('playlist-progress', (event, playlistInfo) => {
   // Change button from feth-data to download
   if (downloadButton.hasClass('fetch-data')) {
-    jqueryActions.buttonState('downloading')
+    appActions.buttonState('downloading')
     // Remove notification
     appErrors.largePlaylist(true)
   }
 
   // Append new title, progress bar and percentage
   if (playlistInfo.static.appendColumns) {
-    (jqueryActions.downloadInfo.mp3Conversion == 'true') ?
-      log.append(`${jqueryActions.dynamicContent(playlistInfo.dynamic.playlist_index, 'convert')}`) :
-      log.append(`${jqueryActions.dynamicContent(playlistInfo.dynamic.playlist_index, 'download')}`)     
+    (appActions.downloadInfo.mp3Conversion == 'true') ?
+      log.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, 'convert')}`) :
+      log.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, 'download')}`)     
   }
 
   // Show how many videos were downloaded for playlist
@@ -129,7 +134,7 @@ ipcRenderer.on('playlist-progress', (event, playlistInfo) => {
   videoNumber.empty()
     
   // Update the value of the progress bar
-  jqueryActions.showProgress(playlistInfo.dynamic)
+  appActions.showProgress(playlistInfo.dynamic)
 
   // Write when download is finished
   if (playlistInfo.static.downloadFinished) {
@@ -138,8 +143,8 @@ ipcRenderer.on('playlist-progress', (event, playlistInfo) => {
     appNotifications.exitMessages.download = 'download'
 
     // Make button available again only if conversion was not selected
-    if (jqueryActions.downloadInfo.mp3Conversion == 'false') {
-      jqueryActions.buttonState('static')
+    if (appActions.downloadInfo.mp3Conversion == 'false') {
+      appActions.buttonState('static')
     }
   }
 })
@@ -161,7 +166,7 @@ ipcRenderer.on('conversion-done', (event, receivedData) => {
 
   if (receivedData.conversionFinished && downloadButton.hasClass('is-downloading')) {
     conversionNumber.html('| Conversion finished!')
-    jqueryActions.buttonState('static')
+    appActions.buttonState('static')
     appNotifications.exitMessages.conversion = 'conversion'
   }
 
@@ -174,7 +179,7 @@ ipcRenderer.on('ytdl-errors', (event, err) => {
   // Remove notification
   appErrors.largePlaylist(true)
 
-  jqueryActions.buttonState('static')
+  appActions.buttonState('static')
   videoNumber.empty()
 
   // Send error

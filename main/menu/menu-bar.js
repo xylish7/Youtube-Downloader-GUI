@@ -26,7 +26,7 @@ const template = [
     submenu: [
       {
         label: 'About',
-        click () { require('electron').shell.openExternal('https://electron.atom.io') }
+        click () { require('electron').shell.openExternal('https://github.com/xylish7/Youtube-Download-Convert-Cut') }
       }
     ]
   }

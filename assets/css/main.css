@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: titleFont;
-  src: url(../fonts/Keep_Singing.ttf);
+  src: url(../fonts/recharge-bd.ttf);
 }
 
 *:focus {
@@ -14,7 +14,7 @@ body {
   -webkit-user-select: none;
   cursor: context-menu;
   overflow:hidden;
-  font-family: "Courier New";
+  font-family: "Trebuchet MS";
   width: 600;
   height: 600;
 }
@@ -40,7 +40,7 @@ progress {
   color: hsl(348, 100%, 61%);
 }
 .log {
-  max-height: 171px;
+  max-height: 150px;
   min-height: 25px;
   overflow-y: scroll;
   margin: 0 15px 15px;
@@ -94,11 +94,11 @@ progress {
 }
 
 .title {
-  color: hsl(348, 99%, 61%);
-}
-
-.subtitle {
-  color: hsl(348, 99%, 61%);
+  position: relative;
+  color: hsla(357, 84%, 48%, 0.849);
+  font-family: titleFont;
+  margin-right: 40px;
+  top: 5px;
 }
 
 #url-input {
@@ -112,7 +112,7 @@ progress {
 }
 
 #url-input:hover {
-  border: 1px solid #b5b5b5
+  border: 1px solid #b5b5b5;
 }
 
 #openFolder {
@@ -120,7 +120,7 @@ progress {
 }
 
 #button-message {
-  width: 112px;
+  width: 82px;
   height: 18; 
 }
 

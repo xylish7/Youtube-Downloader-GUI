@@ -5,64 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <script defer src="../../assets/fontawesome/fontawesome-all.js"></script>
+    <script> $ = require('jquery') </script>
 
-    <link rel="stylesheet" href="../../node_modules/bulma/css/bulma.css">
+    <link rel="stylesheet" href="../../assets/css/bulma.css">
     <link rel="stylesheet" href="../../assets/css/main.css">
     <link rel="stylesheet" href="../../assets/css/navbar.css">
 
-    <link rel="import" href="../templates/download-convert.html">
+    <link rel="import" href="../templates/navbar.html">
+    <link rel="import" href="../templates/download.html">
+    <link rel="import" href="../templates/convert.html">
+    <link rel="import" href="../templates/cut.html">
     <title>Youtube-downloader</title>
   </head>
 
   <body>
-    <div class="container">
-      <div class="navbar">
-        <span class="centerer c is-active">
-            <a href="#" class="custom-underline-text"><strong>Download</strong></a>
-        </span>
-        <!-- <span class="centerer c">
-          <a href="#" class="custom-underline-text"><strong>Cut</strong></a>
-        </span> -->
-
-        <span class="centerer c">
-            <span class="title is-4">Youtube-DL</span>
-        </span>
-  
-        <span class="centerer c">
-          <a href="#" class="custom-underline-text"><strong>Cut-file</strong></a>
-        </span>
-
-        <button id="general-settings" class="button spin circle">
-          <span class="icon has-text-danger">
-            <i id="setting-icon" class="far fa-sun fa-lg"></i>
-          </span>
-        </button>
-      </div>
-
-      <div class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">General settings</p>
-            <button class="delete is-danger" aria-label="close"></button>
-          </header>
-          <section class="modal-card-body">
-            This is the modal!!!
-          </section>
-          <footer class="modal-card-foot">
-            <button class="button is-small is-danger">Close</button>
-          </footer>
-        </div>
-      </div>
-    </div>
+    
   </body>
 
-  <script>
-    var doc = document.querySelector('link[rel="import"]').import;
-    var text = doc.querySelector('.test');
-    var clone = document.importNode(text.content, true);
-    document.querySelector('body').appendChild(clone);
-  </script>
-  <script> $ = require('jquery') </script>
+  <script src="../imports.js"></script>
   <script src="../app/app-navbar.js"></script>
 </html>
