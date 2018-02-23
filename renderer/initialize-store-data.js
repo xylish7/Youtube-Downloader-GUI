@@ -1,6 +1,3 @@
-// Modules
-const $ = require('jquery')
-
 // Internal modules
 const Store = require('./store')
 
@@ -12,7 +9,7 @@ const store = new Store({
   defaults: {}
 });
 
-// Set download path
+// Get download path
 const messagePath = $('#path-message')
 const articlePath = $('#path-article')
 var savePath = store.get('savePath')
@@ -21,3 +18,24 @@ if (savePath) {
   articlePath.show()
   downloadInfo.savePath = savePath
 }
+
+// Set general settings
+const $settingsOptions = $('.settings-options')
+
+$settingsOptions.on('change', function() {
+  let storeId = $(this).attr('id').replace('-option','').replace('-','_')
+  store.set(storeId, $(this).val())
+  console.log(storeId)
+})
+
+// Get general settings
+$settingsOptions.each(function () {
+  // Remove selected option
+  $(this).find('option:selected').removeAttr('selected');
+  // Get id of select
+  let storeId = $(this).attr('id').replace('-option','').replace('-','_')
+  // Get option from persistent data
+  storeId = store.get(storeId)
+  // Set new selected option
+  $(this).find(`option[value="${storeId}"]`).attr('selected', 'selected')
+});

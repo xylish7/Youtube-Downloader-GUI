@@ -31,7 +31,7 @@
         <div class="modal-card">
           <header class="modal-card-head">
             <p class="modal-card-title">General settings</p>
-            <button class="delete is-danger close-modal" aria-label="close"></button>
+            <button class="delete close-modal" aria-label="close"></button>
           </header>
           <section class="modal-card-body customized-scrollbar">
             <p class="subtitle is-6"><strong>Download settings:</strong></p>
@@ -41,14 +41,16 @@
                 <div class="field">
                   <div class="control">
                     <div class="select is-danger is-small">
-                      <select>
-                        <option selected="selected">best-quality</option>
-                        <option>144p</option>
-                        <option>240p</option>
-                        <option>360p</option>
-                        <option>480p</option>
-                        <option>720p-HD</option>
-                        <option>1080p-HD</option>
+                      <select id="video-quality-option" class="settings-options">
+                        <option value="best" selected="selected">best-quality</option>
+                        <!-- <option value="144">144p</option>
+                        <option value="240">240p</option>
+                        <option value="360">360p</option>
+                        <option value="480">480p</option>
+                        <option value="720">720p</option>
+                        <option value="1080">1080p</option>
+                        <option value="1080">1440p</option> -->
+
                       </select>
                     </div>
                   </div>
@@ -63,9 +65,10 @@
                 <div class="field">
                   <div class="control">
                     <div class="select is-danger is-small">
-                      <select>
-                        <option selected="selected">mp4</option>
-                        <option>webm</option>
+                      <select id="video-format-option" class="settings-options">
+                        <option value="mp4" selected="selected">mp4</option>
+                        <option value="webm">webm</option>
+                        <option value="3gp">3gp</option>
                       </select>
                     </div>
                   </div>
@@ -82,15 +85,16 @@
                 <div class="field">
                   <div class="control">
                     <div class="select is-danger is-small">
-                      <select>
-                        <option>80 kbps</option>
-                        <option>96 kbps</option>
-                        <option selected="selected">128 kbps</option>
-                        <option>160 kbps</option>
-                        <option>192 kbps</option>
-                        <option>224 kbps</option>
-                        <option>256 kbps</option>
-                        <option>320 kbps</option>
+                      <select id="audio-quality-option" class="settings-options">
+                        <option value="64k">64 kbps</option>
+                        <option value="80k">80 kbps</option>
+                        <option value="96k">96 kbps</option>
+                        <option value="128k" selected="selected">128 kbps</option>
+                        <option value="160k">160 kbps</option>
+                        <option value="192k">192 kbps</option>
+                        <option value="224k">224 kbps</option>
+                        <option value="256k">256 kbps</option>
+                        <option value="320k">320 kbps</option>
                       </select>
                     </div>
                   </div>
@@ -105,9 +109,12 @@
                 <div class="field">
                   <div class="control">
                     <div class="select is-danger is-small">
-                      <select>
-                        <option selected="selected">mp3</option>
-                        <option>m4a</option>
+                      <select id="audio-format-option" class="settings-options">
+                        <option value="mp3" selected="selected">MP3</option>
+                        <option value="m4a" >M4A</option>
+                        <option value="ogg" >OGG</option>
+                        <!-- <option value="wav" >WAV</option> -->
+                        <option value="wma" >WMA</option>
                       </select>
                     </div>
                   </div>
@@ -122,15 +129,15 @@
                 <div class="field">
                   <div class="control">
                     <div class="select is-danger is-small">
-                      <select>
-                        <option >1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option selected="selected">4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
+                      <select id="no-processes-option" class="settings-options">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4" selected="selected">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
                       </select>
                     </div>
                   </div>

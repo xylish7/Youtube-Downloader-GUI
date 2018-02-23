@@ -11,19 +11,18 @@ exports.convertVideo = (playlistInfo, downloadInfo) => {
     ffmpeg_path: path.resolve(__dirname, '..', '..', 'node_modules', 'youtube-dl', 'bin', 'ffmpeg.exe'),
     args: [
       '-i', 
-      `${downloadInfo.savePath}\\${playlistInfo.dynamic.title}.mp4`,
+      `${downloadInfo.savePath}\\${playlistInfo.dynamic.title}.${downloadInfo.video_format}`,
       '-map', '0:a:0',
-      '-b:a', '96k',
+      '-b:a', `${downloadInfo.audio_quality}`,
       '-y',
-      `${downloadInfo.savePath}\\${playlistInfo.dynamic.title}.mp3`
+      `${downloadInfo.savePath}\\${playlistInfo.dynamic.title}.${downloadInfo.audio_format}`
       ],
     options: {
       detached: false
     }
   }
-  
 
-  if (!checkAvailability()) {
+  if (!checkAvailability(downloadInfo.no_processes)) {
     var processAttributes = {
       spawnAttributes,
       playlistInfo,
@@ -93,14 +92,18 @@ var spawnChild = (spawnAttributes, playlistInfo, downloadInfo) => {
     }
     
   });
+
+  ffmpeg.on('error', (err) => {
+    if (err) console.log(err)
+  })
 }
 
 var removeChild = (childPid) => {
   this.childProcesses = this.childProcesses.filter(pid => pid != childPid)
 }
 
-var checkAvailability = (pendingVideo) => {
-  if (this.childProcesses.length == 4) return false
+var checkAvailability = (noProcesses) => {
+  if (this.childProcesses.length == noProcesses) return false
   else return true
 }
 

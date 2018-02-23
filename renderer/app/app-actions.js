@@ -57,12 +57,21 @@ exports.getFieldValues = () => {
   const mp3Conversion = $('#mp3-conversion')
   const keepFilesCheckbox = $('#keep-files')
   const inputUrl = $('#input-url')
+  const settingsOptions = $('.settings-options')
 
   this.downloadInfo.mp3Conversion = mp3Conversion.is(":checked") ? 
     mp3Conversion.val() : 'false'
   this.downloadInfo.keepFilesCheckbox = keepFilesCheckbox.is(":checked") ? 
     keepFilesCheckbox.val() : 'false'
   this.downloadInfo.url = inputUrl.val()
+
+  // Get general settings values
+  var downloadInfoCopy = this.downloadInfo
+  settingsOptions.each(function () {
+    let id = $(this).attr('id').replace('-option','').replace('-','_')
+    downloadInfoCopy[id] = $(this).val()
+  })
+  this.downloadInfo = downloadInfoCopy
 }
 
 // Add  dynamicaly progress bar for every video

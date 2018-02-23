@@ -7,11 +7,7 @@ const {ipcMain} = require('electron')
 const mp3converter = require('../conversion/mp3Converter')
 const {killAllProcesses} = require('../kill-processes/app-notifications')
 
-exports.options = {
-  maxBuffer: Infinity
-}
 
-exports.args = []
 
 exports.staticInfo = {
   win: false,
@@ -24,11 +20,23 @@ exports.staticInfo = {
 
 exports.ipcEvent = {}
 
+var options = {
+  maxBuffer: Infinity
+}
 var video, stream
+
+var getArgs = () => {
+  var args = [
+    '-f', `${this.ipcEvent.downloadInfo.video_quality}[ext=${this.ipcEvent.downloadInfo.video_format}]`
+  ]
+
+  return args
+}
+
 exports.playlist = (url) => {
- 
+
   var dynamicInfo = {}
-  video = ytdl(url, this.args, this.options)
+  video = ytdl(url, getArgs(), options)
   
   // Catch error
   video.on('error', (err) => { 
@@ -69,7 +77,7 @@ exports.playlist = (url) => {
     }
   
     // Save path
-    var outputFile = `${this.ipcEvent.downloadInfo.savePath}\\${dynamicInfo.title}.mp4`
+    var outputFile = `${this.ipcEvent.downloadInfo.savePath}\\${dynamicInfo.title}.${this.ipcEvent.downloadInfo.video_format}`
 
     // Start writing video in directory
     stream = fs.createWriteStream(outputFile)
@@ -81,6 +89,7 @@ exports.playlist = (url) => {
     })
   
     this.staticInfo.appendColumns = false
+
   });
 
   // Calculate the progress of download
