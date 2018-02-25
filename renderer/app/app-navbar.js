@@ -15,10 +15,27 @@ $generalSettings.on('click', () => {
 
 // Close modal
 const $closeMolad = $('.close-modal')
+const $switchSettings = $('#switch-settings')
 $closeMolad.on('click', () => {
   $modal.removeClass('is-active')
+
+  // Change to 'General Settings' section on modal close
+  if ($switchSettings.attr('checked')) {
+    $switchSettings.prop('checked', false).attr('checked', false)
+    $generalSettingsSection.toggle();
+    $settingsMessage.toggle()
+  }
 })
 
+
+// Toggle between 'General Settings' and 'Updates and releaseas'
+const $settingsMessage = $('.settings-message')
+const $generalSettingsSection = $('.general-settings-section')
+$switchSettings.on('click', function() {
+  ($switchSettings.attr('checked')) ? $(this).attr('checked', false) : $(this).attr('checked', true)
+    $generalSettingsSection.toggle()
+    $settingsMessage.toggle()
+})
 
 // Navigation
 const $navLink =  $('.nav-link')
@@ -41,4 +58,5 @@ $navLink.on('click', function () {
   // Show section
   $(`#${selectedSection}`).removeClass('hide-section')
 })
+
 

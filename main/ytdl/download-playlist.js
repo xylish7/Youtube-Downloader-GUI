@@ -1,7 +1,7 @@
 // Modules
 const ytdl = require('youtube-dl')
 const fs = require('fs')
-const {ipcMain} = require('electron')
+const {ipcMain, app} = require('electron')
 
 // Internam modules
 const mp3converter = require('../conversion/mp3Converter')
@@ -37,20 +37,20 @@ exports.playlist = (url) => {
 
   var dynamicInfo = {}
   video = ytdl(url, getArgs(), options)
-  
+
   // Catch error
   video.on('error', (err) => { 
     this.ipcEvent.event.sender.send('ytdl-errors', err)
 
     // Create directory for logs if it doesn't exists
-    var dir = `${process.env.USERPROFILE}/YT-downloader-logs`
+    var dir = `${app.getPath('userData')}/logs`
     if (!fs.existsSync(dir)){
       fs.mkdirSync(dir);
     }
 
     // Create log file
     var error_template = `---------------------------\n${new Date().toLocaleString()}\n---------------------------\n\n${err}\n\n`
-    fs.appendFile(`${process.env.USERPROFILE}/YT-downloader-logs/ytdl-errors.txt`, error_template, (error) => {
+    fs.appendFile(`${app.getPath('userData')}/logs/ytdl-errors.txt`, error_template, (error) => {
       if (error) throw error;
     })
   });

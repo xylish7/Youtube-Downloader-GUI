@@ -4,8 +4,8 @@ const {autoUpdater} = require('electron-updater')
 const updateWindow = require('../windows/update-window')
 
 // Enable loggin
-autoUpdater.logger = require('electron-log')
-autoUpdater.logger.transports.file.level = 'info'
+// autoUpdater.logger = require('electron-log')
+// autoUpdater.logger.transports.file.level = 'info'
 
 // Disable auto downloading
 autoUpdater.autoDownload = false

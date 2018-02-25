@@ -78,7 +78,7 @@ var spawnChild = (spawnAttributes, playlistInfo, downloadInfo) => {
     
     if (code == 0) 
       if (playlistInfo.static.keepFiles == 'false'){
-        fs.unlinkSync(`${downloadInfo.savePath}\\${sendData.title}.mp4`);
+        fs.unlinkSync(`${downloadInfo.savePath}\\${sendData.title}.${downloadInfo.video_format}`);
         playlistInfo.static.win.webContents.send('conversion-done', sendData)
       } else playlistInfo.static.win.webContents.send('conversion-done', sendData)
 

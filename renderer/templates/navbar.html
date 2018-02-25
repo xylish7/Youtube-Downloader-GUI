@@ -19,8 +19,8 @@
         </span>
 
         <button id="general-settings" class="button spin circle">
-          <span class="icon has-text-danger">
-            <i id="setting-icon" class="far fa-sun"></i>
+          <span class="icon">
+            <i id="setting-icon" class="fas fa-cogs"></i>
           </span>
         </button>
         <hr>
@@ -30,127 +30,215 @@
         <div class="modal-background"></div>
         <div class="modal-card">
           <header class="modal-card-head">
-            <p class="modal-card-title">General settings</p>
+            <span class="icon">
+              <i class="fas fa-cogs"></i>
+            </span>
+            <p class="modal-card-title settings-message" style="margin-left:10px;">General settings</p>
+            <p class="modal-card-title settings-message" style="margin-left:10px; display: none">Updates & Releases</p>
             <button class="delete close-modal" aria-label="close"></button>
           </header>
           <section class="modal-card-body customized-scrollbar">
-            <p class="subtitle is-6"><strong>Download settings:</strong></p>
-            <div class="columns is-mobile is-gapless">
-              <div class="column is-4">Video quality:</div>
-              <div class="column">
-                <div class="field">
-                  <div class="control">
-                    <div class="select is-danger is-small">
-                      <select id="video-quality-option" class="settings-options">
-                        <option value="best" selected="selected">best-quality</option>
-                        <!-- <option value="144">144p</option>
-                        <option value="240">240p</option>
-                        <option value="360">360p</option>
-                        <option value="480">480p</option>
-                        <option value="720">720p</option>
-                        <option value="1080">1080p</option>
-                        <option value="1080">1440p</option> -->
+            <span class="settings-message" style="font-size: 13px;">To see <strong>Updates & Releases</strong> futures and fixed bugs press the switch:</span>
+            <span class="settings-message" style="font-size: 13px; display: none;">To see <strong>General Settings</strong> press the switch: </span>
+            <div class="field is-pulled-right" style="margin-left: 15px;">
+              <input id="switch-settings" type="checkbox" name="switch-settings" class="switch is-small is-danger is-outlined">
+              <label for="switch-settings"></label>            
+            </div>
 
-                      </select>
+            <hr>
+            <div class="general-settings-section">              
+              <p class="subtitle is-6"><strong>Download settings:</strong></p>
+              <div class="columns is-mobile is-gapless">
+                <div class="column is-4">Video quality:</div>
+                <div class="column is-2">
+                  <div class="field">
+                    <div class="control">
+                      <div class="select is-danger is-small">
+                        <select id="video-quality-option" class="settings-options">
+                          <option value="best" selected="selected">best</option>
+                          <!-- <option value="144">144p</option>
+                          <option value="240">240p</option>
+                          <option value="360">360p</option>
+                          <option value="480">480p</option>
+                          <option value="720">720p</option>
+                          <option value="1080">1080p</option>
+                          <option value="1080">1440p</option> -->
+  
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <div class="column">
+                  <span class="icon tooltip">
+                    <i class="fas fa-info-circle" style="color: rgba(0, 0, 0, 0.5)"></i>
+                    <span class="tooltiptext">More quality options <span class="warning">coming soon</span>.</span>
+                  </span>
+                </div>
               </div>
-              <div class="column">3</div>
-            </div>
-            <br>
-            <div class="columns is-mobile is-gapless">
-              <div class="column is-4">Video format:</div>
-              <div class="column">
-                <div class="field">
-                  <div class="control">
-                    <div class="select is-danger is-small">
-                      <select id="video-format-option" class="settings-options">
-                        <option value="mp4" selected="selected">mp4</option>
-                        <option value="webm">webm</option>
-                        <option value="3gp">3gp</option>
-                      </select>
+              <br>
+              <div class="columns is-mobile is-gapless">
+                <div class="column is-4">Video format:</div>
+                <div class="column">
+                  <div class="field">
+                    <div class="control">
+                      <div class="select is-danger is-small">
+                        <select id="video-format-option" class="settings-options">
+                          <option value="mp4" selected="selected">mp4</option>
+                          <option value="webm">webm</option>
+                          <option value="3gp">3gp</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <div class="column"></div>
               </div>
-              <div class="column">3</div>
+              
+              <hr>
+              <p class="subtitle is-6"><strong>Convert settings:</strong></p>
+              <div class="columns is-mobile is-gapless">
+                <div class="column is-4">Audio quality:</div>
+                <div class="column is-2">
+                  <div class="field">
+                    <div class="control">
+                      <div class="select is-danger is-small">
+                        <select id="audio-quality-option" class="settings-options">
+                          <option value="64k">64 kbps</option>
+                          <option value="80k">80 kbps</option>
+                          <option value="96k">96 kbps</option>
+                          <option value="128k" selected="selected">128 kbps</option>
+                          <option value="160k">160 kbps</option>
+                          <option value="192k">192 kbps</option>
+                          <option value="224k">224 kbps</option>
+                          <option value="256k">256 kbps</option>
+                          <option value="320k">320 kbps</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <span class="icon tooltip" style="margin-left: 12px;">
+                    <i class="fas fa-info-circle" style="color: rgba(0, 0, 0, 0.5)"></i>
+                    <span class="tooltiptext" style="top: -20px;">Higher kbps means higher quality, but bigger file size (recommanded: 128kbps) </span>
+                  </span>
+                </div>
+              </div>
+              <br>
+              <div class="columns is-mobile is-gapless">
+                <div class="column is-4">Audio format:</div>
+                <div class="column">
+                  <div class="field">
+                    <div class="control">
+                      <div class="select is-danger is-small">
+                        <select id="audio-format-option" class="settings-options">
+                          <option value="mp3" selected="selected">MP3</option>
+                          <option value="m4a" >M4A</option>
+                          <option value="ogg" >OGG</option>
+                          <!-- <option value="wav" >WAV</option> -->
+                          <option value="wma" >WMA</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column"></div>
+              </div>
+              <br>
+              <div class="columns is-mobile is-gapless">
+                <div class="column is-4">No. processes</div>
+                <div class="column is-2">
+                  <div class="field">
+                    <div class="control">
+                      <div class="select is-danger is-small">
+                        <select id="no-processes-option" class="settings-options">
+                          <option value="1" selected="selected">- 1 -</option>
+                          <option value="2">- 2 -</option>
+                          <option value="3">- 3 -</option>
+                          <option value="4">- 4 -</option>
+                          <option value="5">- 5 -</option>
+                          <option value="6">- 6 -</option>
+                          <option value="7">- 7 -</option>
+                          <option value="8">- 8 -</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <span class="icon tooltip">
+                    <i class="fas fa-exclamation-circle" style="color:hsla(357, 84%, 48%, 0.849);"></i>
+                    <span class="tooltiptext" style="top: -30px;">
+                      Set how many converts to do at the same time. <span class="warning">Caution:</span> High No. processes use <span class="warning">more CPU</span> (recommanded: 1-2).
+                    </span>
+                  </span>               
+                </div>
+              </div>
+              
+              <hr>
+              <p class="subtitle is-6"><strong>Cut settings:</strong></p>
+              <div class="columns is-mobile is-gapless">
+                <div class="column has-text-centered">
+                  <p class="title is-6">Coming soon!</p> 
+                </div>
+              </div>
             </div>
             
-            <hr>
-            <p class="subtitle is-6"><strong>Convert settings:</strong></p>
-            <div class="columns is-mobile is-gapless">
-              <div class="column is-4">Audio quality:</div>
-              <div class="column">
-                <div class="field">
-                  <div class="control">
-                    <div class="select is-danger is-small">
-                      <select id="audio-quality-option" class="settings-options">
-                        <option value="64k">64 kbps</option>
-                        <option value="80k">80 kbps</option>
-                        <option value="96k">96 kbps</option>
-                        <option value="128k" selected="selected">128 kbps</option>
-                        <option value="160k">160 kbps</option>
-                        <option value="192k">192 kbps</option>
-                        <option value="224k">224 kbps</option>
-                        <option value="256k">256 kbps</option>
-                        <option value="320k">320 kbps</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
+            <div class="general-settings-section" style="display: none;">
+              <div class="content">
+                <p class="title is-5">Release 4 - v.2.0.0 (current)</p>
+                <h4>Changes:</h4>
+                <ul>
+                  <li>Modified font-style.</li>
+                  <li>Added navigation bar, settings button and changed logo.</li>
+                  <li>Added a section with all the releases until the current version.</li>
+                </ul>
+                <h4>Features:</h4>
+                <ul>
+                  <li>Open the folder where your files are saved <strong>just by clicking the Save Path.</strong> or the path itself</li>
+                  <li>Add log with errors in: <strong>C:/Users/%USERNAME%/AppData/Roaming/yt-downloader/logs</strong></li>
+                  <li>Remember path for <strong>Save Folder</strong>.</li>
+                  <li>Remember all settings set in <strong>General settings</strong>.</li>
+                  <li>Set video quality.</li>
+                  <li>Set video format.</li>
+                  <li>Set audio quality.</li>
+                  <li>Set audio format.</li>
+                  <li>Set how many <strong>convert processes</strong> to do at the same time. Higher number of processes means <strong>faster</strong> overall conversion, but <strong>increased CPU usage.</strong> </li>
+                </ul>
               </div>
-              <div class="column">3</div>
-            </div>
-            <br>
-            <div class="columns is-mobile is-gapless">
-              <div class="column is-4">Audio format:</div>
-              <div class="column">
-                <div class="field">
-                  <div class="control">
-                    <div class="select is-danger is-small">
-                      <select id="audio-format-option" class="settings-options">
-                        <option value="mp3" selected="selected">MP3</option>
-                        <option value="m4a" >M4A</option>
-                        <option value="ogg" >OGG</option>
-                        <!-- <option value="wav" >WAV</option> -->
-                        <option value="wma" >WMA</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
+
+              <div class="content">
+                <p class="title is-5">Release 3 - v.1.2.1</p>
+                <h4>Features:</h4>
+                <ul>
+                  <li>To paste the copied URL, just <strong>double click</strong> in the input field.</li>
+                </ul>
+                <h4>Fixed bugs:</h4>
+                <ul>
+                  <li>Showing <strong>'Url not valid'</strong>  error when 'Start-download' button is disabled</li>
+                  <li><strong>'Conversion finished'</strong> message shows up when 'Stop-download' is pressed, even if there were no conversions in progress</li>
+                  <li>Playlists with <strong>unavailable/deleted</strong> videos can't be downloaded</li>
+                  <li>When <strong>'Keep original file(s)'</strong> option is selected, the state of the <strong>'Stop-download'</strong> button won't change to <strong>'Start-download'</strong> after video is converted.</li>
+                </ul>
               </div>
-              <div class="column">3</div>
-            </div>
-            <br>
-            <div class="columns is-mobile is-gapless">
-              <div class="column is-4">No. processes</div>
-              <div class="column">
-                <div class="field">
-                  <div class="control">
-                    <div class="select is-danger is-small">
-                      <select id="no-processes-option" class="settings-options">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4" selected="selected">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
+
+              <div class="content">
+                <p class="title is-5">Release 2 - v.1.1.0</p>
+                <h4>Changes:</h4>
+                <ul>
+                  <li>Modified <strong>Update-window</strong> style.</li>
+                </ul>
               </div>
-              <div class="column">3</div>
-            </div>
-            
-            <hr>
-            <p class="subtitle is-6"><strong>Cut settings:</strong></p>
-            <div class="columns is-mobile is-gapless">
-              <div class="column has-text-centered">
-                <p class="title is-6">Coming soon!</p> 
+
+              <div class="content">
+                <p class="title is-5">Release 1 - v.1.0.0</p>
+                <h4>Features:</h4>
+                <ul>
+                  <li>Download video or entire playlists from youtube.</li>
+                  <li>Convert video or entire playlists from youtube.</li>
+                  <li>Option to keep the videos after conversion.</li>
+                </ul>
               </div>
             </div>
           </section>

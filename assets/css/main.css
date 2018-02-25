@@ -124,3 +124,46 @@ progress {
   height: 18; 
 }
 
+/* Tooltip */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 2px;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 110%;
+  opacity: 0;
+  transition: opacity 0.7s;
+}
+
+.tooltip .warning {
+  color: hsl(348, 100%, 61%);
+  font-size: 12px;
+  font-weight: bold 
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent rgba(0, 0, 0, 0.7) transparent transparent;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}

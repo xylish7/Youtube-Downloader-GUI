@@ -1,5 +1,6 @@
 // Modules
 const {dialog} = require('electron').remote
+const {shell} = require('electron')
 
 // Internal modules
 const Store = require('../store')
@@ -50,6 +51,14 @@ exports.getDownloadPath = () => {
   }
 
   this.downloadInfo.savePath = savePath[0]
+}
+
+// Open 'Save Folder' in explorer
+exports.openSavePath = () => {
+  const pathMessage = $('#path-message')
+  pathMessage.on('click', function() {
+    let path = $(this).text().replace('Save Path: ','').trim()
+  })
 }
 
 // Get all values from inputs, checkboxes, selects etc.

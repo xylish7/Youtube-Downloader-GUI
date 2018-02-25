@@ -25,17 +25,19 @@ const $settingsOptions = $('.settings-options')
 $settingsOptions.on('change', function() {
   let storeId = $(this).attr('id').replace('-option','').replace('-','_')
   store.set(storeId, $(this).val())
-  console.log(storeId)
 })
 
 // Get general settings
 $settingsOptions.each(function () {
-  // Remove selected option
-  $(this).find('option:selected').removeAttr('selected');
   // Get id of select
   let storeId = $(this).attr('id').replace('-option','').replace('-','_')
   // Get option from persistent data
   storeId = store.get(storeId)
   // Set new selected option
-  $(this).find(`option[value="${storeId}"]`).attr('selected', 'selected')
+  if (storeId) {
+    // Remove selected option
+    $(this).find('option:selected').removeAttr('selected');
+    // Add 'selected' atribute to the saved value
+    $(this).find(`option[value="${storeId}"]`).attr('selected', 'selected')
+  }
 });

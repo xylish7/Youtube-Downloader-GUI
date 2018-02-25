@@ -32,6 +32,10 @@ openFolder.on('click', () => {
   appActions.getDownloadPath()
 })
 
+
+// Open 'Save Folder' in explorer
+appActions.openSavePath()
+
 // Paste URL on double click
 inputUrl.on('dblclick', () => {
   inputUrl.val(clipboard.readText())
