@@ -5,7 +5,7 @@
 
       <div class="columns">
         <div class="column">
-          <a class="button is-small" id="open-folder">
+          <a class="button is-small" id="open-download-folder">
             <span class="icon is-small">
               <i class="far fa-folder-open"></i>
             </span>
@@ -22,19 +22,16 @@
   
       <div class="field">
         <div class="control">
-          <label class="checkbox">
-            <input id="mp3-conversion" type="checkbox" value="true">
-            Convert to audio
-          </label>
+          <input value="true" class="is-checkradio is-danger is-small" id="mp3-conversion" type="checkbox" name="checkboxDanger">
+          <label for="mp3-conversion">Convert to audio</label>
         </div>
       </div>
-  
+      
+     
       <div class="field">
         <div class="control">
-          <label class="checkbox">
-            <input id="keep-files" type="checkbox" value="true" disabled>
-            Save both video and audio
-          </label>
+          <input value="true" class="is-checkradio is-danger is-small" id="keep-files" type="checkbox" name="checkboxDanger">
+          <label for="keep-files">Save both video and audio</label>
         </div>
       </div>
   
@@ -62,8 +59,8 @@
         <span class="conversion-number"></span>
       </h1>
   
-      <div class="log customized-scrollbar">
-
+      <div class="log download-log customized-scrollbar">
+    
       </div>
   
       <div class="notification is-danger">
@@ -76,7 +73,7 @@
     </div>
     <script>
       // You can also require other files to run in this process
-      require('../app/app.js')
+      require('../app/app-download.js')
   
     </script>
   </section>

@@ -14,13 +14,13 @@ const downloadButton = $('#download-button')
 const inputUrl = $('#input-url')
 const keepFilesCheckbox = $('#keep-files')
 const mp3Conversion = $('#mp3-conversion')
-const openFolder = $('#open-folder')
+const openFolder = $('#open-download-folder')
 const buttonIcon = $('#button-icon') 
 
 // Classes
 const conversionNumber = $('.conversion-number')
 const conversionBar = '.conversion-bar'
-const log = $('.log')
+const downloadLog = $('.download-log')
 const notification = $('.notification')
 const progressBar = '.progress-bar'
 const percentProgress = '.percent-progress'
@@ -76,7 +76,7 @@ downloadButton.on('click', () => {
         appErrors.largePlaylist()
 
         // Delete all progress messages if button is pressed again
-        log.empty()
+        downloadLog.empty()
         conversionNumber.empty()
         
         // Disable button and input
@@ -92,7 +92,7 @@ downloadButton.on('click', () => {
       } else {    
           ipcRenderer.send('stop-download')
           appActions.buttonState('static')
-          log.empty()
+          downloadLog.empty()
           ipcRenderer.on('response', () => {
             conversionNumber.empty()
             videoNumber.html('Process stoped!')
@@ -128,8 +128,8 @@ ipcRenderer.on('playlist-progress', (event, playlistInfo) => {
   // Append new title, progress bar and percentage
   if (playlistInfo.static.appendColumns) {
     (appActions.downloadInfo.mp3Conversion == 'true') ?
-      log.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, 'convert')}`) :
-      log.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, 'download')}`)     
+      downloadLog.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, 'download-convert')}`) :
+      downloadLog.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, 'download')}`)     
   }
 
   // Show how many videos were downloaded for playlist

@@ -2,34 +2,63 @@
   <section id="convert-section" class="menu-section hide-section">
 
     <div class="container">
-      <article class="message is-large">
-        <div class="message-body text-is-centered">
-          <h1 class="title is-3">Coming soon!</h1>
-          <hr>
-          <p class="subtitle is-4">Until then, don't forget to share this awesome app with your friends!&#9786;</p>
-          <p class="subtitle is-5">
-            Share link: <strong>Click icon
-              <span id="copy-link" class="icon" style="cursor: pointer; color:hsla(357, 84%, 48%, 0.849);">
-                <i class="far fa-copy"></i>
-              </span>              
-              to copy link! </strong> 
-              <span id="copy-confirmation" 
-              style=" position:relative; font-size:16px; top: -2px; color:hsla(357, 84%, 48%, 0.849); display:none">Copied!</span>
-            </p>
-          <p class="subtitle is-6" 
-            style="user-select: auto; -webkit-user-select: auto; cursor: auto">
-            <strong>https://github.com/xylish7/Youtube-Downloader-GUI/releases/download/v2.0.0/yt-downloader-setup-2.0.0.exe</strong>
-          </p>
-        </div>
-      </article>
+     
+    
+    <div class="field">
+      <span class="is-size-7"><strong>Select what type of files do you want to convert:</strong></span>
+      
+      <input class="is-checkradio is-rtl is-small is-danger" id="convert-audio-radio" type="radio" name="exampleRtlRadioInline" checked="checked">
+      <label for="convert-audio-radio">Audio</label>
+
+      <input class="is-checkradio is-rtl is-small is-danger" id="convert-video-radio" type="radio" name="exampleRtlRadioInline">
+      <label for="convert-video-radio">Video</label>
     </div>
 
+    <div class="field">
+      <div class="column">
+        <a class="button is-small" id="open-convert-folder">
+          <span class="icon is-small">
+            <i class="far fa-folder-open"></i>
+          </span>
+          <span>Open files</span>
+        </a>     
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="control">
+        <input value="true" class="is-checkradio is-danger is-small" id="delete-convert-files" type="checkbox" name="checkboxDanger">
+        <label for="delete-convert-files">Delete original file</label>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="field">
+        <div class="column">   
+            <a id="start-conversion" style="float:right" class="button is-small is-danger badge is-badge-small is-badge-outlined is-badge-danger">
+              <span class="icon is-small">
+                <i class="far fa-arrow-alt-circle-right"></i>
+              </span>
+              <span> Start conversion</span> 
+            </a>    
+        </div>
+      </div>
+    </div>
+   
+    <div class="is-divider" data-content="PROGRESS"></div>
+
+    <h1>
+      <span class="convert-number"></span>
+    </h1>
+
+    <div class="log convert-log customized-scrollbar">
+    
+    </div>
+  
     <script>
-      const {clipboard} = require('electron')
-      $("#copy-link").on("click",() => {
-        clipboard.writeText('https://github.com/xylish7/Youtube-Downloader-GUI/releases/download/v2.0.0/yt-downloader-setup-2.0.0.exe')
-        $("#copy-confirmation").fadeIn(500).delay(1000).fadeOut(800)
-      })     
+      // You can also require other files to run in this process
+      require('../app/app-convert.js')
+  
     </script>
 
   </section>

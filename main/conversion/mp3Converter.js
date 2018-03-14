@@ -111,3 +111,94 @@ var checkPending = () => {
   if (pendingProcesses.length == 0) return false
   else return true
 }
+
+// ------------- Convert ------------- //
+// ----------------------------------- //
+exports.convertFiles = (fileInfo) => {
+  var spawnAttributes = {
+    ffmpeg_path: path.resolve(__dirname, '..', '..', 'node_modules', 'youtube-dl', 'bin', 'ffmpeg.exe'),
+    args: [
+      '-i', 
+      `${fileInfo.path}`,
+      '-map', '0:a:0',
+      '-b:a', `${fileInfo.audio_quality}`,
+      '-y',
+      `${fileInfo.savePath}\\${fileInfo.title}.${fileInfo.audio_format}`
+      ],
+    options: {
+      detached: false
+    }
+  }
+
+  if (!checkAvailability(fileInfo.no_processes)) {
+    var processAttributes = {
+      spawnAttributes,
+      fileInfo
+    }
+    pendingProcesses.push(processAttributes)
+
+  }
+  else {
+    if (!checkPending()) {
+      spawnConvert(spawnAttributes, fileInfo)
+    }
+    else {
+      spawnConvert(pendingProcesses.shift(), fileInfo)
+    }  
+  } 
+}
+
+var spawnConvert = (spawnAttributes, fileInfo) => {
+  let ffmpegOutput = new Output()
+  
+  var sendData = {
+    conversionFinished: false
+  }
+
+  // Spawn new child process
+  var {ffmpeg_path, args, options} = spawnAttributes
+  var ffmpeg = spawn(ffmpeg_path, args, options);
+  this.childProcesses.push(ffmpeg.pid)
+
+
+  sendData.index =  fileInfo.index
+  sendData.title = fileInfo.dynamic.title
+
+  ffmpeg.stderr.on('data', (data) => {
+    
+    ffmpegOutput.string = data.toString()
+    ffmpegOutput._raw_duration = playlistInfo.dynamic._raw_duration
+    sendData.percent = ffmpegOutput.percent
+
+    if (!isNaN(sendData.percent)) {
+      playlistInfo.static.win.webContents.send('conversion-percent', sendData)
+    }
+      
+  });
+
+  ffmpeg.on('exit', (code) => {
+    if (sendData.index == fileInfo.n_entries) {
+      sendData.conversionFinished = true;
+    }
+    
+    if (code == 0) 
+      if (fileInfo.delete_files == 'true'){
+        fs.unlinkSync(`${downloadInfo.savePath}\\${sendData.title}.${downloadInfo.video_format}`);
+        playlistInfo.static.win.webContents.send('conversion-done', sendData)
+      } else playlistInfo.static.win.webContents.send('conversion-done', sendData)
+
+    // Remove pid from child array
+    removeChild(ffmpeg.pid)
+
+    // Start a pending process
+    if (checkPending())  {
+      var pendingProcess = pendingProcesses.shift()
+      spawnConvert(pendingProcess.spawnAttributes, pendingProcess.fileInfo)
+    }
+    
+  });
+
+  ffmpeg.on('error', (err) => {
+    if (err) console.log(err)
+  })
+}

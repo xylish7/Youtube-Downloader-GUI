@@ -47,7 +47,7 @@
 
             <hr>
             <div class="general-settings-section">              
-              <p class="subtitle is-6"><strong>Download settings:</strong></p>
+              <p class="subtitle is-6"><strong>Download & convert (from youtube) settings:</strong></p>
               <div class="columns is-mobile is-gapless">
                 <div class="column is-4">Video quality:</div>
                 <div class="column is-2">
@@ -94,9 +94,7 @@
                 </div>
                 <div class="column"></div>
               </div>
-              
-              <hr>
-              <p class="subtitle is-6"><strong>Convert settings:</strong></p>
+              <br>
               <div class="columns is-mobile is-gapless">
                 <div class="column is-4">Audio quality:</div>
                 <div class="column is-2">
@@ -175,7 +173,104 @@
                   </span>               
                 </div>
               </div>
-              
+              <hr>
+              <p class="subtitle is-6"><strong>Convert settings:</strong></p>
+              <div class="columns is-mobile is-gapless">
+                <div class="column is-4">Video format:</div>
+                <div class="column">
+                  <div class="field">
+                    <div class="control">
+                      <div class="select is-danger is-small">
+                        <select id="convert-video-format-option" class="settings-options">
+                          <option value="mp4" selected="selected">mp4</option>
+                          <option value="webm">webm</option>
+                          <option value="3gp">3gp</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column"></div>
+              </div>
+              <br>
+              <div class="columns is-mobile is-gapless">
+                <div class="column is-4">Audio quality:</div>
+                <div class="column is-2">
+                  <div class="field">
+                    <div class="control">
+                      <div class="select is-danger is-small">
+                        <select id="convert-audio-quality-option" class="settings-options">
+                          <option value="64k">64 kbps</option>
+                          <option value="80k">80 kbps</option>
+                          <option value="96k">96 kbps</option>
+                          <option value="128k" selected="selected">128 kbps</option>
+                          <option value="160k">160 kbps</option>
+                          <option value="192k">192 kbps</option>
+                          <option value="224k">224 kbps</option>
+                          <option value="256k">256 kbps</option>
+                          <option value="320k">320 kbps</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <span class="icon tooltip" style="margin-left: 12px;">
+                    <i class="fas fa-info-circle" style="color: rgba(0, 0, 0, 0.5)"></i>
+                    <span class="tooltiptext" style="top: -20px;">Higher kbps means higher quality, but bigger file size (recommanded: 128kbps) </span>
+                  </span>
+                </div>
+              </div>
+              <br>
+              <div class="columns is-mobile is-gapless">
+                <div class="column is-4">Audio format:</div>
+                <div class="column">
+                  <div class="field">
+                    <div class="control">
+                      <div class="select is-danger is-small">
+                        <select id="convert-audio-format-option" class="settings-options">
+                          <option value="mp3" selected="selected">MP3</option>
+                          <option value="m4a" >M4A</option>
+                          <option value="ogg" >OGG</option>
+                          <!-- <option value="wav" >WAV</option> -->
+                          <option value="wma" >WMA</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column"></div>
+              </div>
+              <br>
+              <div class="columns is-mobile is-gapless">
+                <div class="column is-4">No. processes</div>
+                <div class="column is-2">
+                  <div class="field">
+                    <div class="control">
+                      <div class="select is-danger is-small">
+                        <select id="convert-no-processes-option" class="settings-options">
+                          <option value="1" selected="selected">- 1 -</option>
+                          <option value="2">- 2 -</option>
+                          <option value="3">- 3 -</option>
+                          <option value="4">- 4 -</option>
+                          <option value="5">- 5 -</option>
+                          <option value="6">- 6 -</option>
+                          <option value="7">- 7 -</option>
+                          <option value="8">- 8 -</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <span class="icon tooltip">
+                    <i class="fas fa-exclamation-circle" style="color:hsla(357, 84%, 48%, 0.849);"></i>
+                    <span class="tooltiptext" style="top: -30px;">
+                      Set how many converts to do at the same time. <span class="warning">Caution:</span> High No. processes use <span class="warning">more CPU</span> (recommanded: 1-2).
+                    </span>
+                  </span>               
+                </div>
+              </div>
               <hr>
               <p class="subtitle is-6"><strong>Cut settings:</strong></p>
               <div class="columns is-mobile is-gapless">
@@ -196,7 +291,7 @@
                 </ul>
                 <h4>Features:</h4>
                 <ul>
-                  <li>Open the folder where your files are saved <strong>just by clicking the Save Path.</strong> or the path itself</li>
+                  <li>Open the folder where your files are saved <strong>just by clicking the Save Path.</strong> or the <strong>path itself</strong>.</li>
                   <li>Add log with errors in: <strong>C:/Users/%USERNAME%/AppData/Roaming/yt-downloader/logs</strong></li>
                   <li>Remember path for <strong>Save Folder</strong>.</li>
                   <li>Remember all settings set in <strong>General settings</strong>.</li>

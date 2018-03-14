@@ -6,7 +6,7 @@ exports.win
 exports.createWindow = () => {
 
   this.win = new BrowserWindow({
-    width: 586,
+    width: 500,
     height: 133,
     useContentSize: true,
     autoHideMenuBar: true,

@@ -15,8 +15,8 @@ body {
   cursor: context-menu;
   overflow:hidden;
   font-family: "Trebuchet MS";
-  width: 600;
-  height: 600;
+  width: 600px;
+  height: 600px;
 }
 
 body::-webkit-scrollbar{
@@ -40,8 +40,6 @@ progress {
   color: hsl(348, 100%, 61%);
 }
 .log {
-  max-height: 150px;
-  min-height: 25px;
   overflow-y: scroll;
   margin: 0 15px 15px;
   padding: 5px 10px;
@@ -50,6 +48,17 @@ progress {
   border-width: 1px;
   border-radius: 5px;
   overflow-x: hidden;
+  padding-left: 28px;
+}
+
+.download-log {
+  max-height: 150px;
+  min-height: 25px;
+}
+
+.convert-log {
+  max-height: 150px;
+  min-height: 25px;
 }
 
 .customized-scrollbar::-webkit-scrollbar {

@@ -13,6 +13,8 @@ const store = new Store({
 });
 
 
+// --------------------------- Download -------------------- //
+
 // Informations regarding the download
 exports.downloadInfo = {
   mp3Conversion: null,
@@ -38,6 +40,7 @@ exports.getDownloadPath = () => {
     properties: ['openDirectory']
   })
 
+  if (savePath) {
   // Store savePath
   store.set('savePath', savePath[0])
 
@@ -51,6 +54,7 @@ exports.getDownloadPath = () => {
   }
 
   this.downloadInfo.savePath = savePath[0]
+  }
 }
 
 // Open 'Save Folder' in explorer
@@ -58,6 +62,7 @@ exports.openSavePath = () => {
   const pathMessage = $('#path-message')
   pathMessage.on('click', function() {
     let path = $(this).text().replace('Save Path: ','').trim()
+    shell.openItem(path)
   })
 }
 
@@ -86,7 +91,7 @@ exports.getFieldValues = () => {
 // Add  dynamicaly progress bar for every video
 exports.dynamicContent = (data, caseName) => {
   switch(caseName) {
-    case 'convert':
+    case 'download-convert':
       return `<div id='${data}' class="columns is-mobile is-gapless">
           <div class="column is-4">
             <p class="video-title"></p>
@@ -115,22 +120,35 @@ exports.dynamicContent = (data, caseName) => {
           </div>
         </div>`
       break;
+    case 'convert':
+      return `<div id='${data}' class="columns is-mobile is-gapless">
+          <div class="column is-4">
+            <p class="video-title"></p>
+          </div>
+          <div  class="column is-6">
+            <progress class="progress progress-bar is-danger is-small" value="0" max="100"></progress>
+          </div>
+          <div class="column is-2">
+            <p class="percent-progress"></p>
+          </div>
+        </div>`
+      break;
   }
 }
 
 // Update progress bar, and percent value
 exports.showProgress = (data) => {
-  const log = $('.log')
+  const downloadLog = $('.download-log')
   const progressBar = '.progress-bar'
   const videoTitle = '.video-title'
   const percentProgress = '.percent-progress'
 
   // Fill progress bar
-  log.find(progressBar).last().val(data.percent)
+  downloadLog.find(progressBar).last().val(data.percent)
   // Show the procent in clear text
-  log.find(percentProgress).last().html(`${data.percent}%`)
+  downloadLog.find(percentProgress).last().html(`${data.percent}%`)
   // Show the title of the video
-  log.find(videoTitle).last().html(`${data.title}`)
+  downloadLog.find(videoTitle).last().html(`${data.title}`)
 }
 
 // Disable download button if no input or save path is provided
@@ -172,5 +190,48 @@ exports.buttonState = (state) => {
       buttonMessage.html('Stop-download!')
       buttonIcon.removeClass('fas fa-sync fa-spin').addClass('fas fa-spinner fa-pulse')
       break;
+  }
+}
+
+// ---------------- Convert ---------------- //
+
+// Get paths for every file
+exports.getConvertFiles = (filter) => {
+  let convertFiles= dialog.showOpenDialog({
+    properties: [
+      'openFile',  
+      'multiSelections'
+    ],
+    filters: [ filter ]
+  })
+
+  return convertFiles
+}
+
+// Get options for conversion
+exports.getConvertOptions = () => {
+  $deleteFiles = $('#delete-convert-files')
+  $deleteFiles = $deleteFiles.is(":checked") ? 
+    $deleteFiles.val() : 'false'
+
+  return {
+    video_format: $('#convert-video-format-option').val(),
+    audio_quality: $('#convert-audio-quality-option').val() ,
+    audio_format: $('#convert-audio-format-option').val(),
+    no_processes: $('#convert-no-processes-option').val(),
+    delete_files: $deleteFiles
+  }
+}
+
+// Get save path
+exports.getConvertPath = (pathWithTitle) => {
+  return pathWithTitle.substring(0, pathWithTitle.lastIndexOf('\\'));
+}
+
+exports.setConvertBadge = (number) => {
+  $startConversion = $('#start-conversion')
+  $startConversion.attr('data-badge', `0/${number}`)
+  if (number == 'remove-badge') {
+    $startConversion.removeAttr('data-badge')
   }
 }

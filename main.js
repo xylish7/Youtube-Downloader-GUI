@@ -13,10 +13,14 @@ const menuBar = require('./main/menu/menu-bar')
 const onExit = require('./main/kill-processes/on-exit')
 const updater = require('./main/update/updater')
 
-// require('electron-reload')(__dirname);
+if (process.argv[2] == 'dev') {
+  require('electron-reload')(__dirname);
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+
 app.on('ready', () => {
   // Create windows
   var windows = {
@@ -24,7 +28,10 @@ app.on('ready', () => {
   }
 
   // Check for update after x seconds
-  setTimeout(updater.check, 2000);
+  if (process.argv[2] == undefined) {
+    setTimeout(updater.check, 2000);
+  }
+  
 
   // Create context menu
   windows.mainWindow.webContents.on('context-menu', (e, params) => {

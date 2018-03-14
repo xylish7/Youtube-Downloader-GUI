@@ -27,7 +27,9 @@ exports.createWindow = () => {
   this.win.loadURL(`file://${__dirname}/../../renderer/windows/main.html`)
 
   // Toggle developer tools
-  // this.win.toggleDevTools()
+  if (process.argv[2] == 'dev') {
+    this.win.toggleDevTools()
+  }
 
   // Handle window closed
   this.win.on('closed', () => {
