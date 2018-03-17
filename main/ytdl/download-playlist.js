@@ -111,6 +111,17 @@ exports.playlist = (url) => {
   video.on('end', () => {
     // Send event if download finished
     var staticInfo = this.staticInfo
+
+    // Send data for video 
+    if (staticInfo.isPlaylist == null) {
+      staticInfo.downloadFinished = true
+      this.ipcEvent.event.sender.send('playlist-progress', {
+        static: staticInfo,
+        dynamic: dynamicInfo
+      })
+    }
+
+    // Send data for playlist
     if (staticInfo.n_entries == dynamicInfo.playlist_index) {
       staticInfo.downloadFinished = true
       this.ipcEvent.event.sender.send('playlist-progress', {
@@ -126,7 +137,7 @@ exports.playlist = (url) => {
       var static = staticInfo,
           dynamic = dynamicInfo
       mp3converter.convertVideo({static, dynamic}, this.ipcEvent.downloadInfo)
-    }   
+    }
   });
 
   // Download next video

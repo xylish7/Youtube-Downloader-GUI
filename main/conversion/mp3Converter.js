@@ -5,7 +5,7 @@ var Output = require('./ffmpegOutput.js');
 
 exports.childProcesses = []
 
-var pendingProcesses = []
+exports.pendingProcesses = []
 exports.convertVideo = (playlistInfo, downloadInfo) => {
   var spawnAttributes = {
     ffmpeg_path: path.resolve(__dirname, '..', '..', 'node_modules', 'youtube-dl', 'bin', 'ffmpeg.exe'),
@@ -28,7 +28,7 @@ exports.convertVideo = (playlistInfo, downloadInfo) => {
       playlistInfo,
       downloadInfo
     }
-    pendingProcesses.push(processAttributes)
+    this.pendingProcesses.push(processAttributes)
 
   }
   else {
@@ -36,7 +36,7 @@ exports.convertVideo = (playlistInfo, downloadInfo) => {
       spawnChild(spawnAttributes, playlistInfo, downloadInfo)
     }
     else {
-      spawnChild(pendingProcesses.shift(), playlistInfo, downloadInfo)
+      spawnChild(this.pendingProcesses.shift(), playlistInfo, downloadInfo)
     }
     
   } 
@@ -44,7 +44,7 @@ exports.convertVideo = (playlistInfo, downloadInfo) => {
 
 var spawnChild = (spawnAttributes, playlistInfo, downloadInfo) => {
   let ffmpegOutput = new Output()
-  
+
   var sendData = {
     conversionFinished: false
   }
@@ -72,22 +72,26 @@ var spawnChild = (spawnAttributes, playlistInfo, downloadInfo) => {
   });
 
   ffmpeg.on('exit', (code) => {
-    if (sendData.playlist_index == playlistInfo.static.n_entries) {
+    if (sendData.playlist_index == playlistInfo.static.n_entries || sendData.isPlaylist == null) {
       sendData.conversionFinished = true;
     }
     
     if (code == 0) 
       if (playlistInfo.static.keepFiles == 'false'){
+        sendData.n_entries = playlistInfo.static.n_entries
         fs.unlinkSync(`${downloadInfo.savePath}\\${sendData.title}.${downloadInfo.video_format}`);
         playlistInfo.static.win.webContents.send('conversion-done', sendData)
-      } else playlistInfo.static.win.webContents.send('conversion-done', sendData)
+      } else {
+        sendData.n_entries = playlistInfo.static.n_entries
+        playlistInfo.static.win.webContents.send('conversion-done', sendData)
+      }
 
     // Remove pid from child array
     removeChild(ffmpeg.pid)
 
     // Start a pending process
     if (checkPending())  {
-      var pendingProcess = pendingProcesses.shift()
+      var pendingProcess = this.pendingProcesses.shift()
       spawnChild(pendingProcess.spawnAttributes, pendingProcess.playlistInfo, pendingProcess.downloadInfo)
     }
     
@@ -108,7 +112,7 @@ var checkAvailability = (noProcesses) => {
 }
 
 var checkPending = () => {
-  if (pendingProcesses.length == 0) return false
+  if (this.pendingProcesses.length == 0) return false
   else return true
 }
 
@@ -119,11 +123,11 @@ exports.convertFiles = (fileInfo) => {
     ffmpeg_path: path.resolve(__dirname, '..', '..', 'node_modules', 'youtube-dl', 'bin', 'ffmpeg.exe'),
     args: [
       '-i', 
-      `${fileInfo.path}`,
+      `${fileInfo.filePath}`,
       '-map', '0:a:0',
       '-b:a', `${fileInfo.audio_quality}`,
       '-y',
-      `${fileInfo.savePath}\\${fileInfo.title}.${fileInfo.audio_format}`
+      `${fileInfo.savePath}\\${fileInfo.title}.${fileInfo.audio_or_video_format}`
       ],
     options: {
       detached: false
@@ -135,24 +139,25 @@ exports.convertFiles = (fileInfo) => {
       spawnAttributes,
       fileInfo
     }
-    pendingProcesses.push(processAttributes)
-
+    this.pendingProcesses.push(processAttributes)
   }
   else {
     if (!checkPending()) {
       spawnConvert(spawnAttributes, fileInfo)
     }
     else {
-      spawnConvert(pendingProcesses.shift(), fileInfo)
+      spawnConvert(this.pendingProcesses.shift(), fileInfo)
     }  
   } 
 }
 
 var spawnConvert = (spawnAttributes, fileInfo) => {
+  
   let ffmpegOutput = new Output()
   
   var sendData = {
-    conversionFinished: false
+    conversionFinished: false,
+    fileConverted: false
   }
 
   // Spawn new child process
@@ -160,39 +165,46 @@ var spawnConvert = (spawnAttributes, fileInfo) => {
   var ffmpeg = spawn(ffmpeg_path, args, options);
   this.childProcesses.push(ffmpeg.pid)
 
-
   sendData.index =  fileInfo.index
-  sendData.title = fileInfo.dynamic.title
 
   ffmpeg.stderr.on('data', (data) => {
-    
     ffmpegOutput.string = data.toString()
-    ffmpegOutput._raw_duration = playlistInfo.dynamic._raw_duration
-    sendData.percent = ffmpegOutput.percent
+    ffmpegOutput.full_duration = ffmpegOutput.fullDuration
 
-    if (!isNaN(sendData.percent)) {
-      playlistInfo.static.win.webContents.send('conversion-percent', sendData)
+    // Get full duration of file
+    if (!isNaN(ffmpegOutput.full_duration)) {
+      ffmpegOutput._raw_duration = ffmpegOutput.fullDuration
+    } 
+
+    if (ffmpegOutput._raw_duration) {
+      sendData.percent = ffmpegOutput.percent
+      if (!isNaN(sendData.percent)) {
+        fileInfo.win.webContents.send('convert-file-progress', sendData)
+      }
     }
       
   });
 
   ffmpeg.on('exit', (code) => {
-    if (sendData.index == fileInfo.n_entries) {
+    sendData.fileConverted = true;
+    sendData.percent = '100.00'
+
+    if (sendData.index == fileInfo.n_entries) 
       sendData.conversionFinished = true;
-    }
-    
+
     if (code == 0) 
       if (fileInfo.delete_files == 'true'){
-        fs.unlinkSync(`${downloadInfo.savePath}\\${sendData.title}.${downloadInfo.video_format}`);
-        playlistInfo.static.win.webContents.send('conversion-done', sendData)
-      } else playlistInfo.static.win.webContents.send('conversion-done', sendData)
+        fs.unlinkSync(`${fileInfo.savePath}\\${fileInfo.title}${fileInfo.original_format}`);
+        fileInfo.win.webContents.send('convert-file-progress', sendData)
+      } else 
+        fileInfo.win.webContents.send('convert-file-progress', sendData)
 
     // Remove pid from child array
     removeChild(ffmpeg.pid)
 
     // Start a pending process
     if (checkPending())  {
-      var pendingProcess = pendingProcesses.shift()
+      var pendingProcess = this.pendingProcesses.shift()
       spawnConvert(pendingProcess.spawnAttributes, pendingProcess.fileInfo)
     }
     
@@ -202,3 +214,4 @@ var spawnConvert = (spawnAttributes, fileInfo) => {
     if (err) console.log(err)
   })
 }
+

@@ -25,6 +25,8 @@
     </div>
 
     <script>
+      const {clipboard} = require('electron')
+
       $("#copy-link1").on("click",() => {
         clipboard.writeText('https://github.com/xylish7/Youtube-Downloader-GUI/releases/download/v2.0.0/yt-downloader-setup-2.0.0.exe')
         $("#copy-confirmation1").fadeIn(500).delay(1000).fadeOut(800)

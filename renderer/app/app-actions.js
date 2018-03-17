@@ -136,6 +136,48 @@ exports.dynamicContent = (data, caseName) => {
   }
 }
 
+// Name every filed from progress log
+exports.progressFieldNames = (caseName) => {
+  switch(caseName) {
+    case 'download-convert':
+      return `<div class="column is-4">
+          <span class="is-size-7" style="margin-left:35px"><strong>Title</strong></span>
+        </div>
+        <div class="column is-3">
+          <span class="is-size-7" style="margin-left:17px"><strong>Download bar</strong></span>
+        </div>
+        <div class="column is-3">
+          <span class="is-size-7" style="margin-left:-19px"><strong>Convert bar</strong></span>
+        </div>
+        <div class="column is-2">
+          <span class="is-size-7" style="margin-left:-55px"><strong>Prog.</strong></span>
+        </div>`
+      break;
+    case 'download':
+      return ` <div class="column is-4">
+          <span class="is-size-7" style="margin-left:35px"><strong>Title</strong></span>
+        </div>
+        <div class="column is-6">
+          <span class="is-size-7" style="margin-left:5px"><strong>Download bar</strong></span>
+        </div>
+        <div class="column is-2">
+          <span class="is-size-7" style="margin-left:-55px"><strong>Prog.</strong></span>
+        </div>`
+      break;
+    case 'convert':
+      return ` <div class="column is-4">
+          <span class="is-size-7" style="margin-left:35px"><strong>Title</strong></span>
+        </div>
+        <div class="column is-6">
+          <span class="is-size-7" style="margin-left:5px"><strong>Convert bar</strong></span>
+        </div>
+        <div class="column is-2">
+          <span class="is-size-7" style="margin-left:-55px"><strong>Prog.</strong></span>
+        </div>`
+      break;
+  }
+}
+
 // Update progress bar, and percent value
 exports.showProgress = (data) => {
   const downloadLog = $('.download-log')
@@ -205,19 +247,35 @@ exports.getConvertFiles = (filter) => {
     filters: [ filter ]
   })
 
-  return convertFiles
+  return convertFiles 
 }
 
+// Append all empty progress bar with title
+exports.emptyProgressBars = (index, title) => {
+  const $convertLog = $('.convert-log')
+  const videoTitle = '.video-title'
+  const percentProgress = '.percent-progress'
+  const progressBar = '.progress-bar '
+
+  $convertLog.append(`${this.dynamicContent(`convert-${index + 1}`, 'convert')}`)
+  $convertLog.find(videoTitle).last().html(`${title}`)
+  $convertLog.find(percentProgress).last().html('0%')
+  $convertLog.find(progressBar).last().val('0')
+}
 // Get options for conversion
 exports.getConvertOptions = () => {
-  $deleteFiles = $('#delete-convert-files')
+
+  var $deleteFiles = $('#delete-convert-files')
   $deleteFiles = $deleteFiles.is(":checked") ? 
     $deleteFiles.val() : 'false'
 
+  const $convertAudioRadio = $('#convert-audio-radio')
+  var audio_or_video_format = ($convertAudioRadio.attr('checked') == 'checked') ?
+  $('#convert-audio-format-option').val() : $('#convert-video-format-option').val()
+
   return {
-    video_format: $('#convert-video-format-option').val(),
+    audio_or_video_format,
     audio_quality: $('#convert-audio-quality-option').val() ,
-    audio_format: $('#convert-audio-format-option').val(),
     no_processes: $('#convert-no-processes-option').val(),
     delete_files: $deleteFiles
   }
@@ -228,10 +286,40 @@ exports.getConvertPath = (pathWithTitle) => {
   return pathWithTitle.substring(0, pathWithTitle.lastIndexOf('\\'));
 }
 
-exports.setConvertBadge = (number) => {
-  $startConversion = $('#start-conversion')
-  $startConversion.attr('data-badge', `0/${number}`)
-  if (number == 'remove-badge') {
-    $startConversion.removeAttr('data-badge')
+exports.setConvertBadge = (id, lastNumber, firstNumber = 0) => { 
+  if (lastNumber == 'remove-badge') {
+    $(`#${id}`).removeAttr('data-badge')
+  } else 
+    $(`#${id}`).attr('data-badge', `${firstNumber}/${lastNumber}`)
+}
+
+// Change the state of the Download button
+exports.convertButtonState = (state) => {
+  const convertButton = $('#start-conversion')
+  const buttonMessage = $('#convert-button-message')
+  const buttonIcon = $('#convert-button-icon')
+
+  switch (state) {
+    case 'static':
+      convertButton.addClass('not-converting').removeClass('is-converting')
+      buttonMessage.html('Start-conversion')
+      buttonIcon.removeClass('fas fa-spinner fa-pulse').addClass('far fa-arrow-alt-circle-right')
+      break;
+  
+    case 'converting':
+      convertButton.addClass('is-converting').removeClass('not-converting')
+      buttonMessage.html('Stop-conversion!')
+      buttonIcon.removeClass('fas fa-sync fa-spin').addClass('fas fa-spinner fa-pulse')
+      break;
   }
+}
+
+// Remove files that have the convert format same as original format
+exports.removeSameFormat = (converFilesArray) => {
+  const $convertAudioRadio = $('#convert-audio-radio')
+  var audio_or_video_format = ($convertAudioRadio.attr('checked') == 'checked') ?
+    $('#convert-audio-format-option').val() : $('#convert-video-format-option').val()
+  
+  const filteredFiles =  converFilesArray.filter(file => file.substring(file.lastIndexOf(".")) != `.${audio_or_video_format}`);
+  return filteredFiles
 }

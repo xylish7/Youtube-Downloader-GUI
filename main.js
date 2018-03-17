@@ -7,11 +7,12 @@ const fs   = require('fs')
 
 // Internal Modules
 const mainWindow = require('./main/windows/main-window')
-const mp3converter = require('./main/conversion/mp3Converter')
+const mp3Converter = require('./main/conversion/mp3Converter')
 const dlPlaylist = require('./main/ytdl/download-playlist')
 const menuBar = require('./main/menu/menu-bar')
 const onExit = require('./main/kill-processes/on-exit')
 const updater = require('./main/update/updater')
+const { killAllProcesses } = require('./main/kill-processes/app-notifications')
 
 if (process.argv[2] == 'dev') {
   require('electron-reload')(__dirname);
@@ -59,6 +60,18 @@ app.on('ready', () => {
     dlPlaylist.staticInfo.downloadFinished = false
     dlPlaylist.playlist(downloadInfo.url)
   }); 
+
+  // Start conversion
+  ipcMain.on('send-convert-file', (event, fileInfo) => {
+    fileInfo.win = windows.mainWindow
+    mp3Converter.convertFiles(fileInfo)
+  })
+
+  // Stop conversion
+  ipcMain.on('stop-convert', (event) => {
+    killAllProcesses()
+    event.sender.send('stop-convert-response')
+  })
 
 })
 

@@ -16,7 +16,7 @@
   
       <article id="path-article" class="message is-small" style="display: none">
         <div class="message-body" >
-          <p id="path-message" style="cursor: pointer; display: inline-block;"></p> 
+          <p id="path-message" style="cursor: pointer;"></p> 
         </div>
       </article>
   
@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="control">
-          <a id="download-button" class="button is-danger is-small not-downloading" disabled>
+          <a id="download-button" class="button is-danger is-small badge is-badge-small is-badge-outlined is-badge-danger not-downloading" disabled >
             <span class="icon">
               <i id="button-icon" class="fa fa-download"></i>
             </span>
@@ -54,18 +54,19 @@
         </div>
       </div>
   
-      <h1>Progress:
-        <span class="video-number"></span>
-        <span class="conversion-number"></span>
-      </h1>
+      <div id="download-divider" class="is-divider" data-content="PROGRESS" style="margin-bottom: 1.1rem"></div>
+
+      <div id='download-progress-fields-name' class="columns is-mobile is-gapless has-text-centered">
+
+      </div>
   
       <div class="log download-log customized-scrollbar">
     
       </div>
   
-      <div class="notification is-danger">
+      <div class="notification download-notification is-danger">
         <button class="delete"></button>
-        <p id="notification-message">
+        <p class="notification-message">
           
         </p>
       </div>

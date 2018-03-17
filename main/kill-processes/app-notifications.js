@@ -33,10 +33,11 @@ exports.resetValues = () => {
 }
 
 exports.killAllProcesses = (callback) => {
-
+  
   if (mp3Converter.childProcesses.length == 0) {
     if (callback && typeof(callback) === "function") callback();
   } else {
+    mp3Converter.pendingProcesses = []
     var initialLength = mp3Converter.childProcesses.length
     var index = mp3Converter.childProcesses.length
     var conditionLength = 0

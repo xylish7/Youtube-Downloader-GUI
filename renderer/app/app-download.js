@@ -16,6 +16,8 @@ const keepFilesCheckbox = $('#keep-files')
 const mp3Conversion = $('#mp3-conversion')
 const openFolder = $('#open-download-folder')
 const buttonIcon = $('#button-icon') 
+const downloadProgressFieldsName = $('#download-progress-fields-name') 
+const downloadDivider = $('#download-divider')
 
 // Classes
 const conversionNumber = $('.conversion-number')
@@ -26,6 +28,9 @@ const progressBar = '.progress-bar'
 const percentProgress = '.percent-progress'
 const videoNumber = $('.video-number')
 const videoTitle = '.video-title'
+
+// Used to count badge progress
+var conversionCount;
 
 // Open browse window to choose save path
 openFolder.on('click', () => {
@@ -72,31 +77,50 @@ downloadButton.on('click', () => {
 
       // If there is no download in progress, starts one
       if (downloadButton.hasClass('not-downloading')){
+        // Change divider message
+        downloadDivider.attr('data-content', 'GET VIDEO/PLAYLIST INFO ...')
+        
+        // Initialize count for badge progress
+        conversionCount = 0
+
+        // Set progress field names
+        if (mp3Conversion.is(":checked"))
+        downloadProgressFieldsName.html(appActions.progressFieldNames('download-convert'))
+        else 
+        downloadProgressFieldsName.html(appActions.progressFieldNames('download'))
+
         // Popup notification if playlist is to large
         appErrors.largePlaylist()
 
         // Delete all progress messages if button is pressed again
         downloadLog.empty()
         conversionNumber.empty()
+        appActions.setConvertBadge('download-button','remove-badge')
         
         // Disable button and input
         appActions.buttonState('fetch-data')
       
-        videoNumber.html(`Download starting...`)
         // Get the value of checkboxes and inputs
         appActions.getFieldValues()
         // Emit event with download info as argumnets
         ipcRenderer.send('new-playlist', appActions.downloadInfo)
         
         // Condition when Stop download is pressed
-      } else {    
-          ipcRenderer.send('stop-download')
-          appActions.buttonState('static')
-          downloadLog.empty()
-          ipcRenderer.on('response', () => {
-            conversionNumber.empty()
-            videoNumber.html('Process stoped!')
-          }) 
+      } else {        
+        // Remove fields name
+        downloadProgressFieldsName.empty()
+        // Remove badge
+        appActions.setConvertBadge('download-button','remove-badge')
+        // Change button to static
+        appActions.buttonState('static')
+        // Empty progress log
+        downloadLog.empty()
+        // Kill processes
+        ipcRenderer.send('stop-download')      
+        ipcRenderer.on('response', () => {
+          // Change divider message
+          downloadDivider.attr('data-content', 'PROCESS STOPED!')
+        })      
       }
     }
   } 
@@ -118,44 +142,66 @@ $('.delete').on('click', () => {
 
 // Get progress for playlist
 ipcRenderer.on('playlist-progress', (event, playlistInfo) => {
-  // Change button from feth-data to download
+  // Initialize badge progress and change 
+  if (playlistInfo.dynamic.playlist_index == 1) {
+    appActions.setConvertBadge('download-button', playlistInfo.static.n_entries, 0)
+  }
+    
+  // Change button from fetch-data to download
   if (downloadButton.hasClass('fetch-data')) {
     appActions.buttonState('downloading')
     // Remove notification
     appErrors.largePlaylist(true)
+    // Change divider message
+    downloadDivider.attr('data-content', 'DOWNLOADING ...')
   }
 
   // Append new title, progress bar and percentage
   if (playlistInfo.static.appendColumns) {
     (appActions.downloadInfo.mp3Conversion == 'true') ?
       downloadLog.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, 'download-convert')}`) :
-      downloadLog.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, 'download')}`)     
-  }
+      downloadLog.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, 'download')}`)  
+    }
 
-  // Show how many videos were downloaded for playlist
-  (playlistInfo.static.isPlaylist != null) ?
-  videoNumber.html(`${playlistInfo.dynamic.playlist_index}/${playlistInfo.static.n_entries}`) :
-  videoNumber.empty()
+  // Set download badge progress
+  if (playlistInfo.dynamic.percent == "100.00" && 
+      appActions.downloadInfo.mp3Conversion == 'false' &&
+      playlistInfo.static.isPlaylist != null 
+      ) {
+    appActions.setConvertBadge('download-button', playlistInfo.static.n_entries, playlistInfo.dynamic.playlist_index)
+  }
     
   // Update the value of the progress bar
   appActions.showProgress(playlistInfo.dynamic)
 
   // Write when download is finished
   if (playlistInfo.static.downloadFinished) {
-    (playlistInfo.static.isPlaylist != null) ?
-    videoNumber.html(`Download finished!`) : videoNumber.html('Download finished!')
+    // Set error-notification that download is completed
     appNotifications.exitMessages.download = 'download'
-
+    // Change divider message
+    if (playlistInfo.static.isPlaylist == null) {
+      downloadDivider.attr('data-content', 'DOWNLOAD FINISHED!')
+    }
+    
     // Make button available again only if conversion was not selected
     if (appActions.downloadInfo.mp3Conversion == 'false') {
+      // Change button state
       appActions.buttonState('static')
-    }
+      // Change divider message
+      downloadDivider.attr('data-content', 'DOWNLOAD FINISHED!')     
+    } else {
+      // Change divider message
+      downloadDivider.attr('data-content', 'DOWNLOAD FINISHED! || CONVERTING ...')
+    }    
   }
 })
 
 // Conversion Progress
 ipcRenderer.on('conversion-percent', (event, receivedData) => {
-
+  if (receivedData.playlist_index == 1) 
+     // Change divider message
+     downloadDivider.attr('data-content', 'DOWNLOAD FINISHED! || CONVERTING ...')
+  
   $(`#${receivedData.playlist_index}>.is-3>.conversion-bar`).val(receivedData.percent)
   // Show the procent in clear text
   $(`#${receivedData.playlist_index}>.is-2>.percent-progress`).html(`${receivedData.percent}%`)
@@ -164,18 +210,20 @@ ipcRenderer.on('conversion-percent', (event, receivedData) => {
 
 // Conversion finished
 ipcRenderer.on('conversion-done', (event, receivedData) => {
-  if (receivedData.isPlaylist == null) {
-    conversionNumber.html('| Conversion finished!')
-  }
-
   if (receivedData.conversionFinished && downloadButton.hasClass('is-downloading')) {
-    conversionNumber.html('| Conversion finished!')
+    downloadDivider.attr('data-content', 'DOWNLOAD FINISHED! || CONVRERT FINISHED!') 
     appActions.buttonState('static')
     appNotifications.exitMessages.conversion = 'conversion'
   }
 
   $(`#${receivedData.playlist_index}>.is-3>.conversion-bar`).val('100')
-  $(`#${receivedData.playlist_index}>.is-2>.percent-progress`).html('100%')
+  $(`#${receivedData.playlist_index}>.is-2>.percent-progress`).html('100.00%')
+
+  // Set download + convert progress
+  if (receivedData.isPlaylist != null) {
+    conversionCount++ 
+    appActions.setConvertBadge('download-button', receivedData.n_entries, conversionCount)
+  }
 })
 
 // Youtube download errors
@@ -188,6 +236,7 @@ ipcRenderer.on('ytdl-errors', (event, err) => {
 
   // Send error
   appErrors.validateAll({ytdl_error: false}, 10000)
+  downloadDivider.attr('data-content', 'ERROR!')
 })
 
 // Close window event

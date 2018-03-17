@@ -6,7 +6,8 @@ exports.messages = {
   path_not_exist: 'The selected Save Folder does not exists!',
   url: 'The provided URL is not valid!',
   ytdl_error: 'Unsupported URL! / Connection timeout!',
-  large_playlist: 'For large playlist, fetching data time is 1-2 min!'
+  large_playlist: 'For large playlist, fetching data time is 1-2 min!',
+  no_files_to_convert: 'Files already have the desired format!'
 }
 
 exports.notificationTime
@@ -30,9 +31,9 @@ exports.validateURL = () => {
 }
 
 // Show error
-exports.showError = (message, duration) => {
-  const notification = $('.notification')
-  const notificationMessage = $('#notification-message')
+exports.showError = (message, duration, notificationPanel='download-notification') => {
+  const notification = $(`.${notificationPanel}`)
+  const notificationMessage = $(`.${notificationPanel}>.notification-message`)
 
   notificationMessage.html(message)
   notification.slideDown(250)
@@ -42,17 +43,16 @@ exports.showError = (message, duration) => {
   }, duration)
 }
 
-exports.validateAll = (validationResults, duration) => {
+exports.validateAll = (validationResults, duration, notificationPanel='download-notification') => {
   if (this.notificationTime) clearTimeout(this.notificationTime)
   for (var key in validationResults) {
     if (validationResults.hasOwnProperty(key)) {
       if (!validationResults[key]) {
-        this.showError(this.messages[key], duration)
+        this.showError(this.messages[key], duration, notificationPanel)
         return false
       }
     }
   }
-
   return true
 }
 

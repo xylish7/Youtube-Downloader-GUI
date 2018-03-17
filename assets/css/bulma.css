@@ -1578,7 +1578,7 @@ a.box:active {
     background-color: white;
     border-color: #dbdbdb;
     box-shadow: none;
-    opacity: 0.5; }
+    opacity: 0.8; }
   .button.is-fullwidth {
     display: flex;
     width: 100%; }

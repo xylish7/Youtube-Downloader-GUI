@@ -3,6 +3,7 @@ class Output  {
     this.string
     this._raw_duration
     this.seconds
+    this.full_duration = null
   }
 
   get searchTime () {
@@ -20,6 +21,13 @@ class Output  {
 
   get percent () {
     return (100*this.rawDuration()/this._raw_duration).toFixed(2)
+  }
+
+  get fullDuration () {
+    let startIndex = this.string.search("Duration:")
+    let fileDuration = this.string.substring(startIndex + 10, startIndex + 18)
+    let hms = fileDuration.split(':')
+    return (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2])
   }
 }
 
