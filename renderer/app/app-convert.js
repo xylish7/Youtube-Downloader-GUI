@@ -1,4 +1,4 @@
-const {ipcRenderer} = require('electron')
+const {ipcRenderer, shell} = require('electron')
 
 var appActions = require('./app-actions')
 const appErrors = require('./app-errors')
@@ -12,6 +12,8 @@ const $convertAudioRadio = $('#convert-audio-radio')
 const $convertVideoRadio = $('#convert-video-radio')
 const $convertProgressFieldsName = $('#convert-progress-fields-name')
 const $convertDivider = $('#convert-divider')
+const $openConvertedFolder = $('#open-converted-folder')
+const $buttonMessage = $('#button-message')
 
 // Classes
 const $convertNotification = $('.convert-notification')
@@ -44,7 +46,6 @@ var conversionCount;
 
 // Get files and show them in progress log
 $openConvertFolder.on('click', () => {
-
   // Open files only if button is not disabled
   if (!$openConvertFolder.prop('disabled')) {
     // Check what radio button is checked
@@ -157,7 +158,29 @@ ipcRenderer.on('convert-file-progress', (event, receivedData) => {
   }
 })
 
+//
+
 // Close notifications
 $('.delete').on('click', () => {
   $convertNotification.css('display', 'none')
 })
+
+// Open the path to the converted files
+$('#open-converted-folder').on('click', () => {
+  if (convertFiles.length > 0) {
+    console.log('here')
+    let path = convertFiles[0].substring(0, convertFiles[0].lastIndexOf('\\'))
+    console.log(path,'here')
+    shell.openItem(path)
+  }
+})
+
+// Activate page loader if the is a conversion on the 'Download' tab
+const $pageLoaderContainer = $('#page-loader-container')
+const $convertContent = $('#convert-content')
+
+exports.showPageLoader = () => {
+  console.log($convertContent.html(), $pageLoaderContainer.html())
+  $convertContent.hide()
+  $pageLoaderContainer.show()
+}

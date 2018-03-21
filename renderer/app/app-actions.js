@@ -43,9 +43,9 @@ exports.getDownloadPath = () => {
   if (savePath) {
   // Store savePath
   store.set('savePath', savePath[0])
-
+    
   // Show path
-  messagePath.html(`<i><strong>Save Path: </strong> ${savePath[0]}</i>`)
+  messagePath.html(`<i>${savePath[0]}</i>`)
   articlePath.show()
 
   // If input has value enable it
@@ -59,9 +59,10 @@ exports.getDownloadPath = () => {
 
 // Open 'Save Folder' in explorer
 exports.openSavePath = () => {
-  const pathMessage = $('#path-message')
-  pathMessage.on('click', function() {
-    let path = $(this).text().replace('Save Path: ','').trim()
+  const pathFolder = $('#open-download-explorer')
+  const messagePath = $('#path-message')
+  pathFolder.on('click', function(){
+    let path = messagePath.text().replace('Save Path: ','').trim()
     shell.openItem(path)
   })
 }

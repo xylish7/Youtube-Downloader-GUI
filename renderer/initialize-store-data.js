@@ -14,7 +14,7 @@ const messagePath = $('#path-message')
 const articlePath = $('#path-article')
 var savePath = store.get('savePath')
 if (savePath) {
-  messagePath.html(`<i><strong>Save Path: </strong> ${savePath}</i>`)
+  messagePath.html(`<i> ${savePath}</i>`)
   articlePath.show()
   downloadInfo.savePath = savePath
 }

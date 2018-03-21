@@ -124,8 +124,8 @@ exports.convertFiles = (fileInfo) => {
     args: [
       '-i', 
       `${fileInfo.filePath}`,
-      '-map', '0:a:0',
-      '-b:a', `${fileInfo.audio_quality}`,
+      // '-map', '0:a:0',
+      // '-b:a', `${fileInfo.audio_quality}`,
       '-y',
       `${fileInfo.savePath}\\${fileInfo.title}.${fileInfo.audio_or_video_format}`
       ],

@@ -32,6 +32,9 @@ const videoTitle = '.video-title'
 // Used to count badge progress
 var conversionCount;
 
+// Used to trigger conditional if one time
+var alreadyTriggered = false;
+
 // Open browse window to choose save path
 openFolder.on('click', () => {
   appActions.getDownloadPath()
@@ -77,6 +80,9 @@ downloadButton.on('click', () => {
 
       // If there is no download in progress, starts one
       if (downloadButton.hasClass('not-downloading')){
+        // Reset varable
+        alreadyTriggered = false
+
         // Change divider message
         downloadDivider.attr('data-content', 'GET VIDEO/PLAYLIST INFO ...')
         
@@ -173,35 +179,40 @@ ipcRenderer.on('playlist-progress', (event, playlistInfo) => {
     
   // Update the value of the progress bar
   appActions.showProgress(playlistInfo.dynamic)
-
   // Write when download is finished
   if (playlistInfo.static.downloadFinished) {
     // Set error-notification that download is completed
     appNotifications.exitMessages.download = 'download'
-    // Change divider message
-    if (playlistInfo.static.isPlaylist == null) {
-      downloadDivider.attr('data-content', 'DOWNLOAD FINISHED!')
-    }
     
     // Make button available again only if conversion was not selected
-    if (appActions.downloadInfo.mp3Conversion == 'false') {
+    // For single videos
+    if (appActions.downloadInfo.mp3Conversion == 'false' && playlistInfo.static.isPlaylist == null ) {
       // Change button state
       appActions.buttonState('static')
       // Change divider message
       downloadDivider.attr('data-content', 'DOWNLOAD FINISHED!')     
-    } else {
+    }  else 
       // Change divider message
-      downloadDivider.attr('data-content', 'DOWNLOAD FINISHED! || CONVERTING ...')
-    }    
+      downloadDivider.attr('data-content', 'DOWNLOAD FINISHED! || CONVERTING ...') 
+
+    // For playlists
+    if (playlistInfo.dynamic.playlist_index == playlistInfo.static.n_entries && appActions.downloadInfo.mp3Conversion == 'false') {
+      // Change button state
+       appActions.buttonState('static')
+      // Change divider message
+      downloadDivider.attr('data-content', 'DOWNLOAD FINISHED!') 
+    }   
   }
 })
 
 // Conversion Progress
 ipcRenderer.on('conversion-percent', (event, receivedData) => {
-  if (receivedData.playlist_index == 1) 
-     // Change divider message
-     downloadDivider.attr('data-content', 'DOWNLOAD FINISHED! || CONVERTING ...')
-  
+  if (receivedData.playlist_index == 1 && !alreadyTriggered) {
+    // Change divider message
+    downloadDivider.attr('data-content', 'DOWNLOADING ... || CONVERTING ...')
+    alreadyTriggered = true
+  }
+      
   $(`#${receivedData.playlist_index}>.is-3>.conversion-bar`).val(receivedData.percent)
   // Show the procent in clear text
   $(`#${receivedData.playlist_index}>.is-2>.percent-progress`).html(`${receivedData.percent}%`)

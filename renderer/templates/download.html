@@ -16,7 +16,12 @@
   
       <article id="path-article" class="message is-small" style="display: none">
         <div class="message-body" >
-          <p id="path-message" style="cursor: pointer;"></p> 
+          <i><strong>Save Path: 
+            <span id="open-download-explorer">
+                <i class="far fa-folder-open has-text-danger" style="cursor:pointer"></i>
+            </span></strong>
+            <span id="path-message"></span>
+          </i>
         </div>
       </article>
   
@@ -30,7 +35,7 @@
      
       <div class="field">
         <div class="control">
-          <input value="true" class="is-checkradio is-danger is-small" id="keep-files" type="checkbox" name="checkboxDanger">
+          <input value="true" class="is-checkradio is-danger is-small" id="keep-files" type="checkbox" name="checkboxDanger" disabled>
           <label for="keep-files">Save both video and audio</label>
         </div>
       </div>
@@ -73,9 +78,7 @@
       
     </div>
     <script>
-      // You can also require other files to run in this process
       require('../app/app-download.js')
-  
     </script>
   </section>
 </template>

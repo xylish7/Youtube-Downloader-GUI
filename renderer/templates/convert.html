@@ -1,77 +1,96 @@
 <template class="page-template">
   <section id="convert-section" class="menu-section hide-section">
 
-    <div class="container">
+    <div id="convert-content" class="container">
      
-    
-    <div class="field">
-      <span class="is-size-7"><strong>Select in what type of files do you want to convert:</strong></span>
-      
-      <input class="is-checkradio is-rtl is-small is-danger" id="convert-audio-radio" type="radio" name="exampleRtlRadioInline" checked="checked">
-      <label for="convert-audio-radio">Audio</label>
+      <div class="field">
+        <span class="is-size-7"><strong>Select in what type of files do you want to convert:</strong></span>
+        
+        <input class="is-checkradio is-rtl is-small is-danger" id="convert-audio-radio" type="radio" name="exampleRtlRadioInline" checked="checked">
+        <label for="convert-audio-radio">Audio</label>
 
-      
-      <span class="icon tooltip">
-        <input class="is-checkradio is-rtl is-small is-danger" id="convert-video-radio" type="radio" name="exampleRtlRadioInline" disabled >
-        <label for="convert-video-radio">Video</label>
-        <span class="tooltiptext-top-arrow" style="width:100px;top:100%;left:80px;margin-left:-50px;"><span class="warning">Coming soon!</span></span>
-      </span>
-      
-    </div>
-
-    <div class="field">
-      <div class="column">
-        <a class="button is-small" id="open-convert-folder">
-          <span class="icon is-small">
-            <i class="far fa-folder-open"></i>
-          </span>
-          <span>Open files</span>
-        </a>     
+        
+        <span class="icon tooltip">
+          <input class="is-checkradio is-rtl is-small is-danger" id="convert-video-radio" type="radio" name="exampleRtlRadioInline" disabled >
+          <label for="convert-video-radio">Video</label>
+          <span class="tooltiptext-top-arrow" style="width:100px;top:100%;left:80px;margin-left:-50px;"><span class="warning">Coming soon!</span></span>
+        </span>
+        
       </div>
-    </div>
 
-    <div class="field">
-      <div class="control">
-        <input value="true" class="is-checkradio is-danger is-small" id="delete-convert-files" type="checkbox" name="checkboxDanger">
-        <label for="delete-convert-files">Delete original file</label>
-      </div>
-    </div>
-
-    <div class="container">
       <div class="field">
         <div class="column">
-          <a id="start-conversion" class="not-converting button is-small is-danger badge is-badge-small is-badge-outlined is-badge-danger" disabled>
+          <a class="button is-small" id="open-convert-folder">
+            <span class="icon is-small">
+              <i class="far fa-folder-open"></i>
+            </span>
+            <span>Open files</span>
+          </a>     
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="control">
+          <input value="true" class="is-checkradio is-danger is-small" id="delete-convert-files" type="checkbox" name="checkboxDanger">
+          <label for="delete-convert-files">Delete original file</label>
+        </div>
+      </div>
+
+      <article class="message is-small">
+        <div class="message-body has-text-weight-bold" style="padding-left: 25px;">
+          Click the folder icon <span id="open-converted-folder"><i class="far fa-folder-open has-text-danger" style="cursor:pointer"></i></span> to open file(s) location.
+          <a id="start-conversion" class="is-pulled-right not-converting button is-small is-danger badge is-badge-small is-badge-outlined is-badge-danger" disabled>
             <span class="icon is-small">
               <i id="convert-button-icon" class="far fa-arrow-alt-circle-right"></i>
             </span>
             <span id="convert-button-message"> Start conversion</span> 
           </a>    
         </div>
+      </article>
+    
+      <div id="convert-divider" class="is-divider" data-content="PROGRESS" style="margin-bottom: 1.1rem"></div>
+
+      <div id='convert-progress-fields-name' class="columns is-mobile is-gapless has-text-centered">
+
+      </div>
+
+      <div class="log convert-log customized-scrollbar">
+
+      </div>
+
+      <div class="notification convert-notification is-danger">
+        <button class="delete"></button>
+        <p class="notification-message">
+          
+        </p>
       </div>
     </div>
-   
-    <div id="convert-divider" class="is-divider" data-content="PROGRESS" style="margin-bottom: 1.1rem"></div>
 
-    <div id='convert-progress-fields-name' class="columns is-mobile is-gapless has-text-centered">
+    <!-- Page loader -->
+    <div id="page-loader-container" style="display: none">
+      <div class="container">
+        <article class="message has-text-centered has-text-weight-bold">
+          <div class="message-body">
+            <p class="is-size-5" style="color: hsla(357, 84%, 48%, 0.849)">There is another "Convert" process on the "Download" tab. Please wait for it to finish.</p>
+          </div>
+        </article>
+      </div>
 
-    </div>
-
-    <div class="log convert-log customized-scrollbar">
-    
-    </div>
-
-    <div class="notification convert-notification is-danger">
-      <button class="delete"></button>
-      <p class="notification-message">
-        
-      </p>
-    </div>
+      <div id="preloader">
+        <div id="loader"></div>
+      </div>
   
-    <script>
-      // You can also require other files to run in this process
-      require('../app/app-convert.js')
-  
-    </script>
-
+      <div class="container">
+        <article class="message has-text-centered has-text-weight-bold">
+          <div class="message-body">
+            <p class="is-size-5 title" style="color: hsla(357, 84%, 48%, 0.849); top:0px;">Thank you!</p>
+          </div>
+        </article>
+      </div> 
+    </div>
+  <script>
+    // You can also require other files to run in this process
+    require('../app/app-convert.js')
+  </script>
   </section>
 </template>
