@@ -14,6 +14,7 @@ const $convertProgressFieldsName = $('#convert-progress-fields-name')
 const $convertDivider = $('#convert-divider')
 const $openConvertedFolder = $('#open-converted-folder')
 const $buttonMessage = $('#button-message')
+const $convertAudioFormatOption = $('#convert-audio-format-option') 
 
 // Classes
 const $convertNotification = $('.convert-notification')
@@ -39,6 +40,8 @@ var fileFilter = {
   audio: {name: 'Audio', extensions: ['mp3', 'm4a', 'ogg', 'wma', 'mkv', 'avi', 'mp4', 'webm', '3gp']}
 }
 
+// Used to stoe initial files to conver
+var initialFiles
 // Used to store files to convert
 var convertFiles;
 // Used to count badge progress
@@ -55,28 +58,38 @@ $openConvertFolder.on('click', () => {
     // Keep initial files if cancel button is pressed when selecting files
     if (initialFiles) {
       convertFiles = initialFiles
+      // Keep a copy of original selection in case the convert format is 
+      // changed from the convert setting after the files have already
+      // been selected
+      originalFiles = initialFiles
+
       // Remove files that have the same format as convert format
       convertFiles = appActions.removeSameFormat(convertFiles)
+      if (convertFiles.length != originalFiles.length)
+        // Send notification if some of files were removed
+        // Send error
+        appErrors.validateAll({files_removed: false}, 10000, 'convert-notification')
     }
 
-    // Get file title
-    if (convertFiles.length > 0) {
-      // Clean last log 
-      $convertLog.empty()
-      // Show progress field names
-      $convertProgressFieldsName.html(appActions.progressFieldNames('convert'))
-      // Enable button
-      $startConversion.removeAttr('disabled')
-      // Set Badge number
-      appActions.setConvertBadge('start-conversion', convertFiles.length)
-    } else {
-      appActions.setConvertBadge('start-conversion', 'remove-badge')
-      // Disable start conversion button
-      $startConversion.attr('disabled', true)
-      // Send error
-      appErrors.validateAll({no_files_to_convert: false}, 10000, 'convert-notification')
-    }
+    // Get files title
+    // Do nothing to the front-end if conversion finished and no file was selected
+    if (conversionCount > 0 && !initialFiles) {}
+    // Empty log and set progress badge if files were selected 
+    else 
+      setNumberOfConversions()
   } 
+})
+
+// Filter convert files array if the format is changed form the general settings
+$convertAudioFormatOption.on('change', function() {
+  if (convertFiles.length > 0) {
+    convertFiles = appActions.removeSameFormat(originalFiles)
+    if (convertFiles.length != originalFiles.length)
+        // Send notification if some of files were removed
+        // Send error
+        appErrors.validateAll({files_removed: false}, 10000, 'convert-notification')
+    setNumberOfConversions()
+  }
 })
 
 // Execute when start conversion button is clicked
@@ -146,7 +159,8 @@ ipcRenderer.on('convert-file-progress', (event, receivedData) => {
   }   
 
   // Execute when conversion is done
-  if (receivedData.conversionFinished) {
+  if (conversionCount == convertFiles.length) {
+
     // Change divider message
     $convertDivider.attr('data-content', 'CONVERT FINISHED!')
     // Enable open files button
@@ -167,11 +181,14 @@ $('.delete').on('click', () => {
 
 // Open the path to the converted files
 $('#open-converted-folder').on('click', () => {
-  if (convertFiles.length > 0) {
-    console.log('here')
-    let path = convertFiles[0].substring(0, convertFiles[0].lastIndexOf('\\'))
-    console.log(path,'here')
-    shell.openItem(path)
+  if (convertFiles) {
+    if (convertFiles.length > 0) {
+      let path = convertFiles[0].substring(0, convertFiles[0].lastIndexOf('\\'))
+      shell.openItem(path)
+    }
+  } else {
+    // Rise error if there were no files opened
+    appErrors.validateAll({no_files_selected: false}, 10000, 'convert-notification')
   }
 })
 
@@ -183,4 +200,24 @@ exports.showPageLoader = () => {
   console.log($convertContent.html(), $pageLoaderContainer.html())
   $convertContent.hide()
   $pageLoaderContainer.show()
+}
+
+function setNumberOfConversions () {
+  if (convertFiles.length > 0) {
+    // Clean last log 
+    $convertLog.empty()
+    // Show progress field names
+    $convertProgressFieldsName.html(appActions.progressFieldNames('convert'))
+    // Enable button
+    $startConversion.removeAttr('disabled')
+    // Set Badge number
+    appActions.setConvertBadge('start-conversion', convertFiles.length)
+  } else { // 
+    if (!(conversionCount > 0) && initialFiles.length > 0)
+      appActions.setConvertBadge('start-conversion', 'remove-badge')
+    // Disable start conversion button
+    $startConversion.attr('disabled', true)
+    // Send error
+    appErrors.validateAll({no_files_to_convert: false}, 10000, 'convert-notification')
+  }
 }

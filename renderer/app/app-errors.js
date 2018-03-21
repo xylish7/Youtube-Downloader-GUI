@@ -7,7 +7,9 @@ exports.messages = {
   url: 'The provided URL is not valid!',
   ytdl_error: 'Unsupported URL! / Connection timeout!',
   large_playlist: 'For large playlist, fetching data time is 1-2 min!',
-  no_files_to_convert: 'Files already have the desired format!'
+  no_files_to_convert: 'Files already have the desired format!',
+  no_files_selected: 'Please, first of all, select the files you want to convert.',
+  files_removed: 'Some files were removed because they had the desired format.'
 }
 
 exports.notificationTime
