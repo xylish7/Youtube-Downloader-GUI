@@ -73,6 +73,11 @@ app.on('ready', () => {
     event.sender.send('stop-convert-response')
   })
 
+  // Hide page loader
+  ipcMain.on('hide-pageloader', (event) =>{
+    event.sender.send('hide-pageloader-response')
+  })
+
 })
 
 // Quit when all windows are closed.

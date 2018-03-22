@@ -192,16 +192,6 @@ $('#open-converted-folder').on('click', () => {
   }
 })
 
-// Activate page loader if the is a conversion on the 'Download' tab
-const $pageLoaderContainer = $('#page-loader-container')
-const $convertContent = $('#convert-content')
-
-exports.showPageLoader = () => {
-  console.log($convertContent.html(), $pageLoaderContainer.html())
-  $convertContent.hide()
-  $pageLoaderContainer.show()
-}
-
 function setNumberOfConversions () {
   if (convertFiles.length > 0) {
     // Clean last log 
