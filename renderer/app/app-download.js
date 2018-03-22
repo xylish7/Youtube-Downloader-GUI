@@ -81,7 +81,7 @@ downloadButton.on('click', () => {
       // If there is no download in progress, starts one
       if (downloadButton.hasClass('not-downloading')){
         // Show pageloader only if conversion was selected
-        if (mp3Conversion.is(':checked')) pageloaderShowed = true // variable declared globally in main.html
+        if (mp3Conversion.is(':checked')) ipcRenderer.send('pageloader', 'show-download-pageloader')
 
         // Reset varable
         alreadyTriggered = false
@@ -116,8 +116,8 @@ downloadButton.on('click', () => {
         
         // Condition when Stop download is pressed
       } else {        
-        // Hide pageloader if process was sopped
-        pageloaderShowed = false // variable declared globally in main.html
+        // Hide pageloader if process was stopped
+        ipcRenderer.send('pageloader', 'hide-download-pageloader')
         // Remove fields name
         downloadProgressFieldsName.empty()
         // Remove badge
@@ -231,7 +231,7 @@ ipcRenderer.on('conversion-done', (event, receivedData) => {
     appActions.buttonState('static')
     appNotifications.exitMessages.conversion = 'conversion'
     // Hide pageloader if convert process finished
-    ipcRenderer.send('hide-pageloader')
+    ipcRenderer.send('pageloader', 'hide-download-pageloader')
   }
 
   $(`#${receivedData.playlist_index}>.is-3>.conversion-bar`).val('100')

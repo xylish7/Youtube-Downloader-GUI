@@ -2,8 +2,8 @@ const {ipcRenderer, shell} = require('electron')
 
 var appActions = require('./app-actions')
 const appErrors = require('./app-errors')
+const appNotifications = require('../../main/kill-processes/app-notifications')
 var mp3Converter = require('../../main/conversion/mp3Converter')
-var {killAllProcesses}= require('../../main/kill-processes/app-notifications')
 
 // IDs
 const $startConversion = $('#start-conversion')
@@ -96,6 +96,10 @@ $convertAudioFormatOption.on('change', function() {
 $startConversion.on('click', () => {
   // Start converstion if button state is static
   if ($startConversion.hasClass('not-converting') && !$startConversion.attr('disabled')) {
+    // Enable notification on exit if convert is not done
+    appNotifications.exitMessages.conversion = null;
+    // Show convert loader on 'Download' tab
+    ipcRenderer.send('pageloader', 'show-convert-pageloader')    
     // Change divider message
     $convertDivider.attr('data-content', 'CONVERTING ...')
     // Disable open files
@@ -129,6 +133,8 @@ $startConversion.on('click', () => {
     if ($startConversion.hasClass('is-converting')) {
         ipcRenderer.send('stop-convert')
         ipcRenderer.on('stop-convert-response', () => {
+          // Hide convert loader on 'Download' tab
+          ipcRenderer.send('pageloader', 'hide-convert-pageloader')
           // Change divider message
           $convertDivider.attr('data-content', 'PROCESS STOPPED!')
           // Empty process log
@@ -160,7 +166,9 @@ ipcRenderer.on('convert-file-progress', (event, receivedData) => {
 
   // Execute when conversion is done
   if (conversionCount == convertFiles.length) {
-
+    appNotifications.exitMessages.conversion = 'conversion'
+    // Hide convert loader on 'Download' tab
+    ipcRenderer.send('pageloader', 'hide-convert-pageloader')
     // Change divider message
     $convertDivider.attr('data-content', 'CONVERT FINISHED!')
     // Enable open files button

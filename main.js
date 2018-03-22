@@ -73,9 +73,25 @@ app.on('ready', () => {
     event.sender.send('stop-convert-response')
   })
 
-  // Hide page loader
-  ipcMain.on('hide-pageloader', (event) =>{
-    event.sender.send('hide-pageloader-response')
+  // Hide page loader for download tab
+  ipcMain.on('pageloader', (event, data) =>{
+    switch (data) {
+      case 'show-download-pageloader':
+        event.sender.send('show-download-pageloader-response')
+        break;
+
+      case 'hide-download-pageloader':
+      event.sender.send('hide-download-pageloader-response')
+      break;
+
+      case 'show-convert-pageloader':
+        event.sender.send('show-convert-pageloader-response')
+        break;
+
+      case 'hide-convert-pageloader':
+      event.sender.send('hide-convert-pageloader-response')
+      break;
+    }
   })
 
 })
