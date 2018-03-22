@@ -98,6 +98,7 @@ $startConversion.on('click', () => {
   if ($startConversion.hasClass('not-converting') && !$startConversion.attr('disabled')) {
     // Enable notification on exit if convert is not done
     appNotifications.exitMessages.conversion = null;
+    appNotifications.exitMessages.download = 'download'
     // Show convert loader on 'Download' tab
     ipcRenderer.send('pageloader', 'show-convert-pageloader')    
     // Change divider message
@@ -167,6 +168,7 @@ ipcRenderer.on('convert-file-progress', (event, receivedData) => {
   // Execute when conversion is done
   if (conversionCount == convertFiles.length) {
     appNotifications.exitMessages.conversion = 'conversion'
+    appNotifications.exitMessages.download = 'download'
     // Hide convert loader on 'Download' tab
     ipcRenderer.send('pageloader', 'hide-convert-pageloader')
     // Change divider message
@@ -219,3 +221,23 @@ function setNumberOfConversions () {
     appErrors.validateAll({no_files_to_convert: false}, 10000, 'convert-notification')
   }
 }
+
+// Close window event
+const downloadButton = $('#download-button')
+ipcRenderer.on('close-window', (event) => {
+  var exitMessages = appNotifications.exitMessages
+
+  // Check which value has null
+  for (const key in exitMessages) {
+    if (exitMessages.hasOwnProperty(key)) {
+      if((!exitMessages[key] && (downloadButton.hasClass('is-downloading') || downloadButton.hasClass('fetch-data'))) || (!exitMessages[key] && $('#start-conversion').hasClass('is-converting'))) {
+        event.sender.send('close-window-response', key)
+        appNotifications.noProcessActive = null
+        break
+      } else {
+        appNotifications.noProcessActive = true
+      }
+    }
+  }
+  if (appNotifications.noProcessActive) event.sender.send('close-window-response', 'done')
+})

@@ -257,21 +257,3 @@ ipcRenderer.on('ytdl-errors', (event, err) => {
   downloadDivider.attr('data-content', 'ERROR!')
 })
 
-// Close window event
-ipcRenderer.on('close-window', (event) => {
-  var exitMessages = appNotifications.exitMessages
-
-  // Check which value has null
-  for (const key in exitMessages) {
-    if (exitMessages.hasOwnProperty(key)) {
-      if(!exitMessages[key] && (downloadButton.hasClass('is-downloading') || downloadButton.hasClass('fetch-data'))) {
-        event.sender.send('close-window-response', key)
-        appNotifications.noProcessActive = null
-        break
-      } else {
-        appNotifications.noProcessActive = true
-      }
-    }
-  }
-  if (appNotifications.noProcessActive) event.sender.send('close-window-response', 'done')
-})
