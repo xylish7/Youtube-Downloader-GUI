@@ -54,13 +54,12 @@ var spawnChild = (spawnAttributes, playlistInfo, downloadInfo) => {
   var ffmpeg = spawn(ffmpeg_path, args, options);
   this.childProcesses.push(ffmpeg.pid)
 
-
   sendData.playlist_index =  playlistInfo.dynamic.playlist_index
   sendData.isPlaylist = playlistInfo.static.isPlaylist
   sendData.title = playlistInfo.dynamic.title
 
   ffmpeg.stderr.on('data', (data) => {
-    
+
     ffmpegOutput.string = data.toString()
     ffmpegOutput._raw_duration = playlistInfo.dynamic._raw_duration
     sendData.percent = ffmpegOutput.percent
@@ -152,7 +151,7 @@ exports.convertFiles = (fileInfo) => {
 }
 
 var spawnConvert = (spawnAttributes, fileInfo) => {
-  
+  fileInfo.win.webContents.send('debug', 'Inside spawnConvert')
   let ffmpegOutput = new Output()
   
   var sendData = {
@@ -164,10 +163,14 @@ var spawnConvert = (spawnAttributes, fileInfo) => {
   var {ffmpeg_path, args, options} = spawnAttributes
   var ffmpeg = spawn(ffmpeg_path, args, options);
   this.childProcesses.push(ffmpeg.pid)
-
+  console.log('-------------------------------------------------------------------------------------------')
+  console.log(ffmpeg)
+  fileInfo.win.webContents.send('debug', ffmpeg)
+  console.log('-------------------------------------------------------------------------------------------')
   sendData.index =  fileInfo.index
 
   ffmpeg.stderr.on('data', (data) => {
+    fileInfo.win.webContents.send('debug', {'Inside data': data})
     ffmpegOutput.string = data.toString()
     ffmpegOutput.full_duration = ffmpegOutput.fullDuration
 
@@ -186,7 +189,8 @@ var spawnConvert = (spawnAttributes, fileInfo) => {
   });
 
   ffmpeg.on('exit', (code) => {
-    sendData.fileConverted = true;
+    fileInfo.win.webContents.send('debug', 'Inside exit')
+    sendData.fileConverted = true
     sendData.percent = '100.00'
 
     if (sendData.index == fileInfo.n_entries) 
@@ -211,7 +215,13 @@ var spawnConvert = (spawnAttributes, fileInfo) => {
   });
 
   ffmpeg.on('error', (err) => {
+    fileInfo.win.webContents.send('debug', 'Inside error')
     if (err) console.log(err)
   })
+
+  ffmpeg.stdout.on('data', (data) => {
+    fileInfo.win.webContents.send('debug', data)
+  });
+  
 }
 

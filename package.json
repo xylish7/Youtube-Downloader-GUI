@@ -1,6 +1,6 @@
 {
   "name": "yt-downloader",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Youtube Downloader",
   "main": "main.js",
   "scripts": {
@@ -42,17 +42,17 @@
   "author": "Frincu Filip",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^1.7.12",
+    "electron": "^1.8.6",
     "electron-reload": "^1.2.2"
   },
   "dependencies": {
-    "bulma": "^0.6.1",
+    "bulma": "^0.6.2",
     "cross-spawn-async": "^2.2.5",
     "electron-log": "^2.2.14",
-    "electron-updater": "^2.20.1",
+    "electron-updater": "^2.21.10",
     "electron-window-state": "^4.1.1",
     "hazardous": "^0.3.0",
-    "jquery": "^3.2.1",
+    "jquery": "^3.3.1",
     "mustache": "^2.3.0",
     "tree-kill": "^1.2.0",
     "youtube-dl": "^1.12.2"

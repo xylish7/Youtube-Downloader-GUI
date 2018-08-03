@@ -241,3 +241,7 @@ ipcRenderer.on('close-window', (event) => {
   }
   if (appNotifications.noProcessActive) event.sender.send('close-window-response', 'done')
 })
+
+ipcRenderer.on('debug', (event, data) => {
+  console.log(data)
+})
