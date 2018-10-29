@@ -1,19 +1,19 @@
 <template class="page-template">
   <section>
-    
+
     <div class="container">
       <div class="navbar">
 
-        <span class="title is-5">Youtube-DL</span> 
+        <span class="title is-5">Youtube-DL</span>
 
         <span id="download-link" class="nav-link ">
-            <a href="#" class="custom-underline-text is-active"><strong>Download</strong></a>
+          <a href="#" class="custom-underline-text is-active"><strong>Download</strong></a>
         </span>
 
         <span id="convert-link" class="nav-link">
           <a href="#" class="custom-underline-text"><strong>Convert</strong></a>
         </span>
-  
+
         <span id="cut-link" class="nav-link">
           <a href="#" class="custom-underline-text"><strong>Cut</strong></a>
         </span>
@@ -25,7 +25,7 @@
         </button>
         <hr>
       </div>
-      
+
       <div class="modal">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -38,15 +38,17 @@
             <button class="delete close-modal" aria-label="close"></button>
           </header>
           <section class="modal-card-body customized-scrollbar">
-            <span class="settings-message" style="font-size: 13px;">To see <strong>Updates & Releases</strong> futures and fixed bugs press the switch:</span>
-            <span class="settings-message" style="font-size: 13px; display: none;">To see <strong>General Settings</strong> press the switch: </span>
+            <span class="settings-message" style="font-size: 13px;">To see <strong>Updates & Releases</strong> futures
+              and fixed bugs press the switch:</span>
+            <span class="settings-message" style="font-size: 13px; display: none;">To see <strong>General Settings</strong>
+              press the switch: </span>
             <div class="field is-pulled-right" style="margin-left: 15px;">
               <input id="switch-settings" type="checkbox" name="switch-settings" class="switch is-small is-danger is-outlined">
-              <label for="switch-settings"></label>            
+              <label for="switch-settings"></label>
             </div>
 
             <hr>
-            <div class="general-settings-section">              
+            <div class="general-settings-section">
               <p class="subtitle is-6"><strong>Download & convert (from youtube) settings:</strong></p>
               <div class="columns is-mobile is-gapless">
                 <div class="column is-4">Video quality:</div>
@@ -63,7 +65,7 @@
                           <option value="720">720p</option>
                           <option value="1080">1080p</option>
                           <option value="1080">1440p</option> -->
-  
+
                         </select>
                       </div>
                     </div>
@@ -119,7 +121,8 @@
                 <div class="column">
                   <span class="icon tooltip" style="margin-left: 12px;">
                     <i class="fas fa-info-circle" style="color: rgba(0, 0, 0, 0.5)"></i>
-                    <span class="tooltiptext" style="top: -20px;">Higher kbps means higher quality, but bigger file size (recommanded: 128kbps) </span>
+                    <span class="tooltiptext" style="top: -20px;">Higher kbps means higher quality, but bigger file
+                      size (recommanded: 128kbps) </span>
                   </span>
                 </div>
               </div>
@@ -132,10 +135,10 @@
                       <div class="select is-danger is-small">
                         <select id="audio-format-option" class="settings-options">
                           <option value="mp3" selected="selected">MP3</option>
-                          <option value="m4a" >M4A</option>
-                          <option value="ogg" >OGG</option>
+                          <option value="m4a">M4A</option>
+                          <option value="ogg">OGG</option>
                           <!-- <option value="wav" >WAV</option> -->
-                          <option value="wma" >WMA</option>
+                          <option value="wma">WMA</option>
                         </select>
                       </div>
                     </div>
@@ -168,14 +171,15 @@
                   <span class="icon tooltip">
                     <i class="fas fa-exclamation-circle" style="color:hsla(357, 84%, 48%, 0.849);"></i>
                     <span class="tooltiptext" style="top: -30px;">
-                      Set how many converts to do at the same time. <span class="warning">Caution:</span> High No. processes use <span class="warning">more CPU</span> (recommanded: 1-2).
+                      Set how many converts to do at the same time. <span class="warning">Caution:</span> High No.
+                      processes use <span class="warning">more CPU</span> (recommanded: 1-2).
                     </span>
-                  </span>               
+                  </span>
                 </div>
               </div>
               <hr>
               <p class="subtitle is-6"><strong>Convert settings:</strong></p>
-              <div class="columns is-mobile is-gapless">
+              <!-- <div class="columns is-mobile is-gapless">
                 <div class="column is-4">Video format:</div>
                 <div class="column">
                   <div class="field">
@@ -231,9 +235,9 @@
                         <select id="convert-audio-format-option" class="settings-options">
                           <option value="mp3" selected="selected">MP3</option>
                           <option value="m4a" >M4A</option>
-                          <option value="ogg" >OGG</option>
-                          <!-- <option value="wav" >WAV</option> -->
-                          <option value="wma" >WMA</option>
+                          <option value="ogg" >OGG</option> -->
+              <!-- <option value="wav" >WAV</option> -->
+              <!-- <option value="wma" >WMA</option>
                         </select>
                       </div>
                     </div>
@@ -270,47 +274,39 @@
                     </span>
                   </span>               
                 </div>
+              </div> -->
+              <div class="columns is-mobile is-gapless">
+                <div class="column has-text-centered">
+                  <p class="title is-6">Coming soon!</p>
+                </div>
               </div>
               <hr>
               <p class="subtitle is-6"><strong>Cut settings:</strong></p>
               <div class="columns is-mobile is-gapless">
                 <div class="column has-text-centered">
-                  <p class="title is-6">Coming soon!</p> 
+                  <p class="title is-6">Coming soon!</p>
                 </div>
               </div>
             </div>
-            
+
             <div class="general-settings-section" style="display: none;">
               <div class="content">
-                <p class="title is-5">Release 5 - v.3.0.0 (current)</p>
+                <p class="title is-5">Release 5 - v.2.1.0 (current)</p>
                 <h3>Download tab:</h3>
-                <dd><h4>Changes:</h4></dd>
+                <h4>Changes:</h4>
                 <ul>
                   <li>Changed progress style.</li>
                   <li>Open in explorer the save path by clicking the red folder icon.</li>
                   <li>Label title, progress bars and percentage above progress box.</li>
                   <li>Changed checkbox style.</li>
                 </ul>
-                <dd><h4>Features:</h4></dd>
+                <h4>Features:</h4>
                 <ul>
                   <li>Auto disable convert option if there is an active conversion in the 'Convert' tab.</li>
                 </ul>
                 <h4>Fixes:</h4>
                 <ul>
                   <li>'Download' button and progress message got stucked after a playlist conversion.</li>
-                </ul>
-                <h3>Convert tab:</h3>           
-                <dd><h4>Features:</h4></dd>
-                <ul>
-                  <li>Convert audio/video files to the desired format. (video not available at the moment).</li>
-                  <li>Keep or delete original files.</li>
-                  <li>Open the path to the files by clicking the red folder icon.</li>
-                  <li>If there is an active conversion on the 'Download' tab, display a pageloader on the 'Convert' tab.</li>
-                </ul>
-                <h3>General settings:</h3>           
-                <dd><h4>Changes:</h4></dd>
-                <ul>
-                  <li>Separate section regarding the video format, audio quality/format and nr. of processes.</li>
                 </ul>
               </div>
               <div class="content">
@@ -323,7 +319,8 @@
                 </ul>
                 <h4>Features:</h4>
                 <ul>
-                  <li>Open the folder where your files are saved <strong>just by clicking the Save Path.</strong> or the <strong>path itself</strong>.</li>
+                  <li>Open the folder where your files are saved <strong>just by clicking the Save Path.</strong> or
+                    the <strong>path itself</strong>.</li>
                   <li>Add log with errors in: <strong>C:/Users/%USERNAME%/AppData/Roaming/yt-downloader/logs</strong></li>
                   <li>Remember path for <strong>Save Folder</strong>.</li>
                   <li>Remember all settings set in <strong>General settings</strong>.</li>
@@ -331,7 +328,9 @@
                   <li>Set video format.</li>
                   <li>Set audio quality.</li>
                   <li>Set audio format.</li>
-                  <li>Set how many <strong>convert processes</strong> to do at the same time. Higher number of processes means <strong>faster</strong> overall conversion, but <strong>increased CPU usage.</strong> </li>
+                  <li>Set how many <strong>convert processes</strong> to do at the same time. Higher number of
+                    processes means <strong>faster</strong> overall conversion, but <strong>increased CPU usage.</strong>
+                  </li>
                 </ul>
               </div>
 
@@ -343,10 +342,12 @@
                 </ul>
                 <h4>Fixed bugs:</h4>
                 <ul>
-                  <li>Showing <strong>'Url not valid'</strong>  error when 'Start-download' button is disabled</li>
-                  <li><strong>'Conversion finished'</strong> message shows up when 'Stop-download' is pressed, even if there were no conversions in progress</li>
+                  <li>Showing <strong>'Url not valid'</strong> error when 'Start-download' button is disabled</li>
+                  <li><strong>'Conversion finished'</strong> message shows up when 'Stop-download' is pressed, even if
+                    there were no conversions in progress</li>
                   <li>Playlists with <strong>unavailable/deleted</strong> videos can't be downloaded</li>
-                  <li>When <strong>'Keep original file(s)'</strong> option is selected, the state of the <strong>'Stop-download'</strong> button won't change to <strong>'Start-download'</strong> after video is converted.</li>
+                  <li>When <strong>'Keep original file(s)'</strong> option is selected, the state of the <strong>'Stop-download'</strong>
+                    button won't change to <strong>'Start-download'</strong> after video is converted.</li>
                 </ul>
               </div>
 

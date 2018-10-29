@@ -1,21 +1,50 @@
 <template class="page-template">
   <section id="convert-section" class="menu-section hide-section">
+    <div class="container">
+      <article class="message is-large">
+        <div class="message-body text-is-centered">
+          <h1 class="title is-3">Coming soon!</h1>
+          <hr>
+          <p class="subtitle is-4">Until then, don't forget to share this awesome app with your friends!&#9786;</p>
+          <p class="subtitle is-5">
+            Share link: <strong>Click icon
+              <span id="copy-link2" class="icon" style="cursor: pointer; color:hsla(357, 84%, 48%, 0.849);">
+                <i class="far fa-copy"></i>
+              </span>
+              to copy link! </strong>
+            <span id="copy-confirmation2" style=" position:relative; font-size:16px; top: -2px; color:hsla(357, 84%, 48%, 0.849); display:none">Copied!</span>
+          </p>
+          <p class="subtitle is-6" style="user-select: auto; -webkit-user-select: auto; cursor: auto">
+            <strong>https://github.com/xylish7/Youtube-Downloader-GUI/releases/download/v2.1.0/yt-downloader-setup-2.1.0.exe</strong>
+          </p>
+        </div>
+      </article>
+    </div>
 
-    <div id="convert-content" class="container">
-     
+    <script>
+      $("#copy-link2").on("click", () => {
+        clipboard.writeText('https://github.com/xylish7/Youtube-Downloader-GUI/releases/download/v2.1.0/yt-downloader-setup-2.1.0.exe')
+        $("#copy-confirmation2").fadeIn(500).delay(1000).fadeOut(800)
+      })     
+    </script>
+    <!-- <div id="convert-content" class="container">
+
       <div class="field">
         <span class="is-size-7"><strong>Select in what type of files do you want to convert:</strong></span>
-        
-        <input class="is-checkradio is-rtl is-small is-danger" id="convert-audio-radio" type="radio" name="exampleRtlRadioInline" checked="checked">
+
+        <input class="is-checkradio is-rtl is-small is-danger" id="convert-audio-radio" type="radio" name="exampleRtlRadioInline"
+          checked="checked">
         <label for="convert-audio-radio">Audio</label>
 
-        
+
         <span class="icon tooltip">
-          <input class="is-checkradio is-rtl is-small is-danger" id="convert-video-radio" type="radio" name="exampleRtlRadioInline" disabled >
+          <input class="is-checkradio is-rtl is-small is-danger" id="convert-video-radio" type="radio" name="exampleRtlRadioInline"
+            disabled>
           <label for="convert-video-radio">Video</label>
-          <span class="tooltiptext-top-arrow" style="width:100px;top:100%;left:80px;margin-left:-50px;"><span class="warning">Coming soon!</span></span>
+          <span class="tooltiptext-top-arrow" style="width:100px;top:100%;left:80px;margin-left:-50px;"><span class="warning">Coming
+              soon!</span></span>
         </span>
-        
+
       </div>
 
       <div class="field">
@@ -25,7 +54,7 @@
               <i class="far fa-folder-open"></i>
             </span>
             <span>Open files</span>
-          </a>     
+          </a>
         </div>
       </div>
 
@@ -38,16 +67,18 @@
 
       <article class="message is-small">
         <div class="message-body has-text-weight-bold" style="padding-left: 25px;">
-          Click the folder icon <span id="open-converted-folder"><i class="far fa-folder-open has-text-danger" style="cursor:pointer"></i></span> to open file(s) location.
-          <a id="start-conversion" class="is-pulled-right not-converting button is-small is-danger badge is-badge-small is-badge-outlined is-badge-danger" disabled>
+          Click the folder icon <span id="open-converted-folder"><i class="far fa-folder-open has-text-danger" style="cursor:pointer"></i></span>
+          to open file(s) location.
+          <a id="start-conversion" class="is-pulled-right not-converting button is-small is-danger badge is-badge-small is-badge-outlined is-badge-danger"
+            disabled>
             <span class="icon is-small">
               <i id="convert-button-icon" class="far fa-arrow-alt-circle-right"></i>
             </span>
-            <span id="convert-button-message"> Start conversion</span> 
-          </a>    
+            <span id="convert-button-message"> Start conversion</span>
+          </a>
         </div>
       </article>
-    
+
       <div id="convert-divider" class="is-divider" data-content="PROGRESS" style="margin-bottom: 1.1rem"></div>
 
       <div id='convert-progress-fields-name' class="columns is-mobile is-gapless has-text-centered">
@@ -61,17 +92,18 @@
       <div class="notification convert-notification is-danger">
         <button class="delete"></button>
         <p class="notification-message">
-          
+
         </p>
       </div>
-    </div>
+    </div> -->
 
     <!-- Page loader -->
-    <div id="page-loader-container" style="display: none">
+    <!-- <div id="page-loader-container" style="display: none">
       <div class="container">
         <article class="message has-text-centered has-text-weight-bold">
           <div class="message-body">
-            <p class="is-size-5" style="color: hsla(357, 84%, 48%, 0.849)">There is another convert process on the "Download" tab. Please wait for it to finish.</p>
+            <p class="is-size-5" style="color: hsla(357, 84%, 48%, 0.849)">There is another convert process on the
+              "Download" tab. Please wait for it to finish.</p>
           </div>
         </article>
       </div>
@@ -79,18 +111,18 @@
       <div id="preloader">
         <div id="loader"></div>
       </div>
-  
+
       <div class="container">
         <article class="message has-text-centered has-text-weight-bold">
           <div class="message-body">
             <p class="is-size-5 title" style="color: hsla(357, 84%, 48%, 0.849); top:0px;">Thank you!</p>
           </div>
         </article>
-      </div> 
-    </div>
-  <script>
-    // You can also require other files to run in this process
-    require('../app/app-convert.js')
-  </script>
+      </div>
+    </div> -->
+    <script>
+      // You can also require other files to run in this process
+      require('../app/app-convert.js')
+    </script>
   </section>
 </template>
