@@ -1,4 +1,5 @@
 node_modules/
+main/vcredist_x86/vcredist_x86.exe
 private/
 dist/
 logs/*

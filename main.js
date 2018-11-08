@@ -1,9 +1,6 @@
 // Modules
 require("hazardous"); // module required when creating installed so spawn can be used
 const { app, ipcMain } = require("electron");
-const ytdl = require("youtube-dl");
-const path = require("path");
-const fs = require("fs");
 
 // Internal Modules
 const mainWindow = require("./main/windows/main-window");
@@ -13,6 +10,7 @@ const menuBar = require("./main/menu/menu-bar");
 const onExit = require("./main/kill-processes/on-exit");
 const updater = require("./main/update/updater");
 const { killAllProcesses } = require("./main/kill-processes/app-notifications");
+const vcredistInstall = require("./main/vcredist_x86/install");
 
 if (process.argv[2] == "dev") {
   require("electron-reload")(__dirname);
@@ -32,6 +30,9 @@ app.on("ready", () => {
   if (process.argv[2] == undefined) {
     setTimeout(updater.check, 2000);
   }
+
+  // Check if Microsoft Visual C++ 2010 Redistributable Package (x86) is installed
+  // vcredistInstall.check();
 
   // Create context menu
   windows.mainWindow.webContents.on("context-menu", (e, params) => {
