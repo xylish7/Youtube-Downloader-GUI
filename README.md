@@ -1,5 +1,5 @@
 # Youtube-Downloader-GUI
-Download and convert youtube videos/playlists to different formats and different qualities.
+A GUI for [youtube-dl](https://github.com/rg3/youtube-dl). Download and convert youtube videos/playlists to different formats and different qualities.
 
 ## How to use it?
 1. Click on this link: [YT-Downloader-v2.1.0](https://github.com/xylish7/Youtube-Downloader-GUI/releases/download/v2.1.0/yt-downloader-setup-2.1.0.exe). If the link is broken, go to **releases** page and download the last version.
