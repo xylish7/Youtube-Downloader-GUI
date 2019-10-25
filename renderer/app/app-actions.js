@@ -251,6 +251,22 @@ exports.buttonState = state => {
       buttonIcon.removeClass("fa fa-download").addClass("fas fa-sync fa-spin");
       break;
 
+    case "search-updates":
+      downloadButton.removeClass("not-downloading").addClass("search-update");
+      inputUrl.attr("disabled", true);
+      buttonMessage.html("Find updates...");
+      buttonIcon.removeClass("fa fa-download").addClass("fas fa-sync fa-spin");
+      break;
+
+    case "updating":
+      downloadButton.addClass("updating").removeClass("search-update");
+      inputUrl.attr("disabled", true);
+      buttonMessage.html("Updating...");
+      buttonIcon
+        .removeClass("fas fa-sync fa-spin")
+        .addClass("fas fa-spinner fa-pulse");
+      break;
+
     case "downloading":
       downloadButton.addClass("is-downloading").removeClass("fetch-data");
       inputUrl.attr("disabled", true);

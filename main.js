@@ -11,6 +11,7 @@ const onExit = require("./main/kill-processes/on-exit");
 const updater = require("./main/update/updater");
 const { killAllProcesses } = require("./main/kill-processes/app-notifications");
 const vcredistInstall = require("./main/vcredist_x86/install");
+const ytdlUpdater = require("./main/update/ytdl-updater");
 
 if (process.argv[2] == "dev") {
   require("electron-reload")(__dirname);
@@ -50,6 +51,11 @@ app.on("ready", () => {
   });
   ipcMain.on("close-window-response", (event, messageKey) => {
     onExit.confirmExit(windows.mainWindow, messageKey);
+  });
+
+  // Search if youtube-dl has any updates to do
+  ipcMain.on("update-ytdl", event => {
+    ytdlUpdater.checkForUpdates(event);
   });
 
   // Start new download
