@@ -1,6 +1,6 @@
 {
   "name": "yt-downloader",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Youtube Downloader",
   "main": "main.js",
   "scripts": {

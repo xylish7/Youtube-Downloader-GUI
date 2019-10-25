@@ -1,8 +1,6 @@
 <template class="page-template">
   <section id="download-section" class="menu-section">
-    
     <div class="container">
-
       <div class="columns">
         <div class="column">
           <a class="button is-small" id="open-download-folder">
@@ -10,83 +8,117 @@
               <i class="far fa-folder-open"></i>
             </span>
             <span>Save Folder</span>
-          </a>     
+          </a>
         </div>
       </div>
-  
+
       <article id="path-article" class="message is-small" style="display: none">
-        <div class="message-body" >
-          <i><strong>Save Path: 
-            <span id="open-download-explorer">
-                <i class="far fa-folder-open has-text-danger" style="cursor:pointer"></i>
-            </span></strong>
+        <div class="message-body">
+          <i
+            ><strong
+              >Save Path:
+              <span id="open-download-explorer">
+                <i
+                  class="far fa-folder-open has-text-danger"
+                  style="cursor:pointer"
+                ></i> </span
+            ></strong>
             <span id="path-message"></span>
           </i>
         </div>
       </article>
-  
+
       <div class="field">
         <div class="control">
-          <input value="true" class="is-checkradio is-danger is-small" id="mp3-conversion" type="checkbox" name="checkboxDanger">
+          <input
+            value="true"
+            class="is-checkradio is-danger is-small"
+            id="mp3-conversion"
+            type="checkbox"
+            name="checkboxDanger"
+          />
           <label for="mp3-conversion">Convert to audio</label>
-          <span id="download-pageloader" class="icon tooltip" style="display:none" >
+          <span
+            id="download-pageloader"
+            class="icon tooltip"
+            style="display:none"
+          >
             <i class="fas fa-exclamation-triangle has-text-danger"></i>
             <span class="tooltiptext" style="width: 340px;">
               <!-- <i class="fas fa-spinner fa-pulse has-text-danger" style="font-size:17px;"></i> -->
-                Conversion in progress on 'Convert' tab. Please wait!	&nbsp; 
-              <i class="fas fa-spinner fa-pulse has-text-danger" style="font-size:17px;"></i>
+              Conversion in progress on 'Convert' tab. Please wait! &nbsp;
+              <i
+                class="fas fa-spinner fa-pulse has-text-danger"
+                style="font-size:17px;"
+              ></i>
             </span>
           </span>
         </div>
       </div>
-      
-     
+
       <div class="field">
         <div class="control">
-          <input value="true" class="is-checkradio is-danger is-small" id="keep-files" type="checkbox" name="checkboxDanger" disabled>
+          <input
+            value="true"
+            class="is-checkradio is-danger is-small"
+            id="keep-files"
+            type="checkbox"
+            name="checkboxDanger"
+            disabled
+          />
           <label for="keep-files">Save both video and audio</label>
         </div>
       </div>
-  
+
       <div class="field has-addons">
         <div class="control is-expanded">
           <div class="control has-icons-left has-icons-right">
-            <input id="input-url" class="input is-small" type="text" placeholder="Double click to paste URL...">
+            <input
+              id="input-url"
+              class="input is-small"
+              type="text"
+              placeholder="Double click to paste URL..."
+            />
             <span class="icon is-small is-left">
               <i class="fas fa-globe"></i>
             </span>
           </div>
         </div>
         <div class="control">
-          <a id="download-button" class="button is-danger is-small badge is-badge-small is-badge-outlined is-badge-danger not-downloading" disabled >
+          <a
+            id="download-button"
+            class="button is-danger is-small badge is-badge-small is-badge-outlined is-badge-danger not-downloading"
+            disabled
+          >
             <span class="icon">
               <i id="button-icon" class="fa fa-download"></i>
             </span>
-            <span id="button-message">Start-download</span> 
+            <span id="button-message">Start-download</span>
           </a>
         </div>
       </div>
-  
-      <div id="download-divider" class="is-divider" data-content="PROGRESS" style="margin-bottom: 1.1rem"></div>
 
-      <div id='download-progress-fields-name' class="columns is-mobile is-gapless has-text-centered">
+      <div
+        id="download-divider"
+        class="is-divider"
+        data-content="PROGRESS"
+        style="margin-bottom: 1.1rem"
+      ></div>
 
-      </div>
-  
-      <div class="log download-log customized-scrollbar">
-    
-      </div>
-  
+      <div
+        id="download-progress-fields-name"
+        class="columns is-mobile is-gapless has-text-centered"
+      ></div>
+
+      <div class="log download-log customized-scrollbar"></div>
+
       <div class="notification download-notification is-danger">
         <button class="delete"></button>
-        <p class="notification-message">
-          
-        </p>
+        <p class="notification-message"></p>
       </div>
-      
     </div>
     <script>
-      require('../app/app-download.js')
+      require("../app/app-download.js");
     </script>
   </section>
 </template>
