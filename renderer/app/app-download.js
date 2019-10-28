@@ -6,6 +6,7 @@ const $ = require("jquery");
 // Internal Modules
 const appActions = require("./app-actions");
 const appErrors = require("./app-errors");
+require("../initialize-store-data");
 const appNotifications = require("../../main/kill-processes/app-notifications");
 
 // IDs
