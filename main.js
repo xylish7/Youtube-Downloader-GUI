@@ -12,6 +12,7 @@ const updater = require("./main/update/updater");
 const { killAllProcesses } = require("./main/kill-processes/app-notifications");
 const vcredistInstall = require("./main/vcredist_x86/install");
 const ytdlUpdater = require("./main/update/ytdl-updater");
+const { keepLogs } = require("./utils/logger");
 
 if (process.argv[2] == "dev") {
   require("electron-reload")(__dirname);
@@ -42,6 +43,9 @@ app.on("ready", () => {
 
   // Send window object to download video
   dlPlaylist.staticInfo.win = windows.mainWindow;
+
+  // Clear old logs
+  keepLogs(7);
 
   // Show notification if processes are in progress
   windows.mainWindow.on("close", e => {

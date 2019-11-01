@@ -46,7 +46,7 @@
     "electron-reload": "^1.2.2"
   },
   "dependencies": {
-    "bulma": "^0.6.2",
+    "bulma": "^0.8.0",
     "cross-spawn-async": "^2.2.5",
     "electron-log": "^2.2.14",
     "electron-updater": "^2.21.10",
