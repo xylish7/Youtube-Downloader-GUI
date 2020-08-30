@@ -4,7 +4,9 @@
 <h1 align="center">
   Youtube-Downloader-GUI  
 </h1>
- 
+
+❗ This repository is no longer mantained. Check [Youtube-SK](https://github.com/xylish7/Youtube-SK) which is work in progress. ❗
+
 A GUI for [youtube-dl](https://github.com/rg3/youtube-dl). Download and convert youtube videos/playlists to different formats and different qualities.
 
 <img width="283" src="readme-assets/Youtube-DL-convert.PNG"> <img width="283" src="readme-assets/Youtube-DL-download-finished.PNG"> <img width="283" src="readme-assets/Youtube-DL-download.PNG"> <img width="283" src="readme-assets/Youtube-DL-fetch.PNG"> <img width="283" src="readme-assets/Youtube-DL-playlist.PNG"> <img width="283" src="readme-assets/Youtube-DL-realases.PNG"> <img width="283" src="readme-assets/Youtube-DL-settings.PNG"> <img width="283" src="readme-assets/Youtube-DL.PNG">
