@@ -18,5 +18,5 @@ A GUI for [youtube-dl](https://github.com/rg3/youtube-dl). Download and convert 
 3. Enjoy using it!
 
 ## Troubleshooting
-
-- If the application throws an error when you try to download a video, install [Microsoft Visual C++ 2010 Redistributable Package (x86)](https://www.microsoft.com/en-US/download/details.aspx?id=5555).
+1. If the application throws an error when you try to download a video, download the exe file from [here](https://youtube-dl.org/downloads/latest/youtube-dl.exe) and copy the exe file in C:\Program Files\yt-downlaoder\resources\app.asar.unpacked\node_modules\youtuve-dl\bin. For OSes other than Windows find the path to the bin folder and paste that exe in it. 
+2. If it still doesn't work, install [Microsoft Visual C++ 2010 Redistributable Package (x86)](https://www.microsoft.com/en-US/download/details.aspx?id=5555).
