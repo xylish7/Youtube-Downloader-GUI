@@ -5,7 +5,7 @@
   Youtube-Downloader-GUI  
 </h1>
 
-❗ This repository is no longer mantained. Check [Youtube-SK](https://github.com/xylish7/Youtube-SK) which is work in progress. ❗
+❗ This repository is no longer mantained since I don't have to much free time so the app may not work as it should ❗
 
 A GUI for [youtube-dl](https://github.com/rg3/youtube-dl). Download and convert youtube videos/playlists to different formats and different qualities.
 
