@@ -1,66 +1,49 @@
-const { shell } = require("electron");
-const { app } = require("@electron/remote");
-
-// On hover, display general-settings button color
-const $generalSettings = $("#general-settings");
-
-// Open modal
-const $modal = $(".modal");
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const jquery_1 = __importDefault(require("jquery"));
+const electron_1 = require("electron");
+const remote_1 = require("@electron/remote");
+const $generalSettings = (0, jquery_1.default)("#general-settings");
+const $modal = (0, jquery_1.default)(".modal");
 $generalSettings.on("click", () => {
-  $modal.addClass("is-active");
+    $modal.addClass("is-active");
 });
-
-// Close modal
-const $closeMolad = $(".close-modal");
-const $switchSettings = $("#switch-settings");
+const $closeMolad = (0, jquery_1.default)(".close-modal");
+const $switchSettings = (0, jquery_1.default)("#switch-settings");
 $closeMolad.on("click", () => {
-  $modal.removeClass("is-active");
-
-  // Change to 'General Settings' section on modal close
-  if ($switchSettings.attr("checked")) {
-    $switchSettings.prop("checked", false).attr("checked", false);
+    $modal.removeClass("is-active");
+    if ($switchSettings.attr("checked")) {
+        $switchSettings.prop("checked", false).removeAttr("checked");
+        $generalSettingsSection.toggle();
+        $settingsMessage.toggle();
+    }
+});
+const logsPath = `${remote_1.app.getPath("userData")}/logs`;
+const $openLogs = (0, jquery_1.default)(".open-logs");
+$openLogs.on("click", () => {
+    electron_1.shell.openPath(logsPath);
+});
+const $settingsMessage = (0, jquery_1.default)(".settings-message");
+const $generalSettingsSection = (0, jquery_1.default)(".general-settings-section");
+$switchSettings.on("click", function () {
+    $switchSettings.attr("checked")
+        ? (0, jquery_1.default)(this).removeAttr("checked")
+        : (0, jquery_1.default)(this).attr("checked", "checked");
     $generalSettingsSection.toggle();
     $settingsMessage.toggle();
-  }
 });
-
-// Open logs folder
-const logsPath = `${app.getPath("userData")}/logs`;
-
-const $openLogs = $(".open-logs");
-$openLogs.on("click", () => {
-  shell.openPath(logsPath);
-});
-
-// Toggle between 'General Settings' and 'Updates and releaseas'
-const $settingsMessage = $(".settings-message");
-const $generalSettingsSection = $(".general-settings-section");
-$switchSettings.on("click", function () {
-  $switchSettings.attr("checked")
-    ? $(this).attr("checked", false)
-    : $(this).attr("checked", true);
-  $generalSettingsSection.toggle();
-  $settingsMessage.toggle();
-});
-
-// Navigation
-const $navLink = $(".nav-link");
-const $menuSection = $(".menu-section");
+const $navLink = (0, jquery_1.default)(".nav-link");
+const $menuSection = (0, jquery_1.default)(".menu-section");
 $navLink.on("click", function () {
-  // Reset links to deafult css
-  $navLink.find("a:first").removeClass("is-active");
-  $menuSection.addClass("hide-section");
-
-  // Apply css style on click
-  $(this).find("a:first").addClass("is-active");
-
-  // Get selected page
-  // Get id of selected link
-  let selectedLink = $(this).attr("id");
-  // Split the id and take the first part of it
-  let selectedSection = selectedLink.split("-");
-  // Create section name to shpw
-  selectedSection = `${selectedSection[0]}-section`;
-  // Show section
-  $(`#${selectedSection}`).removeClass("hide-section");
+    $navLink.find("a:first").removeClass("is-active");
+    $menuSection.addClass("hide-section");
+    (0, jquery_1.default)(this).find("a:first").addClass("is-active");
+    const selectedLink = (0, jquery_1.default)(this).attr("id");
+    const selectedSection = selectedLink.split("-");
+    const sectionId = `${selectedSection[0]}-section`;
+    (0, jquery_1.default)(`#${sectionId}`).removeClass("hide-section");
 });
+//# sourceMappingURL=app-navbar.js.map

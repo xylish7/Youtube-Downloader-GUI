@@ -1,52 +1,38 @@
-// Internal modules
-const Store = require("./store");
-
-var { downloadInfo } = require("./app/app-actions");
-// create persistent data storage
-const store = new Store({
-  configName: "user-preferences",
-  defaults: {}
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const jquery_1 = __importDefault(require("jquery"));
+const store_1 = __importDefault(require("./store"));
+const app_actions_1 = require("./app/app-actions");
+const store = new store_1.default({
+    configName: "user-preferences",
+    defaults: {},
 });
-
-// Get download path
-const messagePath = $("#path-message");
-const articlePath = $("#path-article");
-var savePath = store.get("savePath");
+const messagePath = (0, jquery_1.default)("#path-message");
+const articlePath = (0, jquery_1.default)("#path-article");
+const savePath = store.get("savePath");
 if (savePath) {
-  messagePath.html(`<i> ${savePath}</i>`);
-  articlePath.show();
-  downloadInfo.savePath = savePath;
+    messagePath.html(`<i> ${savePath}</i>`);
+    articlePath.show();
+    app_actions_1.downloadInfo.savePath = savePath;
 }
-
-// Set general settings
-const $settingsOptions = $(".settings-options");
-
-$settingsOptions.on("change", function() {
-  let storeId = $(this)
-    .attr("id")
-    .replace("-option", "")
-    .replace("-", "_");
-  store.set(storeId, $(this).val());
+const $settingsOptions = (0, jquery_1.default)(".settings-options");
+$settingsOptions.on("change", function () {
+    const storeId = (0, jquery_1.default)(this).attr("id")
+        .replace("-option", "")
+        .replace("-", "_");
+    store.set(storeId, (0, jquery_1.default)(this).val());
 });
-
-// Get general settings
-$settingsOptions.each(function() {
-  // Get id of select
-  let storeId = $(this)
-    .attr("id")
-    .replace("-option", "")
-    .replace("-", "_");
-  // Get option from persistent data
-  storeId = store.get(storeId);
-  // Set new selected option
-  if (storeId) {
-    // Remove selected option
-    $(this)
-      .find("option:selected")
-      .removeAttr("selected");
-    // Add 'selected' atribute to the saved value
-    $(this)
-      .find(`option[value="${storeId}"]`)
-      .attr("selected", "selected");
-  }
+$settingsOptions.each(function () {
+    let storeId = (0, jquery_1.default)(this).attr("id")
+        .replace("-option", "")
+        .replace("-", "_");
+    const storedVal = store.get(storeId);
+    if (storedVal) {
+        (0, jquery_1.default)(this).find("option:selected").removeAttr("selected");
+        (0, jquery_1.default)(this).find(`option[value="${storedVal}"]`).attr("selected", "selected");
+    }
 });
+//# sourceMappingURL=initialize-store-data.js.map

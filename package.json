@@ -7,7 +7,9 @@
     "start": "electron .",
     "win": "electron-builder -w",
     "make-cert": "electron-builder create-self-signed-cert -p FilipFrincu",
-    "dev": "electron . dev"
+    "dev": "electron . dev",
+    "build": "tsc",
+    "build:watch": "tsc --watch"
   },
   "build": {
     "nsis": {
@@ -46,9 +48,12 @@
   "author": "Frincu Filip",
   "license": "CC0-1.0",
   "devDependencies": {
+    "@types/jquery": "^4.0.0",
+    "@types/node": "^25.8.0",
     "electron": "^34.0.0",
     "electron-builder": "^25.0.0",
-    "electron-reload": "^1.5.0"
+    "electron-reload": "^1.5.0",
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "@electron/remote": "^2.1.2",

@@ -1,309 +1,192 @@
-// Modules
-const { ipcRenderer, clipboard } = require("electron");
-const fs = require("fs");
-const $ = require("jquery");
-
-// Internal Modules
-const appActions = require("./app-actions");
-const appErrors = require("./app-errors");
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const jquery_1 = __importDefault(require("jquery"));
+const electron_1 = require("electron");
+const appActions = __importStar(require("./app-actions"));
+const appErrors = __importStar(require("./app-errors"));
 require("../initialize-store-data");
-const appNotifications = require("../../main/kill-processes/app-notifications");
-
-// IDs
-const downloadButton = $("#download-button");
-const inputUrl = $("#input-url");
-const keepFilesCheckbox = $("#keep-files");
-const mp3Conversion = $("#mp3-conversion");
-const openFolder = $("#open-download-folder");
-const downloadProgressFieldsName = $("#download-progress-fields-name");
-const downloadDivider = $("#download-divider");
-
-// Classes
-const conversionNumber = $(".conversion-number");
-const downloadLog = $(".download-log");
-const notification = $(".notification");
-const videoNumber = $(".video-number");
-
-// Used to count badge progress
-var conversionCount;
-
-// Used to trigger conditional if one time
-var alreadyTriggered = false;
-
-// Search if youtube-dl has any updates to do
+const appNotifications = __importStar(require("../../main/kill-processes/app-notifications"));
+const downloadButton = (0, jquery_1.default)("#download-button");
+const inputUrl = (0, jquery_1.default)("#input-url");
+const keepFilesCheckbox = (0, jquery_1.default)("#keep-files");
+const mp3Conversion = (0, jquery_1.default)("#mp3-conversion");
+const openFolder = (0, jquery_1.default)("#open-download-folder");
+const downloadProgressFieldsName = (0, jquery_1.default)("#download-progress-fields-name");
+const downloadDivider = (0, jquery_1.default)("#download-divider");
+const conversionNumber = (0, jquery_1.default)(".conversion-number");
+const downloadLog = (0, jquery_1.default)(".download-log");
+const notification = (0, jquery_1.default)(".notification");
+const videoNumber = (0, jquery_1.default)(".video-number");
+let conversionCount;
+let alreadyTriggered = false;
 appActions.buttonState("search-updates");
-ipcRenderer.send("update-ytdl");
-ipcRenderer.on("update-ytdl", () => appActions.buttonState("updating"));
-ipcRenderer.on("ytdl-update-finished", () => appActions.buttonState("static"));
-
-// Open browse window to choose save path
+electron_1.ipcRenderer.send("update-ytdl");
+electron_1.ipcRenderer.on("update-ytdl", () => appActions.buttonState("updating"));
+electron_1.ipcRenderer.on("ytdl-update-finished", () => appActions.buttonState("static"));
 openFolder.on("click", async () => {
-  await appActions.getDownloadPath();
+    await appActions.getDownloadPath();
 });
-
-// Open 'Save Folder' in explorer
 appActions.openSavePath();
-
-// Paste URL on double click
 inputUrl.on("dblclick", () => {
-  inputUrl.val(clipboard.readText());
-  appActions.disableButton();
+    inputUrl.val(electron_1.clipboard.readText());
+    appActions.disableButton();
 });
-
-// Disable download button if no URL is provided
 inputUrl.on("input paste", () => {
-  appActions.disableButton();
+    appActions.disableButton();
 });
-
-// Start download
 downloadButton.on("click", () => {
-  // Reset notification values
-  appNotifications.resetValues();
-
-  if (
-    !downloadButton.prop("disabled") &&
-    !downloadButton.hasClass("fetch-data")
-  ) {
-    // Object containg the results of validations
-    var validationResults = {};
-
-    // Check if save folder was selected
-    validationResults.save_folder_selected = appErrors.validateSaveFolder();
-
-    // Check if selected save folder exists
-    validationResults.path_not_exist = appErrors.validatePath(
-      appActions.downloadInfo.savePath,
-    );
-
-    if (inputUrl.val() != "") {
-      validationResults.url = appErrors.validateURL();
+    appNotifications.resetValues();
+    if (!downloadButton.prop("disabled") &&
+        !downloadButton.hasClass("fetch-data")) {
+        const validationResults = {};
+        validationResults.save_folder_selected = appErrors.validateSaveFolder();
+        validationResults.path_not_exist = appErrors.validatePath(appActions.downloadInfo.savePath);
+        if (inputUrl.val() !== "") {
+            validationResults.url = appErrors.validateURL();
+        }
+        if (appErrors.validateAll(validationResults, 10000) &&
+            validationResults.url) {
+            if (downloadButton.hasClass("not-downloading")) {
+                if (mp3Conversion.is(":checked"))
+                    electron_1.ipcRenderer.send("pageloader", "show-download-pageloader");
+                alreadyTriggered = false;
+                downloadDivider.attr("data-content", "GET VIDEO/PLAYLIST INFO ...");
+                conversionCount = 0;
+                if (mp3Conversion.is(":checked"))
+                    downloadProgressFieldsName.html(appActions.progressFieldNames("download-convert"));
+                else
+                    downloadProgressFieldsName.html(appActions.progressFieldNames("download"));
+                appErrors.largePlaylist();
+                downloadLog.empty();
+                conversionNumber.empty();
+                appActions.setConvertBadge("download-button", "remove-badge");
+                appActions.buttonState("fetch-data");
+                appActions.getFieldValues();
+                electron_1.ipcRenderer.send("new-playlist", appActions.downloadInfo);
+            }
+            else {
+                electron_1.ipcRenderer.send("pageloader", "hide-download-pageloader");
+                downloadProgressFieldsName.empty();
+                appActions.setConvertBadge("download-button", "remove-badge");
+                appActions.buttonState("static");
+                downloadLog.empty();
+                electron_1.ipcRenderer.send("stop-download");
+                electron_1.ipcRenderer.on("response", () => {
+                    downloadDivider.attr("data-content", "DOWNLOAD STOPPED!");
+                });
+            }
+        }
     }
-
-    // If all validation passed start the downoload
-    if (
-      appErrors.validateAll(validationResults, 10000) &&
-      validationResults.url
-    ) {
-      // If there is no download in progress, starts one
-      if (downloadButton.hasClass("not-downloading")) {
-        // Show pageloader only if conversion was selected
-        if (mp3Conversion.is(":checked"))
-          ipcRenderer.send("pageloader", "show-download-pageloader");
-
-        // Reset varable
-        alreadyTriggered = false;
-
-        // Change divider message
-        downloadDivider.attr("data-content", "GET VIDEO/PLAYLIST INFO ...");
-
-        // Initialize count for badge progress
-        conversionCount = 0;
-
-        // Set progress field names
-        if (mp3Conversion.is(":checked"))
-          downloadProgressFieldsName.html(
-            appActions.progressFieldNames("download-convert"),
-          );
-        else
-          downloadProgressFieldsName.html(
-            appActions.progressFieldNames("download"),
-          );
-
-        // Popup notification if playlist is to large
-        appErrors.largePlaylist();
-
-        // Delete all progress messages if button is pressed again
-        downloadLog.empty();
-        conversionNumber.empty();
-        appActions.setConvertBadge("download-button", "remove-badge");
-
-        // Disable button and input
-        appActions.buttonState("fetch-data");
-
-        // Get the value of checkboxes and inputs
-        appActions.getFieldValues();
-        // Emit event with download info as argumnets
-        ipcRenderer.send("new-playlist", appActions.downloadInfo);
-
-        // Condition when Stop download is pressed
-      } else {
-        // Hide pageloader if process was stopped
-        ipcRenderer.send("pageloader", "hide-download-pageloader");
-        // Remove fields name
-        downloadProgressFieldsName.empty();
-        // Remove badge
-        appActions.setConvertBadge("download-button", "remove-badge");
-        // Change button to static
-        appActions.buttonState("static");
-        // Empty progress log
-        downloadLog.empty();
-        // Kill processes
-        ipcRenderer.send("stop-download");
-        ipcRenderer.on("response", () => {
-          // Change divider message
-          downloadDivider.attr("data-content", "DOWNLOAD STOPPED!");
-        });
-      }
-    }
-  }
 });
-
-// Disable Keep files checkbox if convert to mp3 is not checked
 mp3Conversion.on("click", () => {
-  mp3Conversion.is(":checked")
-    ? keepFilesCheckbox.removeAttr("disabled")
-    : keepFilesCheckbox.prop("checked", false).attr("disabled", true);
+    mp3Conversion.is(":checked")
+        ? keepFilesCheckbox.removeAttr("disabled")
+        : keepFilesCheckbox.prop("checked", false).attr("disabled", "true");
 });
-
-// Close notification
-$(".delete").on("click", () => {
-  notification.css("display", "none");
+(0, jquery_1.default)(".delete").on("click", () => {
+    notification.css("display", "none");
 });
-
-// Get progress for playlist
-ipcRenderer.on("playlist-progress", (event, playlistInfo) => {
-  // Initialize badge progress and change
-  if (playlistInfo.dynamic.playlist_index == 1) {
-    appActions.setConvertBadge(
-      "download-button",
-      playlistInfo.static.n_entries,
-      0,
-    );
-  }
-
-  // Change button from fetch-data to download
-  if (downloadButton.hasClass("fetch-data")) {
-    appActions.buttonState("downloading");
-    // Remove notification
+electron_1.ipcRenderer.on("playlist-progress", (_event, playlistInfo) => {
+    if (playlistInfo.dynamic.playlist_index === 1) {
+        appActions.setConvertBadge("download-button", playlistInfo.static.n_entries, 0);
+    }
+    if (downloadButton.hasClass("fetch-data")) {
+        appActions.buttonState("downloading");
+        appErrors.largePlaylist(true);
+        downloadDivider.attr("data-content", "DOWNLOADING ...");
+    }
+    if (playlistInfo.static.appendColumns) {
+        appActions.downloadInfo.mp3Conversion === "true"
+            ? downloadLog.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, "download-convert")}`)
+            : downloadLog.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, "download")}`);
+    }
+    if (playlistInfo.dynamic.percent === "100.00" &&
+        appActions.downloadInfo.mp3Conversion === "false" &&
+        playlistInfo.static.isPlaylist !== null) {
+        appActions.setConvertBadge("download-button", playlistInfo.static.n_entries, playlistInfo.dynamic.playlist_index);
+    }
+    appActions.showProgress(playlistInfo.dynamic);
+    if (playlistInfo.static.downloadFinished) {
+        appNotifications.exitMessages.download = "download";
+        if (appActions.downloadInfo.mp3Conversion === "false" &&
+            playlistInfo.static.isPlaylist === null) {
+            appActions.buttonState("static");
+            downloadDivider.attr("data-content", "DOWNLOAD FINISHED!");
+        }
+        else {
+            downloadDivider.attr("data-content", "DOWNLOAD FINISHED! || CONVERTING ...");
+        }
+        if (playlistInfo.dynamic.playlist_index === playlistInfo.static.n_entries &&
+            appActions.downloadInfo.mp3Conversion === "false") {
+            appActions.buttonState("static");
+            downloadDivider.attr("data-content", "DOWNLOAD FINISHED!");
+        }
+    }
+});
+electron_1.ipcRenderer.on("conversion-percent", (_event, receivedData) => {
+    if (receivedData.playlist_index === 1 && !alreadyTriggered) {
+        downloadDivider.attr("data-content", "DOWNLOADING ... || CONVERTING ...");
+        alreadyTriggered = true;
+    }
+    (0, jquery_1.default)(`#${receivedData.playlist_index}>.is-3>.conversion-bar`).val(receivedData.percent);
+    (0, jquery_1.default)(`#${receivedData.playlist_index}>.is-2>.percent-progress`).html(`${receivedData.percent}%`);
+});
+electron_1.ipcRenderer.on("conversion-done", (_event, receivedData) => {
+    if (receivedData.conversionFinished &&
+        downloadButton.hasClass("is-downloading")) {
+        downloadDivider.attr("data-content", "DOWNLOAD FINISHED! || CONVRERT FINISHED!");
+        appActions.buttonState("static");
+        appNotifications.exitMessages.conversion = "conversion";
+        electron_1.ipcRenderer.send("pageloader", "hide-download-pageloader");
+    }
+    (0, jquery_1.default)(`#${receivedData.playlist_index}>.is-3>.conversion-bar`).val("100");
+    (0, jquery_1.default)(`#${receivedData.playlist_index}>.is-2>.percent-progress`).html("100.00%");
+    if (receivedData.isPlaylist !== null) {
+        conversionCount++;
+        appActions.setConvertBadge("download-button", receivedData.n_entries, conversionCount);
+    }
+});
+electron_1.ipcRenderer.on("ytdl-errors", (_event, err) => {
     appErrors.largePlaylist(true);
-    // Change divider message
-    downloadDivider.attr("data-content", "DOWNLOADING ...");
-  }
-
-  // Append new title, progress bar and percentage
-  if (playlistInfo.static.appendColumns) {
-    appActions.downloadInfo.mp3Conversion == "true"
-      ? downloadLog.append(
-          `${appActions.dynamicContent(
-            playlistInfo.dynamic.playlist_index,
-            "download-convert",
-          )}`,
-        )
-      : downloadLog.append(
-          `${appActions.dynamicContent(
-            playlistInfo.dynamic.playlist_index,
-            "download",
-          )}`,
-        );
-  }
-
-  // Set download badge progress
-  if (
-    playlistInfo.dynamic.percent == "100.00" &&
-    appActions.downloadInfo.mp3Conversion == "false" &&
-    playlistInfo.static.isPlaylist != null
-  ) {
-    appActions.setConvertBadge(
-      "download-button",
-      playlistInfo.static.n_entries,
-      playlistInfo.dynamic.playlist_index,
-    );
-  }
-
-  // Update the value of the progress bar
-  appActions.showProgress(playlistInfo.dynamic);
-  // Write when download is finished
-  if (playlistInfo.static.downloadFinished) {
-    // Set error-notification that download is completed
-    appNotifications.exitMessages.download = "download";
-
-    // Make button available again only if conversion was not selected
-    // For single videos
-    if (
-      appActions.downloadInfo.mp3Conversion == "false" &&
-      playlistInfo.static.isPlaylist == null
-    ) {
-      // Change button state
-      appActions.buttonState("static");
-      // Change divider message
-      downloadDivider.attr("data-content", "DOWNLOAD FINISHED!");
-    }
-    // Change divider message
-    else
-      downloadDivider.attr(
-        "data-content",
-        "DOWNLOAD FINISHED! || CONVERTING ...",
-      );
-
-    // For playlists
-    if (
-      playlistInfo.dynamic.playlist_index == playlistInfo.static.n_entries &&
-      appActions.downloadInfo.mp3Conversion == "false"
-    ) {
-      // Change button state
-      appActions.buttonState("static");
-      // Change divider message
-      downloadDivider.attr("data-content", "DOWNLOAD FINISHED!");
-    }
-  }
-});
-
-// Conversion Progress
-ipcRenderer.on("conversion-percent", (event, receivedData) => {
-  if (receivedData.playlist_index == 1 && !alreadyTriggered) {
-    // Change divider message
-    downloadDivider.attr("data-content", "DOWNLOADING ... || CONVERTING ...");
-    alreadyTriggered = true;
-  }
-
-  $(`#${receivedData.playlist_index}>.is-3>.conversion-bar`).val(
-    receivedData.percent,
-  );
-  // Show the procent in clear text
-  $(`#${receivedData.playlist_index}>.is-2>.percent-progress`).html(
-    `${receivedData.percent}%`,
-  );
-});
-
-// Conversion finished
-ipcRenderer.on("conversion-done", (event, receivedData) => {
-  if (
-    receivedData.conversionFinished &&
-    downloadButton.hasClass("is-downloading")
-  ) {
-    downloadDivider.attr(
-      "data-content",
-      "DOWNLOAD FINISHED! || CONVRERT FINISHED!",
-    );
     appActions.buttonState("static");
-    appNotifications.exitMessages.conversion = "conversion";
-    // Hide pageloader if convert process finished
-    ipcRenderer.send("pageloader", "hide-download-pageloader");
-  }
-
-  $(`#${receivedData.playlist_index}>.is-3>.conversion-bar`).val("100");
-  $(`#${receivedData.playlist_index}>.is-2>.percent-progress`).html("100.00%");
-
-  // Set download + convert progress
-  if (receivedData.isPlaylist != null) {
-    conversionCount++;
-    appActions.setConvertBadge(
-      "download-button",
-      receivedData.n_entries,
-      conversionCount,
-    );
-  }
+    videoNumber.empty();
+    appErrors.validateAll({ ytdl_error: false }, 10000);
+    downloadDivider.attr("data-content", "ERROR!");
 });
-
-// Youtube download errors
-ipcRenderer.on("ytdl-errors", (event, err) => {
-  // Remove notification
-  appErrors.largePlaylist(true);
-
-  appActions.buttonState("static");
-  videoNumber.empty();
-
-  // Send error
-  appErrors.validateAll({ ytdl_error: false }, 10000);
-  downloadDivider.attr("data-content", "ERROR!");
-});
+//# sourceMappingURL=app-download.js.map

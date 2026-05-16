@@ -1,115 +1,97 @@
-// Modules
-const { app, ipcMain } = require("electron");
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+const electron_1 = require("electron");
 const remoteMain = require("@electron/remote/main");
 remoteMain.initialize();
-
-// Internal Modules
-const mainWindow = require("./main/windows/main-window");
-const mp3Converter = require("./main/conversion/mp3Converter");
-const dlPlaylist = require("./main/ytdl/download-playlist");
-const menuBar = require("./main/menu/menu-bar");
-const onExit = require("./main/kill-processes/on-exit");
-const updater = require("./main/update/updater");
-const { killAllProcesses } = require("./main/kill-processes/app-notifications");
-const ytdlUpdater = require("./main/update/ytdl-updater");
-const { keepLogs } = require("./utils/logger");
-
-if (process.argv[2] == "dev") {
-  require("electron-reload")(__dirname);
+const mainWindow = __importStar(require("./main/windows/main-window"));
+const mp3Converter = __importStar(require("./main/conversion/mp3Converter"));
+const dlPlaylist = __importStar(require("./main/ytdl/download-playlist"));
+const menuBar = __importStar(require("./main/menu/menu-bar"));
+const onExit = __importStar(require("./main/kill-processes/on-exit"));
+const updater = __importStar(require("./main/update/updater"));
+const app_notifications_1 = require("./main/kill-processes/app-notifications");
+const ytdlUpdater = __importStar(require("./main/update/ytdl-updater"));
+const logger_1 = require("./utils/logger");
+if (process.argv[2] === "dev") {
+    require("electron-reload")(__dirname);
 }
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-
-app.on("ready", () => {
-  // Create windows
-  var windows = {
-    mainWindow: mainWindow.createWindow(),
-  };
-  remoteMain.enable(windows.mainWindow.webContents);
-
-  // Check for update after x seconds
-  if (process.argv[2] == undefined) {
-    setTimeout(updater.check, 2000);
-  }
-
-  // Check if Microsoft Visual C++ 2010 Redistributable Package (x86) is installed
-  // vcredistInstall.check();
-
-  // Create context menu
-  windows.mainWindow.webContents.on("context-menu", (e, params) => {
-    menuBar.contextMenu.popup(windows.mainWindow, params.x, params.y);
-  });
-
-  // Send window object to download video
-  dlPlaylist.staticInfo.win = windows.mainWindow;
-
-  // Clear old logs
-  keepLogs(7);
-
-  // Show notification if processes are in progress
-  windows.mainWindow.on("close", (e) => {
-    e.preventDefault();
-
-    windows.mainWindow.webContents.send("close-window");
-  });
-  ipcMain.on("close-window-response", (event, messageKey) => {
-    onExit.confirmExit(windows.mainWindow, messageKey);
-  });
-
-  // Search if youtube-dl has any updates to do
-  ipcMain.on("update-ytdl", (event) => {
-    ytdlUpdater.checkForUpdates(event);
-  });
-
-  // Start new download
-  ipcMain.on("new-playlist", (event, downloadInfo) => {
-    dlPlaylist.ipcEvent.downloadInfo = downloadInfo;
-    dlPlaylist.ipcEvent.event = event;
-    dlPlaylist.staticInfo.downloadFinished = false;
-    dlPlaylist.playlist(downloadInfo.url);
-  });
-
-  // Start conversion
-  ipcMain.on("send-convert-file", (event, fileInfo) => {
-    fileInfo.win = windows.mainWindow;
-    mp3Converter.convertFiles(fileInfo);
-  });
-
-  // Stop conversion
-  ipcMain.on("stop-convert", (event) => {
-    killAllProcesses();
-    event.sender.send("stop-convert-response");
-  });
-
-  // Hide page loader for download tab
-  ipcMain.on("pageloader", (event, data) => {
-    switch (data) {
-      case "show-download-pageloader":
-        event.sender.send("show-download-pageloader-response");
-        break;
-
-      case "hide-download-pageloader":
-        event.sender.send("hide-download-pageloader-response");
-        break;
-
-      case "show-convert-pageloader":
-        event.sender.send("show-convert-pageloader-response");
-        break;
-
-      case "hide-convert-pageloader":
-        event.sender.send("hide-convert-pageloader-response");
-        break;
+electron_1.app.on("ready", () => {
+    const windows = {
+        mainWindow: mainWindow.createWindow(),
+    };
+    remoteMain.enable(windows.mainWindow.webContents);
+    if (process.argv[2] === undefined) {
+        setTimeout(updater.check, 2000);
     }
-  });
+    windows.mainWindow.webContents.on("context-menu", (_e, params) => {
+        menuBar.contextMenu.popup({
+            window: windows.mainWindow,
+            x: params.x,
+            y: params.y,
+        });
+    });
+    dlPlaylist.staticInfo.win = windows.mainWindow;
+    (0, logger_1.keepLogs)(7);
+    windows.mainWindow.on("close", (e) => {
+        e.preventDefault();
+        windows.mainWindow.webContents.send("close-window");
+    });
+    electron_1.ipcMain.on("close-window-response", (_event, messageKey) => {
+        onExit.confirmExit(windows.mainWindow, messageKey);
+    });
+    electron_1.ipcMain.on("update-ytdl", (event) => {
+        ytdlUpdater.checkForUpdates(event);
+    });
+    electron_1.ipcMain.on("new-playlist", (event, downloadInfo) => {
+        dlPlaylist.ipcEvent.downloadInfo = downloadInfo;
+        dlPlaylist.ipcEvent.event = event;
+        dlPlaylist.staticInfo.downloadFinished = false;
+        dlPlaylist.playlist(downloadInfo.url);
+    });
+    electron_1.ipcMain.on("send-convert-file", (event, fileInfo) => {
+        fileInfo.win = windows.mainWindow;
+        mp3Converter.convertFiles(fileInfo);
+    });
+    electron_1.ipcMain.on("stop-convert", (event) => {
+        (0, app_notifications_1.killAllProcesses)(() => {
+            event.sender.send("stop-convert-response");
+        });
+    });
+    electron_1.ipcMain.on("pageloader", (event, action) => {
+        event.sender.send(`${action}-response`);
+    });
 });
-
-// Quit when all windows are closed.
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
-});
-
-app.on("activate", () => {
-  if (mainWindow === null) mainWindow.createWindow();
-});
+//# sourceMappingURL=main.js.map
