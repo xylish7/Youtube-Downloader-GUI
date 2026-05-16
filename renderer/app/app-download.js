@@ -37,8 +37,8 @@ ipcRenderer.on("update-ytdl", () => appActions.buttonState("updating"));
 ipcRenderer.on("ytdl-update-finished", () => appActions.buttonState("static"));
 
 // Open browse window to choose save path
-openFolder.on("click", () => {
-  appActions.getDownloadPath();
+openFolder.on("click", async () => {
+  await appActions.getDownloadPath();
 });
 
 // Open 'Save Folder' in explorer
@@ -72,7 +72,7 @@ downloadButton.on("click", () => {
 
     // Check if selected save folder exists
     validationResults.path_not_exist = appErrors.validatePath(
-      appActions.downloadInfo.savePath
+      appActions.downloadInfo.savePath,
     );
 
     if (inputUrl.val() != "") {
@@ -102,11 +102,11 @@ downloadButton.on("click", () => {
         // Set progress field names
         if (mp3Conversion.is(":checked"))
           downloadProgressFieldsName.html(
-            appActions.progressFieldNames("download-convert")
+            appActions.progressFieldNames("download-convert"),
           );
         else
           downloadProgressFieldsName.html(
-            appActions.progressFieldNames("download")
+            appActions.progressFieldNames("download"),
           );
 
         // Popup notification if playlist is to large
@@ -167,7 +167,7 @@ ipcRenderer.on("playlist-progress", (event, playlistInfo) => {
     appActions.setConvertBadge(
       "download-button",
       playlistInfo.static.n_entries,
-      0
+      0,
     );
   }
 
@@ -186,14 +186,14 @@ ipcRenderer.on("playlist-progress", (event, playlistInfo) => {
       ? downloadLog.append(
           `${appActions.dynamicContent(
             playlistInfo.dynamic.playlist_index,
-            "download-convert"
-          )}`
+            "download-convert",
+          )}`,
         )
       : downloadLog.append(
           `${appActions.dynamicContent(
             playlistInfo.dynamic.playlist_index,
-            "download"
-          )}`
+            "download",
+          )}`,
         );
   }
 
@@ -206,7 +206,7 @@ ipcRenderer.on("playlist-progress", (event, playlistInfo) => {
     appActions.setConvertBadge(
       "download-button",
       playlistInfo.static.n_entries,
-      playlistInfo.dynamic.playlist_index
+      playlistInfo.dynamic.playlist_index,
     );
   }
 
@@ -232,7 +232,7 @@ ipcRenderer.on("playlist-progress", (event, playlistInfo) => {
     else
       downloadDivider.attr(
         "data-content",
-        "DOWNLOAD FINISHED! || CONVERTING ..."
+        "DOWNLOAD FINISHED! || CONVERTING ...",
       );
 
     // For playlists
@@ -257,11 +257,11 @@ ipcRenderer.on("conversion-percent", (event, receivedData) => {
   }
 
   $(`#${receivedData.playlist_index}>.is-3>.conversion-bar`).val(
-    receivedData.percent
+    receivedData.percent,
   );
   // Show the procent in clear text
   $(`#${receivedData.playlist_index}>.is-2>.percent-progress`).html(
-    `${receivedData.percent}%`
+    `${receivedData.percent}%`,
   );
 });
 
@@ -273,7 +273,7 @@ ipcRenderer.on("conversion-done", (event, receivedData) => {
   ) {
     downloadDivider.attr(
       "data-content",
-      "DOWNLOAD FINISHED! || CONVRERT FINISHED!"
+      "DOWNLOAD FINISHED! || CONVRERT FINISHED!",
     );
     appActions.buttonState("static");
     appNotifications.exitMessages.conversion = "conversion";
@@ -290,7 +290,7 @@ ipcRenderer.on("conversion-done", (event, receivedData) => {
     appActions.setConvertBadge(
       "download-button",
       receivedData.n_entries,
-      conversionCount
+      conversionCount,
     );
   }
 });

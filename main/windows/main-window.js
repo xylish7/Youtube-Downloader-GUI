@@ -7,7 +7,7 @@ exports.win;
 exports.createWindow = () => {
   let mainWindowState = windowStateKeeper({
     defaultWidth: 600,
-    defaultHeight: 600
+    defaultHeight: 600,
   });
 
   this.win = new BrowserWindow({
@@ -16,7 +16,11 @@ exports.createWindow = () => {
     width: mainWindowState.width,
     height: mainWindowState.height,
     resizable: false,
-    title: "Youtube-downloader"
+    title: "Youtube-downloader",
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
   });
 
   // Open the window at the position it was closed

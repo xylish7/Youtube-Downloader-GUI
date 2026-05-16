@@ -21,15 +21,15 @@ exports.check = () => {
     let downloadProgress = 0;
 
     // Prompt user to update
-    dialog.showMessageBox(
-      {
+    dialog
+      .showMessageBox({
         type: "info",
         title: "Update Available",
         message:
           "A new version of Youtube Downloader is available. Do you want to update now?",
-        buttons: ["Update", "No"]
-      },
-      buttonIndex => {
+        buttons: ["Update", "No"],
+      })
+      .then(({ response: buttonIndex }) => {
         // If not 'Update' button, return
         if (buttonIndex !== 0) return;
 
@@ -38,14 +38,14 @@ exports.check = () => {
 
         // Create progress window
         progressWin = updateWindow.createWindow();
+        const remoteMain = require("@electron/remote/main");
+        remoteMain.enable(progressWin.webContents);
 
-        // Listen for preogress request from progressWin
-        ipcMain.on("download-progress-request", e => {
-          e.returnValue = downloadProgress;
-        });
+        // Listen for progress request from progressWin
+        ipcMain.handle("download-progress-request", () => downloadProgress);
 
         // Track download progress on autoUpdater
-        autoUpdater.on("download-progress", d => {
+        autoUpdater.on("download-progress", (d) => {
           downloadProgress = d.percent;
         });
 
@@ -55,21 +55,19 @@ exports.check = () => {
           if (progressWin) progressWin.close();
 
           // Prompt user to quit and install update
-          dialog.showMessageBox(
-            {
+          dialog
+            .showMessageBox({
               type: "info",
               title: "Update Ready",
               message:
                 "A new version of Youtube-Downloader is ready. Quit and install now?",
-              buttons: ["Yes", "Later"]
-            },
-            buttonIndex => {
+              buttons: ["Yes", "Later"],
+            })
+            .then(({ response: buttonIndex }) => {
               // Update if 'Yes'
               if (buttonIndex === 0) autoUpdater.quitAndInstall();
-            }
-          );
+            });
         });
-      }
-    );
+      });
   });
 };

@@ -1,6 +1,7 @@
 // Modules
-require("hazardous"); // module required when creating installed so spawn can be used
 const { app, ipcMain } = require("electron");
+const remoteMain = require("@electron/remote/main");
+remoteMain.initialize();
 
 // Internal Modules
 const mainWindow = require("./main/windows/main-window");
@@ -10,7 +11,6 @@ const menuBar = require("./main/menu/menu-bar");
 const onExit = require("./main/kill-processes/on-exit");
 const updater = require("./main/update/updater");
 const { killAllProcesses } = require("./main/kill-processes/app-notifications");
-const vcredistInstall = require("./main/vcredist_x86/install");
 const ytdlUpdater = require("./main/update/ytdl-updater");
 const { keepLogs } = require("./utils/logger");
 
@@ -25,8 +25,9 @@ if (process.argv[2] == "dev") {
 app.on("ready", () => {
   // Create windows
   var windows = {
-    mainWindow: mainWindow.createWindow()
+    mainWindow: mainWindow.createWindow(),
   };
+  remoteMain.enable(windows.mainWindow.webContents);
 
   // Check for update after x seconds
   if (process.argv[2] == undefined) {
@@ -48,7 +49,7 @@ app.on("ready", () => {
   keepLogs(7);
 
   // Show notification if processes are in progress
-  windows.mainWindow.on("close", e => {
+  windows.mainWindow.on("close", (e) => {
     e.preventDefault();
 
     windows.mainWindow.webContents.send("close-window");
@@ -58,7 +59,7 @@ app.on("ready", () => {
   });
 
   // Search if youtube-dl has any updates to do
-  ipcMain.on("update-ytdl", event => {
+  ipcMain.on("update-ytdl", (event) => {
     ytdlUpdater.checkForUpdates(event);
   });
 
@@ -77,7 +78,7 @@ app.on("ready", () => {
   });
 
   // Stop conversion
-  ipcMain.on("stop-convert", event => {
+  ipcMain.on("stop-convert", (event) => {
     killAllProcesses();
     event.sender.send("stop-convert-response");
   });

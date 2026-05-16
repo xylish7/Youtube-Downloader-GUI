@@ -1,5 +1,5 @@
 const { shell } = require("electron");
-const { app } = require("electron").remote;
+const { app } = require("@electron/remote");
 
 // On hover, display general-settings button color
 const $generalSettings = $("#general-settings");
@@ -36,13 +36,13 @@ const logsPath = `${app.getPath("userData")}/logs`;
 
 const $openLogs = $(".open-logs");
 $openLogs.on("click", () => {
-  shell.openItem(logsPath);
+  shell.openPath(logsPath);
 });
 
 // Toggle between 'General Settings' and 'Updates and releaseas'
 const $settingsMessage = $(".settings-message");
 const $generalSettingsSection = $(".general-settings-section");
-$switchSettings.on("click", function() {
+$switchSettings.on("click", function () {
   $switchSettings.attr("checked")
     ? $(this).attr("checked", false)
     : $(this).attr("checked", true);
@@ -53,15 +53,13 @@ $switchSettings.on("click", function() {
 // Navigation
 const $navLink = $(".nav-link");
 const $menuSection = $(".menu-section");
-$navLink.on("click", function() {
+$navLink.on("click", function () {
   // Reset links to deafult css
   $navLink.find("a:first").removeClass("is-active");
   $menuSection.addClass("hide-section");
 
   // Apply css style on click
-  $(this)
-    .find("a:first")
-    .addClass("is-active");
+  $(this).find("a:first").addClass("is-active");
 
   // Get selected page
   // Get id of selected link

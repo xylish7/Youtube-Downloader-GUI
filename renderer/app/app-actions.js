@@ -1,5 +1,5 @@
 // Modules
-const { dialog } = require("electron").remote;
+const { dialog } = require("@electron/remote");
 const { shell } = require("electron");
 
 // Internal modules
@@ -9,7 +9,7 @@ const Store = require("../store");
 const store = new Store({
   // We'll call our data file 'user-preferences'
   configName: "user-preferences",
-  defaults: {}
+  defaults: {},
 });
 
 // --------------------------- Download -------------------- //
@@ -20,31 +20,32 @@ exports.downloadInfo = {
   keepFilesCheckbox: null,
   url: null,
   savePath: null,
-  downloadFinished: false
+  downloadFinished: false,
 };
 
 // Iformations regarding the conversion
 exports.conversionInfo = {
-  conversionFinished: false
+  conversionFinished: false,
 };
 
 // Get the path where to save the videos
-exports.getDownloadPath = () => {
+exports.getDownloadPath = async () => {
   const messagePath = $("#path-message");
   const articlePath = $("#path-article");
   const inputUrl = $("#input-url");
   const downloadButton = $("#download-button");
 
-  var savePath = dialog.showOpenDialog({
-    properties: ["openDirectory"]
+  const result = await dialog.showOpenDialog({
+    properties: ["openDirectory"],
   });
 
-  if (savePath) {
+  if (!result.canceled && result.filePaths.length > 0) {
+    const savePath = result.filePaths[0];
     // Store savePath
-    store.set("savePath", savePath[0]);
+    store.set("savePath", savePath);
 
     // Show path
-    messagePath.html(`<i>${savePath[0]}</i>`);
+    messagePath.html(`<i>${savePath}</i>`);
     articlePath.show();
 
     // If input has value enable it
@@ -52,7 +53,7 @@ exports.getDownloadPath = () => {
       downloadButton.removeAttr("disabled");
     }
 
-    this.downloadInfo.savePath = savePath[0];
+    this.downloadInfo.savePath = savePath;
   }
 };
 
@@ -60,12 +61,9 @@ exports.getDownloadPath = () => {
 exports.openSavePath = () => {
   const pathFolder = $("#open-download-explorer");
   const messagePath = $("#path-message");
-  pathFolder.on("click", function() {
-    let path = messagePath
-      .text()
-      .replace("Save Path: ", "")
-      .trim();
-    shell.openItem(path);
+  pathFolder.on("click", function () {
+    let path = messagePath.text().replace("Save Path: ", "").trim();
+    shell.openPath(path);
   });
 };
 
@@ -90,11 +88,8 @@ exports.getFieldValues = () => {
 
   // Get general settings values
   var downloadInfoCopy = this.downloadInfo;
-  settingsOptions.each(function() {
-    let id = $(this)
-      .attr("id")
-      .replace("-option", "")
-      .replace("-", "_");
+  settingsOptions.each(function () {
+    let id = $(this).attr("id").replace("-option", "").replace("-", "_");
     downloadInfoCopy[id] = $(this).val();
   });
   this.downloadInfo = downloadInfoCopy;
@@ -149,7 +144,7 @@ exports.dynamicContent = (data, caseName) => {
 };
 
 // Name every filed from progress log
-exports.progressFieldNames = caseName => {
+exports.progressFieldNames = (caseName) => {
   switch (caseName) {
     case "download-convert":
       return `<div class="column is-4">
@@ -191,27 +186,18 @@ exports.progressFieldNames = caseName => {
 };
 
 // Update progress bar, and percent value
-exports.showProgress = data => {
+exports.showProgress = (data) => {
   const downloadLog = $(".download-log");
   const progressBar = ".progress-bar";
   const videoTitle = ".video-title";
   const percentProgress = ".percent-progress";
 
   // Fill progress bar
-  downloadLog
-    .find(progressBar)
-    .last()
-    .val(data.percent);
+  downloadLog.find(progressBar).last().val(data.percent);
   // Show the procent in clear text
-  downloadLog
-    .find(percentProgress)
-    .last()
-    .html(`${data.percent}%`);
+  downloadLog.find(percentProgress).last().html(`${data.percent}%`);
   // Show the title of the video
-  downloadLog
-    .find(videoTitle)
-    .last()
-    .html(`${data.title}`);
+  downloadLog.find(videoTitle).last().html(`${data.title}`);
 };
 
 // Disable download button if no input or save path is provided
@@ -226,7 +212,7 @@ exports.disableButton = () => {
 };
 
 // Change the state of the Download button
-exports.buttonState = state => {
+exports.buttonState = (state) => {
   const downloadButton = $("#download-button");
   const inputUrl = $("#input-url");
   const buttonMessage = $("#button-message");
@@ -281,13 +267,14 @@ exports.buttonState = state => {
 // ---------------- Convert ---------------- //
 
 // Get paths for every file
-exports.getConvertFiles = filter => {
-  let convertFiles = dialog.showOpenDialog({
+exports.getConvertFiles = async (filter) => {
+  const result = await dialog.showOpenDialog({
     properties: ["openFile", "multiSelections"],
-    filters: [filter]
+    filters: [filter],
   });
 
-  return convertFiles;
+  if (result.canceled || result.filePaths.length === 0) return null;
+  return result.filePaths;
 };
 
 // Append all empty progress bar with title
@@ -298,20 +285,11 @@ exports.emptyProgressBars = (index, title) => {
   const progressBar = ".progress-bar ";
 
   $convertLog.append(
-    `${this.dynamicContent(`convert-${index + 1}`, "convert")}`
+    `${this.dynamicContent(`convert-${index + 1}`, "convert")}`,
   );
-  $convertLog
-    .find(videoTitle)
-    .last()
-    .html(`${title}`);
-  $convertLog
-    .find(percentProgress)
-    .last()
-    .html("0%");
-  $convertLog
-    .find(progressBar)
-    .last()
-    .val("0");
+  $convertLog.find(videoTitle).last().html(`${title}`);
+  $convertLog.find(percentProgress).last().html("0%");
+  $convertLog.find(progressBar).last().val("0");
 };
 // Get options for conversion
 exports.getConvertOptions = () => {
@@ -328,12 +306,12 @@ exports.getConvertOptions = () => {
     audio_or_video_format,
     audio_quality: $("#convert-audio-quality-option").val(),
     no_processes: $("#convert-no-processes-option").val(),
-    delete_files: $deleteFiles
+    delete_files: $deleteFiles,
   };
 };
 
 // Get save path
-exports.getConvertPath = pathWithTitle => {
+exports.getConvertPath = (pathWithTitle) => {
   return pathWithTitle.substring(0, pathWithTitle.lastIndexOf("\\"));
 };
 
@@ -344,7 +322,7 @@ exports.setConvertBadge = (id, lastNumber, firstNumber = 0) => {
 };
 
 // Change the state of the Download button
-exports.convertButtonState = state => {
+exports.convertButtonState = (state) => {
   const convertButton = $("#start-conversion");
   const buttonMessage = $("#convert-button-message");
   const buttonIcon = $("#convert-button-icon");
@@ -369,7 +347,7 @@ exports.convertButtonState = state => {
 };
 
 // Remove files that have the convert format same as original format
-exports.removeSameFormat = converFilesArray => {
+exports.removeSameFormat = (converFilesArray) => {
   const $convertAudioRadio = $("#convert-audio-radio");
   var audio_or_video_format =
     $convertAudioRadio.attr("checked") == "checked"
@@ -377,7 +355,8 @@ exports.removeSameFormat = converFilesArray => {
       : $("#convert-video-format-option").val();
 
   const filteredFiles = converFilesArray.filter(
-    file => file.substring(file.lastIndexOf(".")) != `.${audio_or_video_format}`
+    (file) =>
+      file.substring(file.lastIndexOf(".")) != `.${audio_or_video_format}`,
   );
   return filteredFiles;
 };

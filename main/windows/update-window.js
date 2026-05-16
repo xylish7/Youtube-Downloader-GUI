@@ -1,10 +1,9 @@
-const { BrowserWindow } = require('electron')
+const { BrowserWindow } = require("electron");
 
-exports.win
+exports.win;
 
 // create update window
 exports.createWindow = () => {
-
   this.win = new BrowserWindow({
     width: 500,
     height: 133,
@@ -13,17 +12,21 @@ exports.createWindow = () => {
     maximizable: false,
     fullscreen: false,
     fullscreenable: false,
-    resizable: false
-  })
-  
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+
   // Load main window content
-  this.win.loadURL(`file://${__dirname}/../../renderer/windows/update.html`)
+  this.win.loadURL(`file://${__dirname}/../../renderer/windows/update.html`);
 
   // Handle window closed
-  this.win.on('closed', () => {
-    this.win = null
-  })
-  
+  this.win.on("closed", () => {
+    this.win = null;
+  });
+
   // Return window object
-  return this.win
-}
+  return this.win;
+};

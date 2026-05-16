@@ -64,10 +64,10 @@
     const {ipcRenderer} = require('electron')
 
     // Request progress every second
-    setInterval(() => {
+    setInterval(async () => {
 
-      // Request a sync response via IPC
-      let progress = ipcRenderer.sendSync('download-progress-request').toFixed(2)
+      // Request an async response via IPC
+      const progress = (await ipcRenderer.invoke('download-progress-request')).toFixed(2)
 
       // Update progress element
       $('progress').val(progress)
