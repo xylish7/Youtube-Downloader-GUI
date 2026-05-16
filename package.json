@@ -12,6 +12,14 @@
     "build:watch": "tsc --watch"
   },
   "build": {
+    "files": [
+      "**/*",
+      "main/**",
+      "renderer/**/*.js",
+      "utils/**",
+      "main.js",
+      "!src/**"
+    ],
     "nsis": {
       "oneClick": false,
       "perMachine": true,

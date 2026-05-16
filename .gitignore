@@ -1,6 +1,12 @@
 node_modules/
-main/vcredist_x86/vcredist_x86.exe
 private/
 dist/
 logs/*
 !logs/.gitkeep
+
+# Compiled TypeScript output
+main/
+renderer/**/*.js
+utils/
+main.js
+**/*.js.map
