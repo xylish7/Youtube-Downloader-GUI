@@ -28,6 +28,12 @@ exports.playlist = (url) => {
   var ipcEvent = exports.ipcEvent;
   const { downloadInfo } = ipcEvent;
 
+  // Returns a plain serializable object — excludes BrowserWindow 'win' property
+  const si = (overrides = {}) => {
+    const { win, ...rest } = staticInfo;
+    return { ...rest, ...overrides };
+  };
+
   const outputTemplate = path.join(downloadInfo.savePath, "%(title)s.%(ext)s");
 
   const args = [
@@ -89,11 +95,7 @@ exports.playlist = (url) => {
 
         if (staticInfo.appendColumns) {
           ipcEvent.event.sender.send("playlist-progress", {
-            static: {
-              ...staticInfo,
-              appendColumns: true,
-              downloadFinished: false,
-            },
+            static: si({ appendColumns: true, downloadFinished: false }),
             dynamic: { ...dynamicInfo, percent: "0.00" },
           });
           staticInfo.appendColumns = false;
@@ -105,11 +107,7 @@ exports.playlist = (url) => {
       if (progressMatch) {
         dynamicInfo.percent = parseFloat(progressMatch[1]).toFixed(2);
         ipcEvent.event.sender.send("playlist-progress", {
-          static: {
-            ...staticInfo,
-            appendColumns: false,
-            downloadFinished: false,
-          },
+          static: si({ appendColumns: false, downloadFinished: false }),
           dynamic: { ...dynamicInfo },
         });
       }
@@ -121,11 +119,7 @@ exports.playlist = (url) => {
       ) {
         dynamicInfo.percent = "100.00";
         ipcEvent.event.sender.send("playlist-progress", {
-          static: {
-            ...staticInfo,
-            appendColumns: false,
-            downloadFinished: false,
-          },
+          static: si({ appendColumns: false, downloadFinished: false }),
           dynamic: { ...dynamicInfo },
         });
       }
@@ -143,7 +137,7 @@ exports.playlist = (url) => {
       exports.staticInfo.downloadFinished = true;
 
       ipcEvent.event.sender.send("playlist-progress", {
-        static: { ...staticInfo, downloadFinished: true },
+        static: si({ downloadFinished: true }),
         dynamic: { ...dynamicInfo, percent: "100.00" },
       });
 

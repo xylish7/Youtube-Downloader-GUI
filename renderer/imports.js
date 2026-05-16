@@ -9,12 +9,12 @@ const loads = links.map((link) =>
     .then((html) => {
       const doc = new DOMParser().parseFromString(html, "text/html");
       const template = doc.querySelector(".page-template");
-      const clone = document.importNode(template.content, true);
-      document.body.appendChild(clone);
+      return document.importNode(template.content, true);
     }),
 );
 
-Promise.all(loads).then(() => {
+Promise.all(loads).then((clones) => {
+  clones.forEach((clone) => document.body.appendChild(clone));
   require("../app/app-navbar.js");
   require("../app/app-pageloader.js");
 });

@@ -13,11 +13,11 @@ body {
   user-select: none;
   -webkit-user-select: none;
   cursor: context-menu;
-  overflow:hidden;
+  overflow: hidden;
   font-family: "Trebuchet MS";
 }
 
-body::-webkit-scrollbar{
+body::-webkit-scrollbar {
   display: none;
 }
 
@@ -31,11 +31,11 @@ progress {
 }
 
 .button:disabled {
-  color: green
+  color: green;
 }
 
 .container {
-  margin: 0 20px
+  margin: 0 20px;
 }
 
 .fa.fa-folder-open-o {
@@ -66,16 +66,16 @@ progress {
 .customized-scrollbar::-webkit-scrollbar {
   width: 9px;
   height: 8px;
-  border-radius: 5px
+  border-radius: 5px;
 }
 
 .customized-scrollbar::-webkit-scrollbar-thumb {
-    background: lightgray; 
-    border-radius: 20px;
+  background: lightgray;
+  border-radius: 20px;
 }
 
 .columns.is-mobile.is-gapless {
-  margin: 0
+  margin: 0;
 }
 
 .video-title {
@@ -93,7 +93,7 @@ progress {
   font-size: 13px;
 }
 
-.percent-progress{
+.percent-progress {
   margin-left: 10px;
 }
 
@@ -112,7 +112,7 @@ progress {
   top: 5px;
 }
 
-#path-message{
+#path-message {
   white-space: nowrap;
   width: 520px;
   overflow: hidden;
@@ -120,9 +120,9 @@ progress {
 }
 
 #url-input {
-  border:1px solid lightgray;
-  background-image:none;
-  background-color:transparent;
+  border: 1px solid lightgray;
+  background-image: none;
+  background-color: transparent;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -139,14 +139,14 @@ progress {
 
 #button-message {
   width: 82px;
-  height: 18px; 
+  height: 18px;
 }
 
 #download-button {
   margin-right: 30px;
 }
 
-#start-conversion{
+#start-conversion {
   bottom: 0.3rem;
   margin-right: 15px;
 }
@@ -191,17 +191,16 @@ progress {
   transition: opacity 0.7s;
 }
 
-
 .tooltip .warning {
   color: hsl(348, 100%, 61%);
   font-size: 12px;
-  font-weight: bold 
+  font-weight: bold;
 }
 
 .tooltip .tooltiptext-top-arrow::after {
   content: " ";
   position: absolute;
-  bottom: 100%;  
+  bottom: 100%;
   left: 18%;
   margin-left: -5px;
   border-width: 5px;
@@ -247,7 +246,7 @@ progress {
   margin: -75px 0 0 -75px;
   border-radius: 50%;
   border: 7px solid transparent;
-  border-top-color: rgba(255,0,0,0.8);
+  border-top-color: rgba(255, 0, 0, 0.8);
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
 }
@@ -260,7 +259,7 @@ progress {
   bottom: 5px;
   border-radius: 50%;
   border: 7px solid transparent;
-  border-top-color: rgba(255,0,0,0.8);
+  border-top-color: rgba(255, 0, 0, 0.8);
   -webkit-animation: spin 3s linear infinite;
   animation: spin 3s linear infinite;
 }
@@ -273,31 +272,31 @@ progress {
   bottom: 17px;
   border-radius: 50%;
   border: 7px solid transparent;
-  border-top-color:rgba(255,0,0,0.8);
+  border-top-color: rgba(255, 0, 0, 0.8);
   -webkit-animation: spin 1.5s linear infinite;
   animation: spin 1.5s linear infinite;
 }
 @-webkit-keyframes spin {
-  0%   {
-      -webkit-transform: rotate(0deg);
-      -ms-transform: rotate(0deg);
-      transform: rotate(0deg);
+  0% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-      -webkit-transform: rotate(360deg);
-      -ms-transform: rotate(360deg);
-      transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 @keyframes spin {
-  0%   {
-      -webkit-transform: rotate(0deg);
-      -ms-transform: rotate(0deg);
-      transform: rotate(0deg);
+  0% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-      -webkit-transform: rotate(360deg);
-      -ms-transform: rotate(360deg);
-      transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
