@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeSameFormat = exports.convertButtonState = exports.setConvertBadge = exports.getConvertPath = exports.getConvertOptions = exports.emptyProgressBars = exports.getConvertFiles = exports.buttonState = exports.disableButton = exports.showProgress = exports.progressFieldNames = exports.dynamicContent = exports.getFieldValues = exports.openSavePath = exports.getDownloadPath = exports.conversionInfo = exports.downloadInfo = void 0;
+exports.setConvertBadge = exports.buttonState = exports.disableButton = exports.showProgress = exports.progressFieldNames = exports.dynamicContent = exports.getFieldValues = exports.openSavePath = exports.getDownloadPath = exports.downloadInfo = void 0;
 const jquery_1 = __importDefault(require("jquery"));
 const remote_1 = require("@electron/remote");
 const electron_1 = require("electron");
@@ -14,14 +14,9 @@ const store = new store_1.default({
 });
 // --------------------------- Download -------------------- //
 exports.downloadInfo = {
-    mp3Conversion: null,
-    keepFilesCheckbox: null,
     url: null,
     savePath: null,
     downloadFinished: false,
-};
-exports.conversionInfo = {
-    conversionFinished: false,
 };
 const getDownloadPath = async () => {
     const messagePath = (0, jquery_1.default)("#path-message");
@@ -53,16 +48,8 @@ const openSavePath = () => {
 };
 exports.openSavePath = openSavePath;
 const getFieldValues = () => {
-    const mp3Conversion = (0, jquery_1.default)("#mp3-conversion");
-    const keepFilesCheckbox = (0, jquery_1.default)("#keep-files");
     const inputUrl = (0, jquery_1.default)("#input-url");
     const settingsOptions = (0, jquery_1.default)(".settings-options");
-    exports.downloadInfo.mp3Conversion = mp3Conversion.is(":checked")
-        ? mp3Conversion.val()
-        : "false";
-    exports.downloadInfo.keepFilesCheckbox = keepFilesCheckbox.is(":checked")
-        ? keepFilesCheckbox.val()
-        : "false";
     const url = inputUrl.val();
     if (url.search("list") > 0)
         exports.downloadInfo.url = url.replace(/(v=[^&]*&)/, "");
@@ -80,21 +67,6 @@ const getFieldValues = () => {
 exports.getFieldValues = getFieldValues;
 const dynamicContent = (data, caseName) => {
     switch (caseName) {
-        case "download-convert":
-            return `<div id='${data}' class="columns is-mobile is-gapless">
-          <div class="column is-4">
-            <p class="video-title"></p>
-          </div>
-          <div  class="column is-3">
-            <progress class="progress progress-bar is-danger is-small" value="0" max="100"></progress>
-          </div>
-          <div  class="column is-3">
-            <progress class="progress conversion-bar is-danger is-small" value="0" max="100"></progress>
-          </div>
-          <div class="column is-2">
-            <p class="percent-progress"></p>
-          </div>
-        </div>`;
         case "download":
             return `<div id='${data}' class="columns is-mobile is-gapless">
           <div class="column is-4">
@@ -126,19 +98,6 @@ const dynamicContent = (data, caseName) => {
 exports.dynamicContent = dynamicContent;
 const progressFieldNames = (caseName) => {
     switch (caseName) {
-        case "download-convert":
-            return `<div class="column is-4">
-          <span class="is-size-7" style="margin-left:35px"><strong>Title</strong></span>
-        </div>
-        <div class="column is-3">
-          <span class="is-size-7" style="margin-left:17px"><strong>Download bar</strong></span>
-        </div>
-        <div class="column is-3">
-          <span class="is-size-7" style="margin-left:-19px"><strong>Convert bar</strong></span>
-        </div>
-        <div class="column is-2">
-          <span class="is-size-7" style="margin-left:-55px"><strong>Prog.</strong></span>
-        </div>`;
         case "download":
             return ` <div class="column is-4">
           <span class="is-size-7" style="margin-left:35px"><strong>Title</strong></span>
@@ -231,49 +190,6 @@ const buttonState = (state) => {
     }
 };
 exports.buttonState = buttonState;
-// ---------------- Convert ---------------- //
-const getConvertFiles = async (filter) => {
-    const result = await remote_1.dialog.showOpenDialog({
-        properties: ["openFile", "multiSelections"],
-        filters: [filter],
-    });
-    if (result.canceled || result.filePaths.length === 0)
-        return null;
-    return result.filePaths;
-};
-exports.getConvertFiles = getConvertFiles;
-const emptyProgressBars = (index, title) => {
-    const $convertLog = (0, jquery_1.default)(".convert-log");
-    const videoTitle = ".video-title";
-    const percentProgress = ".percent-progress";
-    const progressBar = ".progress-bar ";
-    $convertLog.append(`${(0, exports.dynamicContent)(`convert-${index + 1}`, "convert")}`);
-    $convertLog.find(videoTitle).last().html(`${title}`);
-    $convertLog.find(percentProgress).last().html("0%");
-    $convertLog.find(progressBar).last().val("0");
-};
-exports.emptyProgressBars = emptyProgressBars;
-const getConvertOptions = () => {
-    let $deleteFiles = (0, jquery_1.default)("#delete-convert-files");
-    const deleteFilesVal = $deleteFiles.is(":checked")
-        ? $deleteFiles.val()
-        : "false";
-    const $convertAudioRadio = (0, jquery_1.default)("#convert-audio-radio");
-    const audio_or_video_format = $convertAudioRadio.attr("checked") === "checked"
-        ? (0, jquery_1.default)("#convert-audio-format-option").val()
-        : (0, jquery_1.default)("#convert-video-format-option").val();
-    return {
-        audio_or_video_format,
-        audio_quality: (0, jquery_1.default)("#convert-audio-quality-option").val(),
-        no_processes: (0, jquery_1.default)("#convert-no-processes-option").val(),
-        delete_files: deleteFilesVal,
-    };
-};
-exports.getConvertOptions = getConvertOptions;
-const getConvertPath = (pathWithTitle) => {
-    return pathWithTitle.substring(0, pathWithTitle.lastIndexOf("\\"));
-};
-exports.getConvertPath = getConvertPath;
 const setConvertBadge = (id, lastNumber, firstNumber = 0) => {
     if (lastNumber === "remove-badge") {
         (0, jquery_1.default)(`#${id}`).removeAttr("data-badge");
@@ -283,34 +199,4 @@ const setConvertBadge = (id, lastNumber, firstNumber = 0) => {
     }
 };
 exports.setConvertBadge = setConvertBadge;
-const convertButtonState = (state) => {
-    const convertButton = (0, jquery_1.default)("#start-conversion");
-    const buttonMessage = (0, jquery_1.default)("#convert-button-message");
-    const buttonIcon = (0, jquery_1.default)("#convert-button-icon");
-    switch (state) {
-        case "static":
-            convertButton.addClass("not-converting").removeClass("is-converting");
-            buttonMessage.html("Start-conversion");
-            buttonIcon
-                .removeClass("fas fa-spinner fa-pulse")
-                .addClass("far fa-arrow-alt-circle-right");
-            break;
-        case "converting":
-            convertButton.addClass("is-converting").removeClass("not-converting");
-            buttonMessage.html("Stop-conversion!");
-            buttonIcon
-                .removeClass("fas fa-sync fa-spin")
-                .addClass("fas fa-spinner fa-pulse");
-            break;
-    }
-};
-exports.convertButtonState = convertButtonState;
-const removeSameFormat = (converFilesArray) => {
-    const $convertAudioRadio = (0, jquery_1.default)("#convert-audio-radio");
-    const audio_or_video_format = $convertAudioRadio.attr("checked") === "checked"
-        ? (0, jquery_1.default)("#convert-audio-format-option").val()
-        : (0, jquery_1.default)("#convert-video-format-option").val();
-    return converFilesArray.filter((file) => file.substring(file.lastIndexOf(".")) !== `.${audio_or_video_format}`);
-};
-exports.removeSameFormat = removeSameFormat;
 //# sourceMappingURL=app-actions.js.map

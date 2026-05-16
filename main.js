@@ -37,12 +37,10 @@ const electron_1 = require("electron");
 const remoteMain = require("@electron/remote/main");
 remoteMain.initialize();
 const mainWindow = __importStar(require("./main/windows/main-window"));
-const mp3Converter = __importStar(require("./main/conversion/mp3Converter"));
 const dlPlaylist = __importStar(require("./main/ytdl/download-playlist"));
 const menuBar = __importStar(require("./main/menu/menu-bar"));
 const onExit = __importStar(require("./main/kill-processes/on-exit"));
 const updater = __importStar(require("./main/update/updater"));
-const app_notifications_1 = require("./main/kill-processes/app-notifications");
 const ytdlUpdater = __importStar(require("./main/update/ytdl-updater"));
 const logger_1 = require("./utils/logger");
 if (process.argv[2] === "dev") {
@@ -80,15 +78,6 @@ electron_1.app.on("ready", () => {
         dlPlaylist.ipcEvent.event = event;
         dlPlaylist.staticInfo.downloadFinished = false;
         dlPlaylist.playlist(downloadInfo.url);
-    });
-    electron_1.ipcMain.on("send-convert-file", (event, fileInfo) => {
-        fileInfo.win = windows.mainWindow;
-        mp3Converter.convertFiles(fileInfo);
-    });
-    electron_1.ipcMain.on("stop-convert", (event) => {
-        (0, app_notifications_1.killAllProcesses)(() => {
-            event.sender.send("stop-convert-response");
-        });
     });
     electron_1.ipcMain.on("pageloader", (event, action) => {
         event.sender.send(`${action}-response`);

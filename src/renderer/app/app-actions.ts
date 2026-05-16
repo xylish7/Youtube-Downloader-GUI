@@ -11,15 +11,9 @@ const store = new Store({
 // --------------------------- Download -------------------- //
 
 export let downloadInfo: Record<string, any> = {
-  mp3Conversion: null,
-  keepFilesCheckbox: null,
   url: null,
   savePath: null,
   downloadFinished: false,
-};
-
-export const conversionInfo = {
-  conversionFinished: false,
 };
 
 export const getDownloadPath = async (): Promise<void> => {
@@ -57,17 +51,8 @@ export const openSavePath = (): void => {
 };
 
 export const getFieldValues = (): void => {
-  const mp3Conversion = $("#mp3-conversion");
-  const keepFilesCheckbox = $("#keep-files");
   const inputUrl = $("#input-url");
   const settingsOptions = $(".settings-options");
-
-  downloadInfo.mp3Conversion = mp3Conversion.is(":checked")
-    ? mp3Conversion.val()
-    : "false";
-  downloadInfo.keepFilesCheckbox = keepFilesCheckbox.is(":checked")
-    ? keepFilesCheckbox.val()
-    : "false";
 
   const url = inputUrl.val() as string;
   if (url.search("list") > 0) downloadInfo.url = url.replace(/(v=[^&]*&)/, "");
@@ -88,21 +73,6 @@ export const dynamicContent = (
   caseName: string,
 ): string => {
   switch (caseName) {
-    case "download-convert":
-      return `<div id='${data}' class="columns is-mobile is-gapless">
-          <div class="column is-4">
-            <p class="video-title"></p>
-          </div>
-          <div  class="column is-3">
-            <progress class="progress progress-bar is-danger is-small" value="0" max="100"></progress>
-          </div>
-          <div  class="column is-3">
-            <progress class="progress conversion-bar is-danger is-small" value="0" max="100"></progress>
-          </div>
-          <div class="column is-2">
-            <p class="percent-progress"></p>
-          </div>
-        </div>`;
     case "download":
       return `<div id='${data}' class="columns is-mobile is-gapless">
           <div class="column is-4">
@@ -134,19 +104,6 @@ export const dynamicContent = (
 
 export const progressFieldNames = (caseName: string): string => {
   switch (caseName) {
-    case "download-convert":
-      return `<div class="column is-4">
-          <span class="is-size-7" style="margin-left:35px"><strong>Title</strong></span>
-        </div>
-        <div class="column is-3">
-          <span class="is-size-7" style="margin-left:17px"><strong>Download bar</strong></span>
-        </div>
-        <div class="column is-3">
-          <span class="is-size-7" style="margin-left:-19px"><strong>Convert bar</strong></span>
-        </div>
-        <div class="column is-2">
-          <span class="is-size-7" style="margin-left:-55px"><strong>Prog.</strong></span>
-        </div>`;
     case "download":
       return ` <div class="column is-4">
           <span class="is-size-7" style="margin-left:35px"><strong>Title</strong></span>
@@ -241,57 +198,6 @@ export const buttonState = (state: string): void => {
   }
 };
 
-// ---------------- Convert ---------------- //
-
-export const getConvertFiles = async (filter: {
-  name: string;
-  extensions: string[];
-}): Promise<string[] | null> => {
-  const result = await dialog.showOpenDialog({
-    properties: ["openFile", "multiSelections"],
-    filters: [filter],
-  });
-
-  if (result.canceled || result.filePaths.length === 0) return null;
-  return result.filePaths;
-};
-
-export const emptyProgressBars = (index: number, title: string): void => {
-  const $convertLog = $(".convert-log");
-  const videoTitle = ".video-title";
-  const percentProgress = ".percent-progress";
-  const progressBar = ".progress-bar ";
-
-  $convertLog.append(`${dynamicContent(`convert-${index + 1}`, "convert")}`);
-  $convertLog.find(videoTitle).last().html(`${title}`);
-  $convertLog.find(percentProgress).last().html("0%");
-  $convertLog.find(progressBar).last().val("0");
-};
-
-export const getConvertOptions = (): Record<string, any> => {
-  let $deleteFiles = $("#delete-convert-files");
-  const deleteFilesVal = $deleteFiles.is(":checked")
-    ? $deleteFiles.val()
-    : "false";
-
-  const $convertAudioRadio = $("#convert-audio-radio");
-  const audio_or_video_format =
-    $convertAudioRadio.attr("checked") === "checked"
-      ? $("#convert-audio-format-option").val()
-      : $("#convert-video-format-option").val();
-
-  return {
-    audio_or_video_format,
-    audio_quality: $("#convert-audio-quality-option").val(),
-    no_processes: $("#convert-no-processes-option").val(),
-    delete_files: deleteFilesVal,
-  };
-};
-
-export const getConvertPath = (pathWithTitle: string): string => {
-  return pathWithTitle.substring(0, pathWithTitle.lastIndexOf("\\"));
-};
-
 export const setConvertBadge = (
   id: string,
   lastNumber: number | string,
@@ -302,40 +208,4 @@ export const setConvertBadge = (
   } else {
     $(`#${id}`).attr("data-badge", `${firstNumber}/${lastNumber}`);
   }
-};
-
-export const convertButtonState = (state: string): void => {
-  const convertButton = $("#start-conversion");
-  const buttonMessage = $("#convert-button-message");
-  const buttonIcon = $("#convert-button-icon");
-
-  switch (state) {
-    case "static":
-      convertButton.addClass("not-converting").removeClass("is-converting");
-      buttonMessage.html("Start-conversion");
-      buttonIcon
-        .removeClass("fas fa-spinner fa-pulse")
-        .addClass("far fa-arrow-alt-circle-right");
-      break;
-    case "converting":
-      convertButton.addClass("is-converting").removeClass("not-converting");
-      buttonMessage.html("Stop-conversion!");
-      buttonIcon
-        .removeClass("fas fa-sync fa-spin")
-        .addClass("fas fa-spinner fa-pulse");
-      break;
-  }
-};
-
-export const removeSameFormat = (converFilesArray: string[]): string[] => {
-  const $convertAudioRadio = $("#convert-audio-radio");
-  const audio_or_video_format =
-    $convertAudioRadio.attr("checked") === "checked"
-      ? ($("#convert-audio-format-option").val() as string)
-      : ($("#convert-video-format-option").val() as string);
-
-  return converFilesArray.filter(
-    (file) =>
-      file.substring(file.lastIndexOf(".")) !== `.${audio_or_video_format}`,
-  );
 };

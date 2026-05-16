@@ -7,7 +7,6 @@ const remoteMain = require("@electron/remote/main") as {
 remoteMain.initialize();
 
 import * as mainWindow from "./main/windows/main-window";
-import * as mp3Converter from "./main/conversion/mp3Converter";
 import * as dlPlaylist from "./main/ytdl/download-playlist";
 import * as menuBar from "./main/menu/menu-bar";
 import * as onExit from "./main/kill-processes/on-exit";
@@ -60,17 +59,6 @@ app.on("ready", () => {
     dlPlaylist.ipcEvent.event = event;
     dlPlaylist.staticInfo.downloadFinished = false;
     dlPlaylist.playlist(downloadInfo.url);
-  });
-
-  ipcMain.on("send-convert-file", (event, fileInfo) => {
-    fileInfo.win = windows.mainWindow;
-    mp3Converter.convertFiles(fileInfo);
-  });
-
-  ipcMain.on("stop-convert", (event) => {
-    killAllProcesses(() => {
-      event.sender.send("stop-convert-response");
-    });
   });
 
   ipcMain.on("pageloader", (event, action: string) => {

@@ -44,17 +44,12 @@ require("../initialize-store-data");
 const appNotifications = __importStar(require("../../main/kill-processes/app-notifications"));
 const downloadButton = (0, jquery_1.default)("#download-button");
 const inputUrl = (0, jquery_1.default)("#input-url");
-const keepFilesCheckbox = (0, jquery_1.default)("#keep-files");
-const mp3Conversion = (0, jquery_1.default)("#mp3-conversion");
 const openFolder = (0, jquery_1.default)("#open-download-folder");
 const downloadProgressFieldsName = (0, jquery_1.default)("#download-progress-fields-name");
 const downloadDivider = (0, jquery_1.default)("#download-divider");
-const conversionNumber = (0, jquery_1.default)(".conversion-number");
 const downloadLog = (0, jquery_1.default)(".download-log");
 const notification = (0, jquery_1.default)(".notification");
 const videoNumber = (0, jquery_1.default)(".video-number");
-let conversionCount;
-let alreadyTriggered = false;
 appActions.buttonState("search-updates");
 electron_1.ipcRenderer.send("update-ytdl");
 electron_1.ipcRenderer.on("update-ytdl", () => appActions.buttonState("updating"));
@@ -83,25 +78,16 @@ downloadButton.on("click", () => {
         if (appErrors.validateAll(validationResults, 10000) &&
             validationResults.url) {
             if (downloadButton.hasClass("not-downloading")) {
-                if (mp3Conversion.is(":checked"))
-                    electron_1.ipcRenderer.send("pageloader", "show-download-pageloader");
-                alreadyTriggered = false;
                 downloadDivider.attr("data-content", "GET VIDEO/PLAYLIST INFO ...");
-                conversionCount = 0;
-                if (mp3Conversion.is(":checked"))
-                    downloadProgressFieldsName.html(appActions.progressFieldNames("download-convert"));
-                else
-                    downloadProgressFieldsName.html(appActions.progressFieldNames("download"));
+                downloadProgressFieldsName.html(appActions.progressFieldNames("download"));
                 appErrors.largePlaylist();
                 downloadLog.empty();
-                conversionNumber.empty();
                 appActions.setConvertBadge("download-button", "remove-badge");
                 appActions.buttonState("fetch-data");
                 appActions.getFieldValues();
                 electron_1.ipcRenderer.send("new-playlist", appActions.downloadInfo);
             }
             else {
-                electron_1.ipcRenderer.send("pageloader", "hide-download-pageloader");
                 downloadProgressFieldsName.empty();
                 appActions.setConvertBadge("download-button", "remove-badge");
                 appActions.buttonState("static");
@@ -113,11 +99,6 @@ downloadButton.on("click", () => {
             }
         }
     }
-});
-mp3Conversion.on("click", () => {
-    mp3Conversion.is(":checked")
-        ? keepFilesCheckbox.removeAttr("disabled")
-        : keepFilesCheckbox.prop("checked", false).attr("disabled", "true");
 });
 (0, jquery_1.default)(".delete").on("click", () => {
     notification.css("display", "none");
@@ -132,54 +113,17 @@ electron_1.ipcRenderer.on("playlist-progress", (_event, playlistInfo) => {
         downloadDivider.attr("data-content", "DOWNLOADING ...");
     }
     if (playlistInfo.static.appendColumns) {
-        appActions.downloadInfo.mp3Conversion === "true"
-            ? downloadLog.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, "download-convert")}`)
-            : downloadLog.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, "download")}`);
+        downloadLog.append(`${appActions.dynamicContent(playlistInfo.dynamic.playlist_index, "download")}`);
     }
     if (playlistInfo.dynamic.percent === "100.00" &&
-        appActions.downloadInfo.mp3Conversion === "false" &&
         playlistInfo.static.isPlaylist !== null) {
         appActions.setConvertBadge("download-button", playlistInfo.static.n_entries, playlistInfo.dynamic.playlist_index);
     }
     appActions.showProgress(playlistInfo.dynamic);
     if (playlistInfo.static.downloadFinished) {
         appNotifications.exitMessages.download = "download";
-        if (appActions.downloadInfo.mp3Conversion === "false" &&
-            playlistInfo.static.isPlaylist === null) {
-            appActions.buttonState("static");
-            downloadDivider.attr("data-content", "DOWNLOAD FINISHED!");
-        }
-        else {
-            downloadDivider.attr("data-content", "DOWNLOAD FINISHED! || CONVERTING ...");
-        }
-        if (playlistInfo.dynamic.playlist_index === playlistInfo.static.n_entries &&
-            appActions.downloadInfo.mp3Conversion === "false") {
-            appActions.buttonState("static");
-            downloadDivider.attr("data-content", "DOWNLOAD FINISHED!");
-        }
-    }
-});
-electron_1.ipcRenderer.on("conversion-percent", (_event, receivedData) => {
-    if (receivedData.playlist_index === 1 && !alreadyTriggered) {
-        downloadDivider.attr("data-content", "DOWNLOADING ... || CONVERTING ...");
-        alreadyTriggered = true;
-    }
-    (0, jquery_1.default)(`#${receivedData.playlist_index}>.is-3>.conversion-bar`).val(receivedData.percent);
-    (0, jquery_1.default)(`#${receivedData.playlist_index}>.is-2>.percent-progress`).html(`${receivedData.percent}%`);
-});
-electron_1.ipcRenderer.on("conversion-done", (_event, receivedData) => {
-    if (receivedData.conversionFinished &&
-        downloadButton.hasClass("is-downloading")) {
-        downloadDivider.attr("data-content", "DOWNLOAD FINISHED! || CONVRERT FINISHED!");
         appActions.buttonState("static");
-        appNotifications.exitMessages.conversion = "conversion";
-        electron_1.ipcRenderer.send("pageloader", "hide-download-pageloader");
-    }
-    (0, jquery_1.default)(`#${receivedData.playlist_index}>.is-3>.conversion-bar`).val("100");
-    (0, jquery_1.default)(`#${receivedData.playlist_index}>.is-2>.percent-progress`).html("100.00%");
-    if (receivedData.isPlaylist !== null) {
-        conversionCount++;
-        appActions.setConvertBadge("download-button", receivedData.n_entries, conversionCount);
+        downloadDivider.attr("data-content", "DOWNLOAD FINISHED!");
     }
 });
 electron_1.ipcRenderer.on("ytdl-errors", (_event, err) => {
@@ -188,5 +132,14 @@ electron_1.ipcRenderer.on("ytdl-errors", (_event, err) => {
     videoNumber.empty();
     appErrors.validateAll({ ytdl_error: false }, 10000);
     downloadDivider.attr("data-content", "ERROR!");
+});
+electron_1.ipcRenderer.on("close-window", () => {
+    if (downloadButton.hasClass("is-downloading") ||
+        downloadButton.hasClass("fetch-data")) {
+        electron_1.ipcRenderer.send("close-window-response", "download");
+    }
+    else {
+        electron_1.ipcRenderer.send("close-window-response", "done");
+    }
 });
 //# sourceMappingURL=app-download.js.map
